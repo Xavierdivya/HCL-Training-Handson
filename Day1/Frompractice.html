@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="canonical" href="https://example.com/">
+        <style>
+            body {
+                margin: 0;
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: Arial, sans-serif;
+                background: linear-gradient(to right,red,pink,orange);
+                font-weight: bold;
+            }
+
+            h2{
+                padding-left: 150px;
+                text-shadow:4px 5px 5px #ccc;
+            }
+
+            form {
+                width: max-content;
+                padding: 20px 30px;
+                border: 6px solid #ccc;
+                border-radius: 8px;
+                background:linear-gradient(90deg,grey,rgb(122, 115, 115),rgb(114, 113, 113));
+            }
+
+            label {
+                display: inline-block;
+                width: 180px;
+                text-align: left;
+                margin-right: 10px;
+            }
+
+            input, select, textarea {
+                vertical-align: middle;
+                box-sizing: border-box;
+                font-weight: bold;
+            }
+
+            input:focus-visible,
+            select:focus-visible,
+            textarea:focus-visible{
+                outline: 3px solid whitesmoke;
+                outline-offset: 3px;
+            }
+
+            button{
+                display:inline-block;
+                margin-left: 150px;
+                border: 2px solid gray;
+                height:50px;
+                width:90px;
+                border-radius: 15px;
+                font-size: medium;
+                font-weight: bold;
+                
+            }
+
+            #submit:hover{
+                border:none;
+                background-color: green;
+                box-shadow: 5px 4px 5px rgb(19, 134, 3);
+                
+            }
+
+            #reset:hover{
+                border:none;
+                background-color: red;
+                box-shadow: 5px 4px 5px rgb(173, 41, 1);
+            }
+        </style>
+
+        <title>
+            Form Practice
+        </title>
+        <link rel="icon" type="image/png" href="favicon.png">
+    </head>
+    <body>
+        <form method="post" action="#">
+            <h2>College Registration Form</h2>
+            <label for="name">Name</label>
+            <input id="name" type="text" name="name" required><br><br>
+            <label for="email">Email <span style="color:red">*</span></label>
+            <input id="email" type="email" name="email" required><br><br>
+            <label for="phone">Phone</label>
+            <input id="phone" type="tel" name="phone"><br><br>
+            <label>Gender</label>
+            <input type="radio" value="male" name="gender" id="male"><label for="male">Male</label>
+            <input type="radio" value="female" name="gender" id="female"><label for="female">Female</label><br><br>
+            <label for="department">Department</label>
+            <select id="department" name="department">
+                <option value="CSE">CSE</option>
+                <option value="IT">IT</option>
+                <option value="ECE">ECE</option>
+            </select><br><br>
+            <label>Skills</label>
+            <input type="checkbox" value="html" name="skills">HTML
+            <input type="checkbox" value="css" name="skills">CSS
+            <input type="checkbox" value="js" name="skills">JS<br><br>
+            <label for="address">Address</label>
+            <textarea id="address" name="address" rows="4" cols="50"></textarea><br><br>
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" required><br><br>
+            <label for="confirm-password">Confirm Password</label>
+            <input id="confirm-password" type="password" name="confirmPassword" required><br><br>
+            <label for="profile-picture">Profile Picture</label>
+            <input id="profile-picture" type="file" name="profilePicture"><br><br>
+            <input id="terms" type="checkbox" name="terms" required>
+            <label for="terms">Terms &amp; conditions</label><br><br>
+            <button id="submit" type="submit">Submit</button>
+            <button id="reset" type="reset">Reset</button><br>
+        </form>
+    </body>
+</html>
