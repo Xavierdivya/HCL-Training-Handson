@@ -1,0 +1,258 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\services\\vehiclerentalservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\services\\vehiclerentalservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\payments\\cardpaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\payments\\cardpaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\payments\\cashpaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\payments\\cashpaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\payments\\ipaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\payments\\ipaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\models\\rentalsummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\models\\rentalsummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\models\\rentalchargesummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\models\\rentalchargesummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\models\\bikerental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\models\\bikerental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\models\\carrental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\models\\carrental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\models\\rental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\models\\rental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\models\\vehiclelocation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\models\\vehiclelocation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\models\\rentalperiod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\models\\rentalperiod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|c:\\users\\intel\\source\\repos\\vehiclerentalsystem\\vehiclerentalsystem\\models\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{388DC1C1-C65A-472A-BB21-06B5D09EBEA5}|VehicleRentalSystem\\VehicleRentalSystem.csproj|solutionrelative:vehiclerentalsystem\\models\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IPaymentProcessor.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Payments\\IPaymentProcessor.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Payments\\IPaymentProcessor.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Payments\\IPaymentProcessor.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Payments\\IPaymentProcessor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:30:37.938Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CashPaymentProcessor.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Payments\\CashPaymentProcessor.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Payments\\CashPaymentProcessor.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Payments\\CashPaymentProcessor.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Payments\\CashPaymentProcessor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:30:55.048Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CardPaymentProcessor.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Payments\\CardPaymentProcessor.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Payments\\CardPaymentProcessor.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Payments\\CardPaymentProcessor.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Payments\\CardPaymentProcessor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:31:12.187Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "VehicleRentalService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Services\\VehicleRentalService.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Services\\VehicleRentalService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Services\\VehicleRentalService.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Services\\VehicleRentalService.cs",
+              "ViewState": "AgIAAN8AAAAAAAAAAAAAAPIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:32:37.303Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Program.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Program.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Program.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Program.cs",
+              "ViewState": "AgIAANsAAAAAAAAAAAAAAOcAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:25:43.325Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "RentalSummary.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\RentalSummary.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Models\\RentalSummary.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\RentalSummary.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Models\\RentalSummary.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:31:32.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RentalChargeSummary.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\RentalChargeSummary.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Models\\RentalChargeSummary.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\RentalChargeSummary.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Models\\RentalChargeSummary.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:38:16.91Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "BikeRental.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\BikeRental.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Models\\BikeRental.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\BikeRental.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Models\\BikeRental.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:29:14.246Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CarRental.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\CarRental.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Models\\CarRental.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\CarRental.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Models\\CarRental.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:28:54.884Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Rental.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\Rental.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Models\\Rental.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\Rental.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Models\\Rental.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAAADEAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:27:53.85Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "VehicleLocation.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\VehicleLocation.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Models\\VehicleLocation.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\VehicleLocation.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Models\\VehicleLocation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:38:39.699Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "RentalPeriod.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\RentalPeriod.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Models\\RentalPeriod.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\RentalPeriod.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Models\\RentalPeriod.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:43:22.141Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Customer.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\Customer.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Models\\Customer.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\Customer.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Models\\Customer.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAAACIAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:39:30.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Vehicle.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\Vehicle.cs",
+              "RelativeDocumentMoniker": "VehicleRentalSystem\\Models\\Vehicle.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\VehicleRentalSystem\\VehicleRentalSystem\\Models\\Vehicle.cs",
+              "RelativeToolTip": "VehicleRentalSystem\\Models\\Vehicle.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAAACYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:27:17.162Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

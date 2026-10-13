@@ -1,0 +1,15 @@
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\bin\Debug\net10.0\VehicleRentalSystem.exe
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\bin\Debug\net10.0\VehicleRentalSystem.deps.json
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\bin\Debug\net10.0\VehicleRentalSystem.runtimeconfig.json
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\bin\Debug\net10.0\VehicleRentalSystem.dll
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\bin\Debug\net10.0\VehicleRentalSystem.pdb
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\VehicleRentalSystem.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\VehicleRentalSystem.AssemblyInfoInputs.cache
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\VehicleRentalSystem.AssemblyInfo.cs
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\VehicleRentalSystem.csproj.CoreCompileInputs.cache
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\VehicleRentalSystem.dll
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\refint\VehicleRentalSystem.dll
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\VehicleRentalSystem.pdb
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\VehicleRentalSystem.genruntimeconfig.cache
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\ref\VehicleRentalSystem.dll
+C:\Users\Intel\source\repos\VehicleRentalSystem\VehicleRentalSystem\obj\Debug\net10.0\VehicleR.157AD715.Up2Date
