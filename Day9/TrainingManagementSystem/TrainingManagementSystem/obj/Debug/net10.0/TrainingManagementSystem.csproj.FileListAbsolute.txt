@@ -1,0 +1,15 @@
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\TrainingManagementSystem.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\TrainingManagementSystem.AssemblyInfoInputs.cache
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\TrainingManagementSystem.AssemblyInfo.cs
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\TrainingManagementSystem.csproj.CoreCompileInputs.cache
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\bin\Debug\net10.0\TrainingManagementSystem.exe
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\bin\Debug\net10.0\TrainingManagementSystem.deps.json
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\bin\Debug\net10.0\TrainingManagementSystem.runtimeconfig.json
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\bin\Debug\net10.0\TrainingManagementSystem.dll
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\bin\Debug\net10.0\TrainingManagementSystem.pdb
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\TrainingManagementSystem.dll
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\refint\TrainingManagementSystem.dll
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\TrainingManagementSystem.pdb
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\TrainingManagementSystem.genruntimeconfig.cache
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\ref\TrainingManagementSystem.dll
+C:\Users\Intel\source\repos\TrainingManagementSystem\TrainingManagementSystem\obj\Debug\net10.0\Training.B820EFE8.Up2Date

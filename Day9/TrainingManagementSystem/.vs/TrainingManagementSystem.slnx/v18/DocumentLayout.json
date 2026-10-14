@@ -1,0 +1,581 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\services\\paymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\services\\paymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\services\\enrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\services\\enrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\services\\feecalculatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\services\\feecalculatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\feecalculator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\feecalculator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\services\\trainingsessionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\services\\trainingsessionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\utilities\\inputvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\utilities\\inputvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\enrollment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\enrollment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\services\\reportservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\services\\reportservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\services\\trainingmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\services\\trainingmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\sessions\\classroomsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\sessions\\classroomsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\services\\trainingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\services\\trainingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\services\\learnerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\services\\learnerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\utilities\\genericutilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\utilities\\genericutilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\payments\\classroompaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\payments\\classroompaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\payments\\onlinepaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\payments\\onlinepaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\payments\\ipaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\payments\\ipaymentprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\trainingmanagementsystem.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\trainingmanagementsystem.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\sessions\\onlinesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\sessions\\onlinesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\sessions\\coursesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\sessions\\coursesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\interfaces\\itrainingsessionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\interfaces\\itrainingsessionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\coursesummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\coursesummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\sessionduration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\sessionduration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\feesummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\feesummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\paymentstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\paymentstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\enrollmentstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\enrollmentstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\learner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\learner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\classroomsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\classroomsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\onlinesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\onlinesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\models\\trainingsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\models\\trainingsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|c:\\users\\intel\\source\\repos\\trainingmanagementsystem\\trainingmanagementsystem\\services\\courseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0035B26-1780-FB0E-564F-3D072D869F44}|TrainingManagementSystem\\TrainingManagementSystem.csproj|solutionrelative:trainingmanagementsystem\\services\\courseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FeeCalculator.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\FeeCalculator.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\FeeCalculator.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\FeeCalculator.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\FeeCalculator.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAuwAMAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T16:57:59.822Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FeeCalculatorService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\FeeCalculatorService.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Services\\FeeCalculatorService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\FeeCalculatorService.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Services\\FeeCalculatorService.cs",
+              "ViewState": "AgIAADQAAAAAAAAAAADwv0oAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T16:58:25.958Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Program.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Program.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Program.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Program.cs",
+              "ViewState": "AgIAANMAAAAAAAAAAAAgwNwAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T05:42:34.496Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EnrollmentService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\EnrollmentService.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Services\\EnrollmentService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\EnrollmentService.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Services\\EnrollmentService.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAADwvzkAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T16:23:29.745Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PaymentService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\PaymentService.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Services\\PaymentService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\PaymentService.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Services\\PaymentService.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAA4wBYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:56:59.782Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TrainingSessionService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\TrainingSessionService.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Services\\TrainingSessionService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\TrainingSessionService.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Services\\TrainingSessionService.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAswDQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:12:16.894Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "InputValidator.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Utilities\\InputValidator.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Utilities\\InputValidator.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Utilities\\InputValidator.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Utilities\\InputValidator.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAswEEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:53:16.824Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Enrollment.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\Enrollment.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\Enrollment.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\Enrollment.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\Enrollment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T16:23:37.328Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "TrainingManager.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\TrainingManager.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Services\\TrainingManager.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\TrainingManager.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Services\\TrainingManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:18:44.255Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ClassroomSession.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Sessions\\ClassroomSession.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Sessions\\ClassroomSession.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Sessions\\ClassroomSession.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Sessions\\ClassroomSession.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAuwBwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:50:47.344Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ReportService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\ReportService.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Services\\ReportService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\ReportService.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Services\\ReportService.cs",
+              "ViewState": "AgIAADsAAAAAAAAAAAAuwE4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T18:03:36.513Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Course.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\Course.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\Course.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\Course.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\Course.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAkwCcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T16:43:18.784Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "TrainingService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\TrainingService.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Services\\TrainingService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\TrainingService.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Services\\TrainingService.cs",
+              "ViewState": "AgIAAHAAAAAAAAAAAAAuwIMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:55:34.245Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "GenericUtilities.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Utilities\\GenericUtilities.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Utilities\\GenericUtilities.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Utilities\\GenericUtilities.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Utilities\\GenericUtilities.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAuwBoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:53:40.448Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ClassroomPaymentProcessor.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Payments\\ClassroomPaymentProcessor.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Payments\\ClassroomPaymentProcessor.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Payments\\ClassroomPaymentProcessor.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Payments\\ClassroomPaymentProcessor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:52:29.551Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "OnlinePaymentProcessor.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Payments\\OnlinePaymentProcessor.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Payments\\OnlinePaymentProcessor.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Payments\\OnlinePaymentProcessor.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Payments\\OnlinePaymentProcessor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:52:04.643Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IPaymentProcessor.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Payments\\IPaymentProcessor.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Payments\\IPaymentProcessor.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Payments\\IPaymentProcessor.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Payments\\IPaymentProcessor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:51:36.85Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "LearnerService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\LearnerService.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Services\\LearnerService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\LearnerService.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Services\\LearnerService.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAuwFYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T15:17:28.12Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "OnlineSession.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Sessions\\OnlineSession.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Sessions\\OnlineSession.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Sessions\\OnlineSession.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Sessions\\OnlineSession.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAuwBwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:50:21.749Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "CourseSession.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Sessions\\CourseSession.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Sessions\\CourseSession.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Sessions\\CourseSession.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Sessions\\CourseSession.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAA8wBcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:49:52.01Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "TrainingManagementSystem",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\TrainingManagementSystem.csproj",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\TrainingManagementSystem.csproj",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\TrainingManagementSystem.csproj",
+              "RelativeToolTip": "TrainingManagementSystem\\TrainingManagementSystem.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-10-14T17:49:24.809Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "CourseSummary.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\CourseSummary.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\CourseSummary.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\CourseSummary.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\CourseSummary.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:47:23.242Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "SessionDuration.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\SessionDuration.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\SessionDuration.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\SessionDuration.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\SessionDuration.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAA8wB0AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:46:34.763Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Payment.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\Payment.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\Payment.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\Payment.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\Payment.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAA8wBoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:45:19.874Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "PaymentStatus.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\PaymentStatus.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\PaymentStatus.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\PaymentStatus.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\PaymentStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:40:00.665Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ITrainingSessionService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Interfaces\\ITrainingSessionService.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Interfaces\\ITrainingSessionService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Interfaces\\ITrainingSessionService.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Interfaces\\ITrainingSessionService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:24:15.711Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "Learner.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\Learner.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\Learner.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\Learner.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\Learner.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAuwBQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T15:46:26.559Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "FeeSummary.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\FeeSummary.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\FeeSummary.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\FeeSummary.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\FeeSummary.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAuwBQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T16:59:13.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "EnrollmentStatus.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\EnrollmentStatus.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\EnrollmentStatus.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\EnrollmentStatus.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\EnrollmentStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T16:25:20.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "ClassroomSession.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\ClassroomSession.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\ClassroomSession.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\ClassroomSession.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\ClassroomSession.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAA8wBcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:11:47.898Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "OnlineSession.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\OnlineSession.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\OnlineSession.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\OnlineSession.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\OnlineSession.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAA8wBcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:11:19.902Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "TrainingSession.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\TrainingSession.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Models\\TrainingSession.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Models\\TrainingSession.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Models\\TrainingSession.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAuwCEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T17:10:35.832Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "CourseService.cs",
+              "DocumentMoniker": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\CourseService.cs",
+              "RelativeDocumentMoniker": "TrainingManagementSystem\\Services\\CourseService.cs",
+              "ToolTip": "C:\\Users\\Intel\\source\\repos\\TrainingManagementSystem\\TrainingManagementSystem\\Services\\CourseService.cs",
+              "RelativeToolTip": "TrainingManagementSystem\\Services\\CourseService.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAuwF8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-14T16:43:36.043Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
