@@ -9,8 +9,10 @@ The purpose of this repository is to maintain and organize my daily practice pro
 
 ## 📂 Repository Structure
 
-```text
-HCL-Training-Handson/
+# HCL-Training-Handson
+
+## Daily Training Projects
+
 | Day | Project |
 |---|---|
 | Day 1 | [HTML and CSS Practice](Day1/) |
@@ -27,9 +29,7 @@ HCL-Training-Handson/
 | Day 12 | [JSON Practice](Day12/) |
 | Day 13 | [File Handling](Day13/) |
 | Day 14 | [Course Management](Day14/) |
-| Day 15 | [Daily Practice](Day15/)|
-└── README.md
-```
+| Day 15 | [Daily Practice](Day15/) |
 
 *Note: The folders and files will be updated as I progress through the training.*
 
