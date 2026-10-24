@@ -11,13 +11,23 @@ The purpose of this repository is to maintain and organize my daily practice pro
 
 ```text
 HCL-Training-Handson/
-├── Day1/
-│   ├── Frompractice.html
-│   └── favicon.png
-├── Day2/
-├── Day3/
-├── Day4/
-├── Day5/
+| Day | Project |
+|---|---|
+| Day 1 | [HTML and CSS Practice](Day1/) |
+| Day 2 | [Portfolio](Day2/portfolio/) |
+| Day 3 | [Web Practice](Day3/) |
+| Day 4 | [Grocery Project](Day4/) |
+| Day 5 | [Student Management System](Day5/) |
+| Day 6 | [Practice Projects](Day6/) |
+| Day 7 | [Leave Management API](Day7/) |
+| Day 8 | [Vehicle Rental System](Day8/) |
+| Day 9 | [Training Management System](Day9/) |
+| Day 10 | [LINQ Practice](Day10/) |
+| Day 11 | [Event Management](Day11/) |
+| Day 12 | [JSON Practice](Day12/) |
+| Day 13 | [File Handling](Day13/) |
+| Day 14 | [Course Management](Day14/) |
+| Day 15 | [Daily Practice](Day15/)|
 └── README.md
 ```
 
