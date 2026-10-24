@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BMI Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>BMI Calculator</h1>
+
+    <form id="bmiForm" novalidate>
+      <div class="unit-toggle" role="group" aria-label="Units">
+        <button type="button" class="unit active" data-unit="metric" aria-pressed="true">Metric (kg, cm)</button>
+        <button type="button" class="unit" data-unit="imperial" aria-pressed="false">Imperial (lb, in)</button>
+      </div>
+
+      <label for="weight"><span id="weightLabel">Weight (kg)</span></label>
+      <input id="weight" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 60" required>
+
+      <label for="height"><span id="heightLabel">Height (cm)</span></label>
+      <input id="height" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 165" required>
+
+      <p id="error" class="error" role="alert"></p>
+
+      <div class="actions">
+        <button type="submit" class="primary">Calculate</button>
+        <button type="button" id="resetBtn" class="secondary">Reset</button>
+      </div>
+    </form>
+
+    <section id="result" class="result" aria-live="polite" hidden>
+      <p class="label">Your BMI</p>
+      <p id="bmiValue" class="value">0.0</p>
+      <p id="bmiCategory" class="category"></p>
+    </section>
+
+    <p class="note">BMI is a general screening measure, not a medical diagnosis.</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

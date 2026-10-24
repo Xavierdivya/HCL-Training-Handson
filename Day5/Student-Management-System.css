@@ -1,0 +1,166 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #fdf2d7, #f8d9d9);
+    color: #222;
+}
+
+body h1 {
+    font-family: "Courier New", Courier, monospace;
+    text-align: center;
+    color: #1746a2;
+    margin-bottom: 10px;
+}
+
+h2 {
+    text-align: center;
+    color: #2457a7;
+}
+
+.admission {
+    width: min(650px, 100%);
+    margin: 25px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 2px solid #c5d5f5;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.admission label {
+    display: inline-block;
+    width: 140px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.admission input,
+.admission select {
+    width: min(350px, 100%);
+    padding: 10px;
+    border: 1px solid #a8bde5;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #f9fbff;
+}
+
+.admission textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    border: 1px solid #a8bde5;
+    border-radius: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    resize: vertical;
+}
+
+.admission input:focus,
+.admission select:focus,
+.admission textarea:focus {
+    outline: 2px solid #2f6ef5;
+    border-color: #2f6ef5;
+}
+
+button {
+    padding: 11px 22px;
+    margin: 6px 5px 6px 0;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #2f6ef5, #1c4fd6);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(47, 110, 245, 0.25);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#addedmsg {
+    text-align: center;
+    font-weight: bold;
+    color: #1746a2;
+    overflow-wrap: anywhere;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+th,
+td {
+    border: 1px solid #cbd5e1;
+    padding: 12px;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+th {
+    background-color: #2457a7;
+    color: white;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #edf3ff;
+}
+
+tbody tr:hover {
+    background-color: #dce8ff;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    body h1 {
+        font-size: 23px;
+    }
+
+    .admission {
+        padding: 16px;
+    }
+
+    .admission label {
+        width: 100%;
+    }
+
+    .admission input,
+    .admission select {
+        width: 100%;
+    }
+
+    button {
+        margin-bottom: 10px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        font-size: 13px;
+    }
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Grocery web page Design
+        </title>
+        <link rel="stylesheet" href="Grocery.css">
+    </head>
+    <body>
+        <div class="container">
+        <h1>Grocery Store</h1>
+        <p>Welcome to our grocery store!</p> <br><br>
+        <article id="article"> 
+        <div class="onecontent">  
+        <label id="label">Product</label>
+        <select id="product">
+            <option >Apple</option>
+            <option >Banana</option>
+            <option >Orange</option>
+            <option >Milk</option>
+            <option >Meat</option>
+            <option >Oil</option>
+            <option >Water</option>
+            <option >Sugar</option>
+        </select><br><br><br>
+        </div>
+        <div class="onecontent">
+        <label id="label">Quantity</label>
+        <input type="number" min="1" id="quantity"><br><br><br>
+        </div>
+
+        <button onclick="addproduct()">Add</button>
+
+        <button onclick="showproduct()">Bill Amt</button>
+        <div id="output"></div>
+        <div id="bill"></div>
+        </article>
+        </div>
+
+    <script src="Grocery.js"></script>
+    </body>
+</html>

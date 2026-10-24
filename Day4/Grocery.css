@@ -1,0 +1,131 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #e0f7fa, #fdf2d7, #f8d9d9);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    width: min(42rem, 90vw);
+    min-height: 60vh;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid #1b1b1b;
+    border-radius: 22px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+    padding: 35px 30px 30px;
+    box-sizing: border-box;
+    backdrop-filter: blur(8px);
+}
+
+.container h1 {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    color: #0d4fcb;
+    letter-spacing: 1px;
+}
+
+.container p {
+    margin: 0 0 25px;
+    text-align: center;
+    font-size: 1rem;
+    color: #1459b8;
+    font-weight: 600;
+}
+
+#onecontent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+
+.container label {
+    display: inline-block;
+    min-width: 120px;
+    font-size: 1.1rem;
+    color: #1f1f1f;
+    font-weight: 700;
+}
+
+.container input,
+.container select {
+    width: 200px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    color: #222;
+    background: #f9fbff;
+    border: 2px solid #c5d5f5;
+    border-radius: 12px;
+    transition: 0.3s ease;
+    outline: none;
+}
+
+.container input:focus,
+.container select:focus {
+    border-color: #2f6ef5;
+    box-shadow: 0 0 0 4px rgba(47, 110, 245, 0.12);
+    background: #ffffff;
+}
+
+.quantity {
+    display: flex;
+    justify-content: center;
+    padding-left: 0;
+    margin-top: 15px;
+}
+
+.container button {
+    display: block;
+    margin: 28px auto 0;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2f6ef5, #1c4fd6);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(47, 110, 245, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.container button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 24px rgba(47, 110, 245, 0.3);
+    filter: brightness(1.05);
+}
+
+.container button:active {
+    transform: translateY(0);
+    box-shadow: 0 8px 16px rgba(47, 110, 245, 0.22);
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 25px 18px;
+    }
+
+    #onecontent {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .container label {
+        min-width: auto;
+    }
+
+    .container input,
+    .container select {
+        width: 100%;
+    }
+
+}
+

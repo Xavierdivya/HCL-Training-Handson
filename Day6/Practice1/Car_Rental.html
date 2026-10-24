@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DriveEase - Car Rental</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+
+<link rel="stylesheet" href="Car_Rental.css">
+<link rel="icon" href="car.jpeg" type="jpeg/png">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-info" href="#home">
+            DriveEase
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#cars">Available Cars</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#booking">Book Now</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#feedback">Feedback</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<section id="home"><div id="home-container">
+    <div class="home-content">
+        <span class="badge bg-info text-dark mb-3">
+            YOUR JOURNEY STARTS HERE
+        </span>
+
+        <h1>Find Your Perfect Ride</h1>
+
+        <p>
+            Explore the road with comfort and freedom.
+            Rent your favourite car at affordable prices.
+        </p>
+
+        <a href="#cars" class="btn btn-info btn-lg me-2">
+            Explore Cars
+        </a>
+
+        <a href="#booking" class="btn btn-outline-light btn-lg">
+            Book Now
+        </a>
+    </div>
+    </div>
+</section>
+
+<section id="cars" class="py-5">
+    <div id="carscontainer">
+    <div class="container">
+
+        <h2 class="section-title">Our Available Cars</h2>
+        <p class="text-center text-secondary mb-5">
+            Choose a car that matches your journey.
+        </p>
+
+        <div class="row g-4">
+
+            <!-- CAR 1 -->
+            <div class="col-md-4">
+                <div class="card car-card h-100">
+                    <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80"
+                         class="card-img-top" alt="Sports car">
+
+                    <div class="card-body">
+                        <h5 class="card-title">Chevrolet Camaro</h5>
+                        <p class="card-text">
+                            Stylish sports car for an exciting drive.
+                        </p>
+
+                        <h5 class="text-info">₹4,500 / day</h5>
+
+                        <a href="#booking"
+                           class="btn btn-info w-100 mt-3">
+                            Book This Car
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAR 2 -->
+            <div class="col-md-4">
+                <div class="card car-card h-100">
+                    <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80"
+                         class="card-img-top" alt="Luxury sedan">
+
+                    <div class="card-body">
+                        <h5 class="card-title">Luxury Sedan</h5>
+                        <p class="card-text">
+                            Enjoy a comfortable ride for business
+                            and family trips.
+                        </p>
+
+                        <h5 class="text-info">₹3,000 / day</h5>
+
+                        <a href="#booking"
+                           class="btn btn-info w-100 mt-3">
+                            Book This Car
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAR 3 -->
+            <div class="col-md-4">
+                <div class="card car-card h-100">
+                    <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=800&q=80"
+                         class="card-img-top" alt="SUV">
+
+                    <div class="card-body">
+                        <h5 class="card-title">Premium SUV</h5>
+                        <p class="card-text">
+                            Spacious and reliable for long journeys
+                            and group travel.
+                        </p>
+
+                        <h5 class="text-info">₹3,800 / day</h5>
+
+                        <a href="#booking"
+                           class="btn btn-info w-100 mt-3">
+                            Book This Car
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="booking" class="py-5">
+    <div id="bookcontainer">
+    <div class="container">
+
+        <h2 class="section-title">Book Your Car</h2>
+
+        <div class="booking-card mx-auto mt-4">
+
+            <form action="#" method="get">
+
+                <div class="mb-3">
+                    <label for="customer" class="form-label">
+                        Full Name
+                    </label>
+                    <input type="text" id="customer"
+                           class="form-control"
+                           placeholder="Enter your name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">
+                        Email Address
+                    </label>
+                    <input type="email" id="email"
+                           class="form-control"
+                           placeholder="Enter your email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="car" class="form-label">
+                        Select Car
+                    </label>
+                    <select id="car" class="form-select" required>
+                        <option value="">Choose a car</option>
+                        <option>Chevrolet Camaro</option>
+                        <option>Luxury Sedan</option>
+                        <option>Premium SUV</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="pickup" class="form-label">
+                            Pickup Date
+                        </label>
+                        <input type="date" id="pickup"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="return" class="form-label">
+                            Return Date
+                        </label>
+                        <input type="date" id="return"
+                               class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="location" class="form-label">
+                        Pickup Location
+                    </label>
+                    <input type="text" id="location"
+                           class="form-control"
+                           placeholder="Enter pickup city" required>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-info w-100">
+                    Confirm Booking
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+    </div>
+</section>
+
+<section id="about" class="py-5">
+    <div id="aboutcontainer">
+    <div class="container text-center">
+
+        <h2 class="section-title">About DriveEase</h2>
+
+        <p class="about-text">
+            DriveEase is a car rental platform designed to make
+            travelling simple, comfortable, and convenient.
+            We offer a range of vehicles for family trips,
+            business travel, and weekend adventures.
+        </p>
+
+        <div class="row g-4 mt-3">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>🚘 Wide Selection</h4>
+                    <p>Choose from a variety of vehicles for your trip.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>💰 Affordable Prices</h4>
+                    <p>Find rental options that suit your budget.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h4>🛡️ Reliable Service</h4>
+                    <p>Enjoy a simple and convenient booking experience.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</section>
+
+<section id="feedback" class="py-5">
+    <div id="feedbackcontainer">
+    <div class="container">
+
+        <h2 class="section-title">Customer Feedback</h2>
+
+        <div class="row g-4 mt-3">
+
+            <div class="col-md-4">
+                <div class="feedback-card">
+                    <h5>Arun Kumar</h5>
+                    <p class="stars">★★★★★</p>
+                    <p>
+                        The booking process was simple, and the car
+                        was comfortable for our family trip.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feedback-card">
+                    <h5>Priya Sharma</h5>
+                    <p class="stars">★★★★★</p>
+                    <p>
+                        I found a suitable car at a reasonable price.
+                        The website was easy to navigate.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feedback-card">
+                    <h5>Rahul Raj</h5>
+                    <p class="stars">★★★★☆</p>
+                    <p>
+                        A convenient option for weekend travel
+                        with several vehicle choices.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</section>
+
+<footer class="bg-dark text-white py-4">
+    <div id="footercontainer">
+    <div class="container">
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <h4 class="text-info">DriveEase</h4>
+                <p>Your journey, our responsibility.</p>
+            </div>
+
+            <div class="col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#cars">Available Cars</a></li>
+                    <li><a href="#booking">Book a Car</a></li>
+                    <li><a href="#feedback">Feedback</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <h5>Contact Us</h5>
+                <p>Email: support@driveease.example</p>
+                <p>Phone: +91 98765 43210</p>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <p class="text-center mb-0">
+            &copy; 2026 DriveEase. All Rights Reserved.
+        </p>
+
+    </div>
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

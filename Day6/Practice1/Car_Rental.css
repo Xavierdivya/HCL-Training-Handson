@@ -1,0 +1,241 @@
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 75px;
+}
+
+body {
+    margin: 0;
+    background-color: #111111;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+/* section {
+    scroll-margin-top: 5px;
+} */
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.nav-link:hover {
+    color: #0dcaf0 !important;
+}
+
+/* Home */
+#home {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 100px 10% 50px;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.65),
+                        rgba(0, 0, 0, 0.65)),
+        url("https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=80")
+        center / cover no-repeat;
+}
+
+.home-content {
+    max-width: 650px;
+}
+
+.home-content h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.home-content p {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+/* Section headings */
+.section-title {
+    text-align: center;
+    color: #0dcaf0;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Cars */
+#cars {
+    background-color: #171717;
+}
+
+.car-card {
+    background-color: #242424;
+    color: white;
+    border: 1px solid #393939;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s ease;
+}
+
+.car-card img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.car-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 8px 20px rgba(13, 202, 240, 0.2);
+}
+
+.car-card .card-text {
+    color: #cccccc;
+}
+
+/* Booking */
+#booking {
+    background-color: #101010;
+}
+
+.booking-card {
+    max-width: 650px;
+    background-color: #242424;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #444444;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.form-label {
+    color: #f5f5f5;
+}
+
+.form-control,
+.form-select {
+    padding: 11px;
+}
+
+/* About */
+#about {
+    background-color: #191919;
+}
+
+.about-text {
+    max-width: 800px;
+    margin: 20px auto;
+    line-height: 1.9;
+    color: #cccccc;
+}
+
+.feature-card {
+    background-color: #252525;
+    border-left: 4px solid #0dcaf0;
+    padding: 25px;
+    border-radius: 10px;
+    height: 100%;
+    transition: 0.3s ease;
+}
+
+.feature-card h4 {
+    color: #0dcaf0;
+}
+
+.feature-card p {
+    color: #cccccc;
+    margin-bottom: 0;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Feedback */
+#feedback {
+    background-color: #111111;
+}
+
+.feedback-card {
+    height: 100%;
+    padding: 25px;
+    background-color: #242424;
+    border-left: 4px solid #0dcaf0;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: 0.3s ease;
+}
+
+.feedback-card h5 {
+    color: #0dcaf0;
+}
+
+.feedback-card p {
+    color: #dddddd;
+    line-height: 1.8;
+}
+
+.feedback-card .stars {
+    color: #ffc107;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.feedback-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Footer */
+footer {
+    color: #cccccc;
+}
+
+footer h5 {
+    color: white;
+    margin-bottom: 15px;
+}
+
+footer a {
+    color: #cccccc;
+    text-decoration: none;
+    line-height: 2;
+}
+
+footer a:hover {
+    color: #0dcaf0;
+}
+
+/* Buttons */
+.btn-info {
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 202, 240, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #home {
+        padding: 100px 7% 50px;
+    }
+
+    .home-content h1 {
+        font-size: 38px;
+    }
+
+    .section-title {
+        font-size: 27px;
+    }
+
+    .booking-card {
+        padding: 20px;
+    }
+}
+
+#homecontainer,
+#carscontainer,
+#bookcontainer,
+#aboutcontainer,
+#feedbackcontainer,
+#footercontainer {
+    height: max-content;
+}

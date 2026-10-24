@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Divya X | Java Full Stack Developer &amp; Computer Science Engineering Student</title>
+  <meta name="description" content="Portfolio of Divya X, a Computer Science and Engineering student (2027) and Java Full Stack developer building practical software with Java, Spring Boot, REST APIs, MySQL and modern web technologies.">
+  <meta name="author" content="Divya X">
+  <meta name="theme-color" content="#faf7f2">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Divya X | Java Full Stack Developer">
+  <meta property="og:description" content="Computer Science Engineering student building practical software with Java, Spring Boot, REST APIs and SQL.">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Theme + JS flag are set before first paint to avoid a flash of the wrong theme.
+       Stored choice wins; otherwise the visitor's system preference is used. -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      try {
+        var t = localStorage.getItem('theme');
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        root.setAttribute('data-theme', t);
+      } catch (e) {}
+      root.classList.add('js');
+    })();
+  </script>
+
+  <!-- Fonts (CDN). System fonts are the fallback if this fails to load. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 (vendored locally, so the site works offline) -->
+  <link rel="stylesheet" href="assets/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#about">Skip to content</a>
+
+  <!-- ========== SVG ICON SPRITE (no icon-font dependency) ========== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.7 5.4-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></symbol>
+      <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11.5H3V9.75zm6.5 0h3.8v1.6h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.85h-4v-5.2c0-1.24-.02-2.84-1.73-2.84-1.73 0-2 1.35-2 2.75v5.29h-4V9.75z"/></symbol>
+      <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+      <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.7V17c0 .6-.5 1-1.1 1.2C7.8 18.7 7 20.2 7 22M14 14.7V17c0 .6.5 1 1.1 1.2 1.1.5 1.9 2 1.9 3.8M18 2H6v7a6 6 0 0 0 12 0V2z"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21.1 7 14.2 2 9.3l6.9-1L12 2z"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3zM19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></symbol>
+      <symbol id="i-server" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="7" rx="2"/><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 6.5h.01M6 17.5h.01"/></symbol>
+      <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></symbol>
+      <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></symbol>
+      <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></symbol>
+      <symbol id="i-tool" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9l-3.8 3.8z"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z"/></symbol>
+      <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6M12 19h8"/></symbol>
+      <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5zM6 12v5c3 2 9 2 12 0v-5"/></symbol>
+      <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></symbol>
+      <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+      <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+      <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 0 1 0 9z"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ========== TOP BAR ========== -->
+  <header class="topbar" id="topbar">
+    <a class="monogram" href="#home" data-nav aria-label="Divya X, back to home">DX</a>
+
+    <div class="topbar-actions">
+      <a class="top-link top-link--resume" href="assets/resume.pdf" download="Divya_X_Resume.pdf">
+        <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg><span>Resume</span>
+      </a>
+      <button class="icon-btn" id="themeToggle" type="button" aria-pressed="false" aria-label="Switch to dark theme">
+        <svg class="icon theme-icon theme-icon--moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        <svg class="icon theme-icon theme-icon--sun" aria-hidden="true"><use href="#i-sun"/></svg>
+      </button>
+      <a class="top-link top-link--connect" href="#contact" data-nav>Let&rsquo;s connect</a>
+      <button class="icon-btn menu-btn" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+        <svg class="icon menu-icon menu-icon--open" aria-hidden="true"><use href="#i-menu"/></svg>
+        <svg class="icon menu-icon menu-icon--close" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile / tablet menu -->
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <ul>
+      <li><a href="#home" data-nav>Home</a></li>
+      <li><a href="#about" data-nav>About</a></li>
+      <li><a href="#skills" data-nav>Skills</a></li>
+      <li><a href="#experience" data-nav>Experience</a></li>
+      <li><a href="#projects" data-nav>Projects</a></li>
+      <li><a href="#education" data-nav>Education</a></li>
+      <li><a href="#achievements" data-nav>Achievements</a></li>
+      <li><a href="#contact" data-nav>Contact</a></li>
+    </ul>
+    <a class="btn-x btn-x--ghost mobile-menu__resume" href="assets/resume.pdf" download="Divya_X_Resume.pdf">
+      <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download Resume
+    </a>
+  </nav>
+
+  <!-- Desktop edge navigation (right) -->
+  <nav class="rail-nav" aria-label="Section navigation">
+    <ul>
+      <li><a href="#home" data-nav data-section="home">Home</a></li>
+      <li><a href="#about" data-nav data-section="about">About</a></li>
+      <li><a href="#skills" data-nav data-section="skills">Skills</a></li>
+      <li><a href="#experience" data-nav data-section="experience">Experience</a></li>
+      <li><a href="#projects" data-nav data-section="projects">Projects</a></li>
+      <li><a href="#education" data-nav data-section="education">Education</a></li>
+      <li><a href="#achievements" data-nav data-section="achievements">Achievements</a></li>
+      <li><a href="#contact" data-nav data-section="contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Desktop edge socials (left) -->
+  <aside class="rail-social" aria-label="Social links">
+    <a href="https://github.com/Xavierdivya" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile (opens in new tab)"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-github"/></svg></a>
+    <a href="https://www.linkedin.com/in/divya-xavier-3b5317290" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile (opens in new tab)"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-linkedin"/></svg></a>
+    <a href="https://leetcode.com/u/DivyaXavier/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode profile (opens in new tab)"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></a>
+    <span class="rail-social__line" aria-hidden="true"></span>
+  </aside>
+
+  <main id="main">
+
+    <!-- ========== HERO / INTERACTIVE LANDING ========== -->
+    <section class="hero" id="home" aria-label="Introduction">
+      <div class="hero-inner">
+
+        <!-- Central animated symbol (pure inline SVG + CSS). Click / Enter / Space to enter. -->
+        <button class="orb" id="orb" type="button" aria-label="Enter the portfolio. Click to explore.">
+          <span class="orb-aura" aria-hidden="true"></span>
+          <span class="orb-pulse" aria-hidden="true"></span>
+          <svg class="orb-svg" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+            <defs>
+              <radialGradient id="gCore" cx="34%" cy="28%" r="80%">
+                <stop offset="0" style="stop-color:var(--orb-1)"/>
+                <stop offset="0.55" style="stop-color:var(--orb-2)"/>
+                <stop offset="1" style="stop-color:var(--orb-3)"/>
+              </radialGradient>
+              <linearGradient id="gRingA" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" style="stop-color:var(--violet)"/>
+                <stop offset="1" style="stop-color:var(--cyan)"/>
+              </linearGradient>
+              <linearGradient id="gRingB" x1="1" y1="0" x2="0" y2="1">
+                <stop offset="0" style="stop-color:var(--pink)"/>
+                <stop offset="1" style="stop-color:var(--violet)"/>
+              </linearGradient>
+            </defs>
+
+            <!-- outer dotted ring -->
+            <g class="par par-1"><g class="spin spin--slow">
+              <circle cx="200" cy="200" r="188" fill="none" stroke="url(#gRingA)" stroke-width="1.6" stroke-dasharray="1 10" stroke-linecap="round"/>
+            </g></g>
+
+            <!-- three tilted orbits -->
+            <g class="par par-2"><g class="spin spin--rev">
+              <ellipse cx="200" cy="200" rx="172" ry="64" fill="none" stroke="url(#gRingB)" stroke-width="1.4" opacity="0.8"/>
+              <circle cx="372" cy="200" r="7" fill="url(#gRingB)"/>
+            </g></g>
+            <g class="par par-2"><g class="spin">
+              <g transform="rotate(60 200 200)">
+                <ellipse cx="200" cy="200" rx="172" ry="64" fill="none" stroke="url(#gRingA)" stroke-width="1.4" opacity="0.8"/>
+                <circle cx="28" cy="200" r="6" fill="url(#gRingA)"/>
+              </g>
+            </g></g>
+            <g class="par par-3"><g class="spin spin--mid">
+              <g transform="rotate(-60 200 200)">
+                <ellipse cx="200" cy="200" rx="172" ry="64" fill="none" stroke="url(#gRingB)" stroke-width="1.4" opacity="0.65"/>
+                <circle cx="372" cy="200" r="5" fill="url(#gRingA)"/>
+              </g>
+            </g></g>
+
+            <!-- glowing core with DX monogram -->
+            <g class="par par-4"><g class="core">
+              <circle cx="200" cy="200" r="86" fill="url(#gCore)"/>
+              <ellipse cx="172" cy="162" rx="40" ry="22" fill="#fff" opacity="0.28" transform="rotate(-28 172 162)"/>
+              <text x="200" y="217" text-anchor="middle" class="orb-mono">DX</text>
+            </g></g>
+          </svg>
+        </button>
+
+        <h1 class="hero-title">Hi, I&rsquo;m <span class="grad-text">Divya X.</span></h1>
+        <p class="hero-role">Computer Science Engineering student <span aria-hidden="true">|</span> Java Full Stack Developer <span aria-hidden="true">|</span> Software Developer</p>
+
+        <p class="hero-hint" aria-hidden="true"><span class="hero-hint__dot"></span><span id="heroHint">Click to explore</span></p>
+
+        <!-- Revealed after entering (always visible if JavaScript is unavailable) -->
+        <div class="hero-extra" id="heroExtra">
+          <div class="hero-extra__inner">
+            <p class="hero-intro">I build practical software solutions using Java, Spring Boot, REST APIs, SQL and modern web technologies. I enjoy solving problems, developing useful applications, and continuously improving my engineering skills.</p>
+            <div class="hero-cta">
+              <a class="btn-x btn-x--primary" href="#projects" data-nav>Explore My Projects <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+              <a class="btn-x btn-x--ghost" href="assets/resume.pdf" download="Divya_X_Resume.pdf"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download Resume</a>
+            </div>
+            <ul class="hero-social" aria-label="Social links">
+              <li><a href="https://github.com/Xavierdivya" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile (opens in new tab)"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-github"/></svg></a></li>
+              <li><a href="https://www.linkedin.com/in/divya-xavier-3b5317290" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile (opens in new tab)"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-linkedin"/></svg></a></li>
+              <li><a href="https://leetcode.com/u/DivyaXavier/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode profile (opens in new tab)"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Everything below the landing screen is revealed on entry (see script.js). -->
+    <div class="gated" id="content">
+
+      <!-- ========== ABOUT ========== -->
+      <section class="section" id="about" aria-labelledby="about-title">
+        <div class="container wrap">
+          <header class="section-head reveal">
+            <p class="eyebrow">01 &mdash; About</p>
+            <h2 id="about-title">Building useful software, one layer at a time.</h2>
+          </header>
+
+          <div class="row g-4 align-items-start">
+            <div class="col-lg-7 reveal">
+              <p class="lead-text">I&rsquo;m a Computer Science and Engineering student at PSNA College of Engineering and Technology, graduating in 2027 with a CGPA of 8.73.</p>
+              <p>Across three internships in full stack and Java full stack development, I&rsquo;ve built backend applications with Spring Boot and MySQL, designed REST APIs using layered architecture, and connected them to responsive HTML, CSS and JavaScript front ends.</p>
+              <p>I enjoy turning ideas into practical software &mdash; from a course registration system to an AI-assisted learning planner &mdash; and I&rsquo;m looking for software developer and Java Full Stack roles where I can keep growing as an engineer.</p>
+            </div>
+            <div class="col-lg-5 reveal">
+              <ul class="stat-grid" aria-label="Highlights">
+                <li><strong>8.73</strong><span>CGPA, B.E. CSE</span></li>
+                <li><strong>3</strong><span>Internships</span></li>
+                <li><strong>150+</strong><span>LeetCode problems solved</span></li>
+                <li><strong>3&#9733;</strong><span>HackerRank, Java</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== SKILLS ========== -->
+      <section class="section section--alt" id="skills" aria-labelledby="skills-title">
+        <div class="container wrap">
+          <header class="section-head reveal">
+            <p class="eyebrow">02 &mdash; Skills</p>
+            <h2 id="skills-title">Tools and concepts I work with.</h2>
+          </header>
+
+          <div class="row g-4">
+            <div class="col-md-6 col-lg-4 reveal">
+              <article class="card-x skill-card">
+                <div class="skill-card__head"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></span><h3>Programming Languages</h3></div>
+                <ul class="chips"><li>Java</li><li>JavaScript</li><li>SQL</li></ul>
+              </article>
+            </div>
+            <div class="col-md-6 col-lg-4 reveal">
+              <article class="card-x skill-card">
+                <div class="skill-card__head"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-layout"/></svg></span><h3>Frontend</h3></div>
+                <ul class="chips"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+              </article>
+            </div>
+            <div class="col-md-6 col-lg-4 reveal">
+              <article class="card-x skill-card">
+                <div class="skill-card__head"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-server"/></svg></span><h3>Backend</h3></div>
+                <ul class="chips"><li>Spring Boot</li><li>REST APIs</li><li>JDBC</li></ul>
+              </article>
+            </div>
+            <div class="col-md-6 col-lg-4 reveal">
+              <article class="card-x skill-card">
+                <div class="skill-card__head"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-database"/></svg></span><h3>Database</h3></div>
+                <ul class="chips"><li>MySQL</li></ul>
+              </article>
+            </div>
+            <div class="col-md-6 col-lg-4 reveal">
+              <article class="card-x skill-card">
+                <div class="skill-card__head"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-cpu"/></svg></span><h3>Core Computer Science</h3></div>
+                <ul class="chips"><li>Data Structures &amp; Algorithms</li><li>Object-Oriented Programming</li><li>DBMS</li><li>Operating Systems</li><li>Computer Networks</li></ul>
+              </article>
+            </div>
+            <div class="col-md-6 col-lg-4 reveal">
+              <article class="card-x skill-card">
+                <div class="skill-card__head"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-tool"/></svg></span><h3>Tools</h3></div>
+                <ul class="chips"><li>Git</li><li>GitHub</li><li>IntelliJ IDEA</li><li>Eclipse</li><li>Docker (Basics)</li></ul>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== EXPERIENCE ========== -->
+      <section class="section" id="experience" aria-labelledby="experience-title">
+        <div class="container wrap">
+          <header class="section-head reveal">
+            <p class="eyebrow">03 &mdash; Experience</p>
+            <h2 id="experience-title">Internships.</h2>
+          </header>
+
+          <ol class="timeline">
+            <li class="timeline__item reveal">
+              <span class="timeline__dot" aria-hidden="true"></span>
+              <article class="card-x">
+                <p class="meta">June 2026 &ndash; July 2026</p>
+                <h3>Full Stack Web Development Intern</h3>
+                <p class="org">Reccsar Pvt. Ltd.</p>
+                <ul class="bullets">
+                  <li>Completed internship training in full stack web development.</li>
+                  <li>Worked with frontend, backend and database concepts while following software development best practices.</li>
+                  <li>Practised debugging, testing and problem-solving through hands-on assignments.</li>
+                </ul>
+                <ul class="chips chips--sm"><li>Full Stack</li><li>Frontend</li><li>Backend</li><li>Database</li></ul>
+              </article>
+            </li>
+            <li class="timeline__item reveal">
+              <span class="timeline__dot" aria-hidden="true"></span>
+              <article class="card-x">
+                <p class="meta">June 2025 &ndash; July 2025</p>
+                <h3>Java Full Stack Intern</h3>
+                <p class="org">Pantech E-Learning</p>
+                <ul class="bullets">
+                  <li>Developed backend applications using Spring Boot and MySQL.</li>
+                  <li>Designed REST APIs using layered architecture principles.</li>
+                  <li>Applied object-oriented programming concepts to build modular, maintainable applications.</li>
+                </ul>
+                <ul class="chips chips--sm"><li>Java</li><li>Spring Boot</li><li>MySQL</li><li>REST APIs</li></ul>
+              </article>
+            </li>
+            <li class="timeline__item reveal">
+              <span class="timeline__dot" aria-hidden="true"></span>
+              <article class="card-x">
+                <p class="meta">January 2025 &ndash; February 2025</p>
+                <h3>Full Stack Developer Intern</h3>
+                <p class="org">CodeAlpha</p>
+                <ul class="bullets">
+                  <li>Built responsive web applications using HTML, CSS, JavaScript and Java.</li>
+                  <li>Worked on frontend&ndash;backend integration, debugging and testing.</li>
+                </ul>
+                <ul class="chips chips--sm"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Java</li></ul>
+              </article>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ========== PROJECTS ========== -->
+      <!-- To change a repository link, edit the href of the "GitHub" button inside the matching card.
+           All four URLs below were taken from the hyperlinks embedded in the resume PDF. -->
+      <section class="section section--alt" id="projects" aria-labelledby="projects-title">
+        <div class="container wrap">
+          <header class="section-head reveal">
+            <p class="eyebrow">04 &mdash; Projects</p>
+            <h2 id="projects-title">Selected projects.</h2>
+          </header>
+
+          <div class="row g-4">
+            <div class="col-md-6 reveal">
+              <article class="card-x project-card">
+                <span class="tile tile--lg"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+                <h3>Course Registration System</h3>
+                <p>Designed and implemented REST APIs for student registration and course enrollment, structured with Controller&ndash;Service&ndash;Repository layered architecture for scalability and maintainability.</p>
+                <ul class="chips chips--sm"><li>Spring Boot</li><li>Java</li><li>MySQL</li><li>REST APIs</li></ul>
+                <a class="btn-x btn-x--ghost btn-x--sm" href="https://github.com/Xavierdivya/Course-Registration-System" target="_blank" rel="noopener noreferrer" aria-label="Course Registration System on GitHub (opens in new tab)"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-github"/></svg>GitHub<svg class="icon icon--tiny" aria-hidden="true"><use href="#i-external"/></svg></a>
+              </article>
+            </div>
+            <div class="col-md-6 reveal">
+              <article class="card-x project-card">
+                <span class="tile tile--lg"><svg class="icon" aria-hidden="true"><use href="#i-database"/></svg></span>
+                <h3>Student Management System</h3>
+                <p>A CRUD-based backend application for managing student records, integrating JDBC with MySQL and applying validation to keep data consistent.</p>
+                <ul class="chips chips--sm"><li>Java</li><li>JDBC</li><li>MySQL</li></ul>
+                <a class="btn-x btn-x--ghost btn-x--sm" href="https://github.com/Xavierdivya/Student-Management-System-Java" target="_blank" rel="noopener noreferrer" aria-label="Student Management System on GitHub (opens in new tab)"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-github"/></svg>GitHub<svg class="icon icon--tiny" aria-hidden="true"><use href="#i-external"/></svg></a>
+              </article>
+            </div>
+            <div class="col-md-6 reveal">
+              <article class="card-x project-card">
+                <span class="tile tile--lg"><svg class="icon" aria-hidden="true"><use href="#i-sparkles"/></svg></span>
+                <h3>EduPath AI</h3>
+                <p>An AI-assisted education planning platform that generates personalized learning recommendations, with responsive user interfaces and integrated backend data management.</p>
+                <ul class="chips chips--sm"><li>React</li><li>MongoDB</li></ul>
+                <a class="btn-x btn-x--ghost btn-x--sm" href="https://github.com/Xavierdivya/TR-076-The-Noble-Four" target="_blank" rel="noopener noreferrer" aria-label="EduPath AI on GitHub (opens in new tab)"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-github"/></svg>GitHub<svg class="icon icon--tiny" aria-hidden="true"><use href="#i-external"/></svg></a>
+              </article>
+            </div>
+            <div class="col-md-6 reveal">
+              <article class="card-x project-card">
+                <span class="tile tile--lg"><svg class="icon" aria-hidden="true"><use href="#i-terminal"/></svg></span>
+                <h3>Java Quiz Application</h3>
+                <p>A console-based quiz application with question management, score calculation and result evaluation, built with a modular structure, exception handling and clean coding practices.</p>
+                <ul class="chips chips--sm"><li>Core Java</li><li>OOP</li></ul>
+                <a class="btn-x btn-x--ghost btn-x--sm" href="https://github.com/Xavierdivya/JavaQuizApp" target="_blank" rel="noopener noreferrer" aria-label="Java Quiz Application on GitHub (opens in new tab)"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-github"/></svg>GitHub<svg class="icon icon--tiny" aria-hidden="true"><use href="#i-external"/></svg></a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== EDUCATION + CERTIFICATIONS ========== -->
+      <section class="section" id="education" aria-labelledby="education-title">
+        <div class="container wrap">
+          <header class="section-head reveal">
+            <p class="eyebrow">05 &mdash; Education</p>
+            <h2 id="education-title">Education &amp; certifications.</h2>
+          </header>
+
+          <div class="row g-4">
+            <div class="col-lg-6 reveal">
+              <article class="card-x edu-card edu-card--primary">
+                <span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-cap"/></svg></span>
+                <p class="meta">September 2023 &ndash; August 2027</p>
+                <h3>Bachelor of Engineering &mdash; Computer Science and Engineering</h3>
+                <p class="org">PSNA College of Engineering and Technology</p>
+                <p class="score">CGPA: <strong>8.73</strong></p>
+              </article>
+            </div>
+            <div class="col-lg-6">
+              <div class="row g-4">
+                <div class="col-12 reveal">
+                  <article class="card-x edu-card">
+                    <p class="meta">June 2022 &ndash; March 2023</p>
+                    <h3>Higher Secondary Certificate &mdash; Class XII</h3>
+                    <p class="org">St. Joseph&rsquo;s Girls Higher Secondary School</p>
+                    <p class="score">Percentage: <strong>91%</strong></p>
+                  </article>
+                </div>
+                <div class="col-12 reveal">
+                  <article class="card-x edu-card">
+                    <p class="meta">June 2020 &ndash; March 2021</p>
+                    <h3>Secondary School Leaving Certificate &mdash; Class X</h3>
+                    <p class="org">St. Joseph&rsquo;s Girls Higher Secondary School</p>
+                    <p class="score">Result: <strong>Pass</strong> (COVID-19 batch)</p>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="subhead reveal">Certifications</h3>
+          <ul class="cert-grid">
+            <li class="reveal"><span class="cert__icon"><svg class="icon" aria-hidden="true"><use href="#i-award"/></svg></span><div><strong>Programming in Java</strong><span>NPTEL &middot; 62/100</span></div></li>
+            <li class="reveal"><span class="cert__icon"><svg class="icon" aria-hidden="true"><use href="#i-award"/></svg></span><div><strong>Data Structures using Java</strong><span>NPTEL &middot; 58/100</span></div></li>
+            <li class="reveal"><span class="cert__icon"><svg class="icon" aria-hidden="true"><use href="#i-award"/></svg></span><div><strong>Foundation of Cloud IoT Edge ML</strong><span>NPTEL &middot; 75/100</span></div></li>
+            <li class="reveal"><span class="cert__icon"><svg class="icon" aria-hidden="true"><use href="#i-award"/></svg></span><div><strong>Docker for Java Developers</strong><span>Udemy</span></div></li>
+            <li class="reveal"><span class="cert__icon"><svg class="icon" aria-hidden="true"><use href="#i-award"/></svg></span><div><strong>Crash Course in Python</strong><span>Coursera</span></div></li>
+            <li class="reveal"><span class="cert__icon"><svg class="icon" aria-hidden="true"><use href="#i-award"/></svg></span><div><strong>HDCA</strong><span>Certification</span></div></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ========== ACHIEVEMENTS ========== -->
+      <section class="section section--alt" id="achievements" aria-labelledby="achievements-title">
+        <div class="container wrap">
+          <header class="section-head reveal">
+            <p class="eyebrow">06 &mdash; Achievements</p>
+            <h2 id="achievements-title">Achievements &amp; participation.</h2>
+          </header>
+
+          <div class="row g-4">
+            <div class="col-md-6 col-lg-3 reveal"><article class="card-x ach-card"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></span><h3>150+ LeetCode problems</h3><p>Solved on LeetCode.</p></article></div>
+            <div class="col-md-6 col-lg-3 reveal"><article class="card-x ach-card"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg></span><h3>HackerRank 3-star</h3><p>Rated in Java.</p></article></div>
+            <div class="col-md-6 col-lg-3 reveal"><article class="card-x ach-card"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-trophy"/></svg></span><h3>First Prize</h3><p>Logic Fest.</p></article></div>
+            <div class="col-md-6 col-lg-3 reveal"><article class="card-x ach-card"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-mic"/></svg></span><h3>Conference presentation</h3><p>Presented the Smart Canteen project.</p></article></div>
+            <div class="col-md-6 col-lg-3 reveal"><article class="card-x ach-card"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-zap"/></svg></span><h3>Tensor 24-Hour Hackathon</h3><p>Participant, SRM Trichy.</p></article></div>
+            <div class="col-md-6 col-lg-3 reveal"><article class="card-x ach-card"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-zap"/></svg></span><h3>12-Hour Hackathon</h3><p>Participant, Prince Institutions.</p></article></div>
+            <div class="col-md-6 col-lg-3 reveal"><article class="card-x ach-card"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span><h3>IBM TGMC</h3><p>Participant.</p></article></div>
+            <div class="col-md-6 col-lg-3 reveal"><article class="card-x ach-card"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-cloud"/></svg></span><h3>Workshops</h3><p>Prompt Paradox and IoT, AI &amp; Cloud workshops.</p></article></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== CONTACT ========== -->
+      <section class="section" id="contact" aria-labelledby="contact-title">
+        <div class="container wrap">
+          <header class="section-head section-head--center reveal">
+            <p class="eyebrow">07 &mdash; Contact</p>
+            <h2 id="contact-title">Have an opportunity or project in mind?<br><span class="grad-text">Let&rsquo;s connect.</span></h2>
+            <p class="section-sub">I&rsquo;m open to software developer and Java Full Stack opportunities. The quickest way to reach me is by email.</p>
+          </header>
+
+          <ul class="contact-grid">
+            <li class="reveal"><a class="card-x contact-card" href="mailto:xavierdivya01@gmail.com" aria-label="Send an email to xavierdivya01@gmail.com"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg></span><span class="contact-card__label">Email</span><span class="contact-card__value">xavierdivya01@gmail.com</span></a></li>
+            <li class="reveal"><a class="card-x contact-card" href="tel:+919789386073" aria-label="Call +91 9789386073"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></span><span class="contact-card__label">Phone</span><span class="contact-card__value">+91 9789386073</span></a></li>
+            <li class="reveal"><a class="card-x contact-card" href="https://www.linkedin.com/in/divya-xavier-3b5317290" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile (opens in new tab)"><span class="tile"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-linkedin"/></svg></span><span class="contact-card__label">LinkedIn</span><span class="contact-card__value">divya-xavier</span></a></li>
+            <li class="reveal"><a class="card-x contact-card" href="https://github.com/Xavierdivya" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile (opens in new tab)"><span class="tile"><svg class="icon icon--fill" aria-hidden="true"><use href="#i-github"/></svg></span><span class="contact-card__label">GitHub</span><span class="contact-card__value">Xavierdivya</span></a></li>
+            <li class="reveal"><a class="card-x contact-card" href="https://leetcode.com/u/DivyaXavier/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode profile (opens in new tab)"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></span><span class="contact-card__label">LeetCode</span><span class="contact-card__value">DivyaXavier</span></a></li>
+            <li class="reveal"><a class="card-x contact-card" href="assets/resume.pdf" download="Divya_X_Resume.pdf" aria-label="Download resume as PDF"><span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span><span class="contact-card__label">Resume</span><span class="contact-card__value">Download PDF</span></a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer gated">
+    <div class="container wrap footer__inner">
+      <p>&copy; <span id="year">2026</span> Divya X. Built with HTML, CSS &amp; JavaScript.</p>
+      <a class="footer__top" href="#home" data-nav aria-label="Back to top"><svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg>Back to top</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
