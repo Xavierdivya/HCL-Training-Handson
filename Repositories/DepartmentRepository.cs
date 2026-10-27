@@ -75,4 +75,64 @@ public class DepartmentRepository
 
         return departments;
     }
+
+
+    public async Task<bool> UpdateAsync(Department department)
+    {
+        const string sql = """
+        UPDATE Departments
+        SET DepartmentName = @DepartmentName,
+            Location = @Location
+        WHERE DepartmentId = @DepartmentId;
+        """;
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add(
+            "@DepartmentId", SqlDbType.Int)
+            .Value = department.DepartmentId;
+
+        command.Parameters.Add(
+            "@DepartmentName", SqlDbType.NVarChar, 100)
+            .Value = department.DepartmentName;
+
+        command.Parameters.Add(
+            "@Location", SqlDbType.NVarChar, 100)
+            .Value = department.Location is null
+                ? DBNull.Value
+                : department.Location;
+
+        await connection.OpenAsync();
+
+        int rowsAffected = await command.ExecuteNonQueryAsync();
+
+        return rowsAffected > 0;
+    }
+
+    public async Task<bool> DeleteAsync(int departmentId)
+    {
+        const string sql = """
+        DELETE FROM Departments
+        WHERE DepartmentId = @DepartmentId;
+        """;
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add(
+            "@DepartmentId", SqlDbType.Int)
+            .Value = departmentId;
+
+        await connection.OpenAsync();
+
+        int rowsAffected = await command.ExecuteNonQueryAsync();
+
+        return rowsAffected > 0;
+    }
+
 }
