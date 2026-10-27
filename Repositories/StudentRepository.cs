@@ -86,4 +86,62 @@ public class StudentRepository
 
         return students;
     }
+
+
+    public async Task<bool> UpdateAsync(Student student)
+    {
+        const string sql = """
+        UPDATE Students
+        SET Name = @Name,
+            Email = @Email,
+            Age = @Age,
+            DepartmentId = @DepartmentId
+        WHERE StudentId = @StudentId;
+        """;
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add("@StudentId", SqlDbType.Int)
+            .Value = student.StudentId;
+
+        command.Parameters.Add("@Name", SqlDbType.NVarChar, 100)
+            .Value = student.Name;
+
+        command.Parameters.Add("@Email", SqlDbType.NVarChar, 255)
+            .Value = student.Email;
+
+        command.Parameters.Add("@Age", SqlDbType.Int)
+            .Value = student.Age;
+
+        command.Parameters.Add("@DepartmentId", SqlDbType.Int)
+            .Value = student.DepartmentId;
+
+        await connection.OpenAsync();
+
+        return await command.ExecuteNonQueryAsync() > 0;
+    }
+
+    public async Task<bool> DeleteAsync(int studentId)
+    {
+        const string sql = """
+        DELETE FROM Students
+        WHERE StudentId = @StudentId;
+        """;
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add("@StudentId", SqlDbType.Int)
+            .Value = studentId;
+
+        await connection.OpenAsync();
+
+        return await command.ExecuteNonQueryAsync() > 0;
+    }
+
 }
