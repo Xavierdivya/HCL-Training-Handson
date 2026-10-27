@@ -1,251 +1,302 @@
 ﻿
+using Microsoft.Data.SqlClient;
 using StudentCourseManagement.Models;
 using StudentCourseManagement.Repositories;
 using StudentCourseManagement.Services;
-using Microsoft.Data.SqlClient;
 
-DepartmentRepository repository = new();
-DepartmentService service = new(repository);
+// Initialize repositories
+DepartmentRepository departmentRepository = new();
 StudentRepository studentRepository = new();
-StudentService studentService = new(studentRepository);
 CourseRepository courseRepository = new();
+
+// Initialize services
+DepartmentService departmentService = new(departmentRepository);
+StudentService studentService = new(studentRepository);
 CourseService courseService = new(courseRepository);
 
-bool running = true;
-
-while (running)
+while (true)
 {
-    Console.WriteLine("\n===== Student Course Management =====");
-    Console.WriteLine("1. Add Department");
-    Console.WriteLine("2. View All Departments");
-    Console.WriteLine("3. Update Department");
-    Console.WriteLine("4. Delete Department");
-    Console.WriteLine("5. Add Student");
-    Console.WriteLine("6. View All Students");
-    Console.WriteLine("7. Update Student");
-    Console.WriteLine("8. Delete Student");
-    Console.WriteLine("9.Add Course");
-    Console.WriteLine("10.View All Courses");
-    Console.WriteLine("11.Update Course");
-    Console.WriteLine("12.Delete Course");
-    Console.WriteLine("0. Exit");
-    Console.Write("Enter your choice: ");
+    Console.WriteLine();
+    Console.WriteLine("====================================");
+    Console.WriteLine("   STUDENT COURSE MANAGEMENT SYSTEM");
+    Console.WriteLine("====================================");
+    Console.WriteLine("1.  Add Department");
+    Console.WriteLine("2.  View All Departments");
+    Console.WriteLine("3.  Update Department");
+    Console.WriteLine("4.  Delete Department");
+    Console.WriteLine("------------------------------------");
+    Console.WriteLine("5.  Add Student");
+    Console.WriteLine("6.  View All Students");
+    Console.WriteLine("7.  Update Student");
+    Console.WriteLine("8.  Delete Student");
+    Console.WriteLine("------------------------------------");
+    Console.WriteLine("9.  Add Course");
+    Console.WriteLine("10. View All Courses");
+    Console.WriteLine("11. Update Course");
+    Console.WriteLine("12. Delete Course");
+    Console.WriteLine("------------------------------------");
+    Console.WriteLine("0.  Exit");
+    Console.WriteLine("====================================");
+    Console.Write("Choose an option: ");
 
-    string? choice = Console.ReadLine();
+    string choice = Console.ReadLine() ?? "";
+
+    if (choice == "0")
+    {
+        Console.WriteLine("Exiting application. Goodbye!");
+        break;
+    }
 
     try
     {
         switch (choice)
         {
+            // =========================================
+            // DEPARTMENT OPERATIONS
+            // =========================================
+
             case "1":
-                Console.Write("Enter department name: ");
-                string departmentName = Console.ReadLine() ?? "";
-
-                Console.Write("Enter department location (optional): ");
-                string? location = Console.ReadLine();
-
-                Department department = new()
                 {
-                    DepartmentName = departmentName,
-                    Location = string.IsNullOrWhiteSpace(location)
-                        ? null
-                        : location
-                };
+                    Department department = new();
 
-                int newId = await service.AddAsync(department);
+                    Console.Write("Enter department name: ");
+                    department.DepartmentName = Console.ReadLine() ?? "";
 
-                Console.WriteLine(
-                    $"Department added successfully! ID: {newId}");
-                break;
+                    Console.Write("Enter department location: ");
+                    department.Location = Console.ReadLine();
+
+                    int newDepartmentId =
+                        await departmentService.AddAsync(department);
+
+                    Console.WriteLine(
+                        $"Department added successfully. ID: {newDepartmentId}");
+
+                    break;
+                }
 
             case "2":
-                List<Department> departments =
-                    await service.GetAllAsync();
-
-                if (departments.Count == 0)
                 {
-                    Console.WriteLine("No departments found.");
+                    List<Department> departments =
+                        await departmentService.GetAllAsync();
+
+                    if (departments.Count == 0)
+                    {
+                        Console.WriteLine("No departments found.");
+                        break;
+                    }
+
+                    foreach (Department department in departments)
+                    {
+                        Console.WriteLine(
+                            $"ID: {department.DepartmentId} | " +
+                            $"Name: {department.DepartmentName} | " +
+                            $"Location: {department.Location ?? "N/A"} | " +
+                            $"Active: {department.IsActive}");
+                    }
+
                     break;
                 }
-
-                Console.WriteLine("\n--- Department List ---");
-
-                foreach (Department item in departments)
-                {
-                    Console.WriteLine(
-                        $"ID: {item.DepartmentId} | " +
-                        $"Name: {item.DepartmentName} | " +
-                        $"Location: {item.Location ?? "N/A"} | " +
-                        $"Active: {item.IsActive}");
-                }
-                break;
-
 
             case "3":
-                Console.Write("Enter department ID to update: ");
-
-                if (!int.TryParse(Console.ReadLine(), out int updateId) ||
-                    updateId <= 0)
                 {
-                    Console.WriteLine("Invalid department ID.");
+                    Department department = new();
+
+                    Console.Write("Enter department ID to update: ");
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int updateDepartmentId))
+                    {
+                        Console.WriteLine("Invalid department ID.");
+                        break;
+                    }
+
+                    department.DepartmentId = updateDepartmentId;
+
+                    Console.Write("Enter new department name: ");
+                    department.DepartmentName = Console.ReadLine() ?? "";
+
+                    Console.Write("Enter new department location: ");
+                    department.Location = Console.ReadLine();
+
+                    bool departmentUpdated =
+                        await departmentService.UpdateAsync(department);
+
+                    Console.WriteLine(departmentUpdated
+                        ? "Department updated successfully."
+                        : "Department not found.");
+
                     break;
                 }
-
-                Console.Write("Enter new department name: ");
-                string newName = Console.ReadLine() ?? "";
-
-                Console.Write("Enter new location (optional): ");
-                string? newLocation = Console.ReadLine();
-
-                Department updatedDepartment = new()
-                {
-                    DepartmentId = updateId,
-                    DepartmentName = newName,
-                    Location = string.IsNullOrWhiteSpace(newLocation)
-                        ? null
-                        : newLocation
-                };
-
-                bool updated = await service.UpdateAsync(updatedDepartment);
-
-                Console.WriteLine(updated
-                    ? "Department updated successfully!"
-                    : "Department not found.");
-                break;
 
             case "4":
-                Console.Write("Enter department ID to delete: ");
-
-                if (!int.TryParse(Console.ReadLine(), out int deleteId) ||
-                    deleteId <= 0)
                 {
-                    Console.WriteLine("Invalid department ID.");
+                    Console.Write("Enter department ID to delete: ");
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int deleteDepartmentId))
+                    {
+                        Console.WriteLine("Invalid department ID.");
+                        break;
+                    }
+
+                    bool departmentDeleted =
+                        await departmentService.DeleteAsync(deleteDepartmentId);
+
+                    Console.WriteLine(departmentDeleted
+                        ? "Department deleted successfully."
+                        : "Department not found.");
+
                     break;
                 }
 
-                bool deleted = await service.DeleteAsync(deleteId);
-
-                Console.WriteLine(deleted
-                    ? "Department deleted successfully!"
-                    : "Department not found.");
-                break;
-
-
+            // =========================================
+            // STUDENT OPERATIONS
+            // =========================================
 
             case "5":
-                Console.Write("Enter student name: ");
-                string studentName = Console.ReadLine() ?? "";
-
-                Console.Write("Enter email: ");
-                string email = Console.ReadLine() ?? "";
-
-                Console.Write("Enter age: ");
-                if (!int.TryParse(Console.ReadLine(), out int age))
                 {
-                    Console.WriteLine("Invalid age.");
+                    Student student = new();
+
+                    Console.Write("Enter student name: ");
+                    student.Name = Console.ReadLine() ?? "";
+
+                    Console.Write("Enter student email: ");
+                    student.Email = Console.ReadLine() ?? "";
+
+                    Console.Write("Enter student age: ");
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int studentAge))
+                    {
+                        Console.WriteLine("Invalid age.");
+                        break;
+                    }
+
+                    student.Age = studentAge;
+
+                    Console.Write("Enter department ID: ");
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int studentDepartmentId))
+                    {
+                        Console.WriteLine("Invalid department ID.");
+                        break;
+                    }
+
+                    student.DepartmentId = studentDepartmentId;
+
+                    int newStudentId =
+                        await studentService.AddAsync(student);
+
+                    Console.WriteLine(
+                        $"Student added successfully. ID: {newStudentId}");
+
                     break;
                 }
-
-                Console.Write("Enter department ID: ");
-                if (!int.TryParse(Console.ReadLine(), out int departmentId))
-                {
-                    Console.WriteLine("Invalid department ID.");
-                    break;
-                }
-
-                Student newStudent = new()
-                {
-                    Name = studentName,
-                    Email = email,
-                    Age = age,
-                    DepartmentId = departmentId
-                };
-
-                int studentId = await studentService.AddAsync(newStudent);
-                Console.WriteLine($"Student added! ID: {studentId}");
-                break;
 
             case "6":
-                List<Student> students = await studentService.GetAllAsync();
-
-                if (students.Count == 0)
                 {
-                    Console.WriteLine("No students found.");
+                    List<Student> students =
+                        await studentService.GetAllAsync();
+
+                    if (students.Count == 0)
+                    {
+                        Console.WriteLine("No students found.");
+                        break;
+                    }
+
+                    foreach (Student student in students)
+                    {
+                        Console.WriteLine(
+                            $"ID: {student.StudentId} | " +
+                            $"Name: {student.Name} | " +
+                            $"Email: {student.Email} | " +
+                            $"Age: {student.Age} | " +
+                            $"Department ID: {student.DepartmentId} | " +
+                            $"Admission Date: {student.AdmissionDate:g} | " +
+                            $"Active: {student.IsActive}");
+                    }
+
                     break;
                 }
-
-                foreach (Student student in students)
-                {
-                    Console.WriteLine(
-                        $"ID: {student.StudentId} | " +
-                        $"Name: {student.Name} | " +
-                        $"Email: {student.Email} | " +
-                        $"Age: {student.Age} | " +
-                        $"Department ID: {student.DepartmentId}");
-                }
-                break;
 
             case "7":
-                Console.Write("Enter student ID to update: ");
-                if (!int.TryParse(Console.ReadLine(), out int updateStudentId))
                 {
-                    Console.WriteLine("Invalid student ID.");
+                    Student student = new();
+
+                    Console.Write("Enter student ID to update: ");
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int updateStudentId))
+                    {
+                        Console.WriteLine("Invalid student ID.");
+                        break;
+                    }
+
+                    student.StudentId = updateStudentId;
+
+                    Console.Write("Enter new student name: ");
+                    student.Name = Console.ReadLine() ?? "";
+
+                    Console.Write("Enter new student email: ");
+                    student.Email = Console.ReadLine() ?? "";
+
+                    Console.Write("Enter new student age: ");
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int updatedStudentAge))
+                    {
+                        Console.WriteLine("Invalid age.");
+                        break;
+                    }
+
+                    student.Age = updatedStudentAge;
+
+                    Console.Write("Enter new department ID: ");
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int updatedStudentDepartmentId))
+                    {
+                        Console.WriteLine("Invalid department ID.");
+                        break;
+                    }
+
+                    student.DepartmentId = updatedStudentDepartmentId;
+
+                    bool studentUpdated =
+                        await studentService.UpdateAsync(student);
+
+                    Console.WriteLine(studentUpdated
+                        ? "Student updated successfully."
+                        : "Student not found.");
+
                     break;
                 }
-
-                Console.Write("Enter new name: ");
-                string updatedName = Console.ReadLine() ?? "";
-
-                Console.Write("Enter new email: ");
-                string updatedEmail = Console.ReadLine() ?? "";
-
-                Console.Write("Enter new age: ");
-                if (!int.TryParse(Console.ReadLine(), out int updatedAge))
-                {
-                    Console.WriteLine("Invalid age.");
-                    break;
-                }
-
-                Console.Write("Enter new department ID: ");
-                if (!int.TryParse(Console.ReadLine(), out int updatedDepartmentId))
-                {
-                    Console.WriteLine("Invalid department ID.");
-                    break;
-                }
-
-                Student updatedStudent = new()
-                {
-                    StudentId = updateStudentId,
-                    Name = updatedName,
-                    Email = updatedEmail,
-                    Age = updatedAge,
-                    DepartmentId = updatedDepartmentId
-                };
-
-                bool studentUpdated =
-                    await studentService.UpdateAsync(updatedStudent);
-
-                Console.WriteLine(studentUpdated
-                    ? "Student updated successfully."
-                    : "Student not found.");
-                break;
 
             case "8":
-                Console.Write("Enter student ID to delete: ");
-                if (!int.TryParse(Console.ReadLine(), out int deleteStudentId))
                 {
-                    Console.WriteLine("Invalid student ID.");
+                    Console.Write("Enter student ID to delete: ");
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int deleteStudentId))
+                    {
+                        Console.WriteLine("Invalid student ID.");
+                        break;
+                    }
+
+                    bool studentDeleted =
+                        await studentService.DeleteAsync(deleteStudentId);
+
+                    Console.WriteLine(studentDeleted
+                        ? "Student deleted successfully."
+                        : "Student not found.");
+
                     break;
                 }
 
-                bool studentDeleted =
-                    await studentService.DeleteAsync(deleteStudentId);
-
-                Console.WriteLine(studentDeleted
-                    ? "Student deleted successfully."
-                    : "Student not found.");
-                break;
-
+            // =========================================
+            // COURSE OPERATIONS
+            // =========================================
 
             case "9":
                 {
@@ -255,37 +306,51 @@ while (running)
                     course.CourseName = Console.ReadLine() ?? "";
 
                     Console.Write("Enter duration in months: ");
-                    if (!int.TryParse(Console.ReadLine(), out int duration))
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int courseDuration))
                     {
                         Console.WriteLine("Invalid duration.");
                         break;
                     }
-                    course.DurationMonths = duration;
+
+                    course.DurationMonths = courseDuration;
 
                     Console.Write("Enter course fee: ");
-                    if (!decimal.TryParse(Console.ReadLine(), out decimal fee))
+
+                    if (!decimal.TryParse(
+                        Console.ReadLine(), out decimal courseFee))
                     {
                         Console.WriteLine("Invalid fee.");
                         break;
                     }
-                    course.Fee = fee;
+
+                    course.Fee = courseFee;
 
                     Console.Write("Enter department ID: ");
-                    if (!int.TryParse(Console.ReadLine(), out int departmentId))
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int courseDepartmentId))
                     {
                         Console.WriteLine("Invalid department ID.");
                         break;
                     }
-                    course.DepartmentId = departmentId;
 
-                    int newId = await courseService.AddAsync(course);
-                    Console.WriteLine($"Course added successfully. ID: {newId}");
+                    course.DepartmentId = courseDepartmentId;
+
+                    int newCourseId =
+                        await courseService.AddAsync(course);
+
+                    Console.WriteLine(
+                        $"Course added successfully. ID: {newCourseId}");
+
                     break;
                 }
 
             case "10":
                 {
-                    List<Course> courses = await courseService.GetAllAsync();
+                    List<Course> courses =
+                        await courseService.GetAllAsync();
 
                     if (courses.Count == 0)
                     {
@@ -303,6 +368,7 @@ while (running)
                             $"Department ID: {course.DepartmentId} | " +
                             $"Active: {course.IsActive}");
                     }
+
                     break;
                 }
 
@@ -311,80 +377,102 @@ while (running)
                     Course course = new();
 
                     Console.Write("Enter course ID to update: ");
-                    if (!int.TryParse(Console.ReadLine(), out int courseId))
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int updateCourseId))
                     {
                         Console.WriteLine("Invalid course ID.");
                         break;
                     }
-                    course.CourseId = courseId;
+
+                    course.CourseId = updateCourseId;
 
                     Console.Write("Enter new course name: ");
                     course.CourseName = Console.ReadLine() ?? "";
 
                     Console.Write("Enter new duration in months: ");
-                    if (!int.TryParse(Console.ReadLine(), out int duration))
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int updatedCourseDuration))
                     {
                         Console.WriteLine("Invalid duration.");
                         break;
                     }
-                    course.DurationMonths = duration;
+
+                    course.DurationMonths = updatedCourseDuration;
 
                     Console.Write("Enter new course fee: ");
-                    if (!decimal.TryParse(Console.ReadLine(), out decimal fee))
+
+                    if (!decimal.TryParse(
+                        Console.ReadLine(), out decimal updatedCourseFee))
                     {
                         Console.WriteLine("Invalid fee.");
                         break;
                     }
-                    course.Fee = fee;
+
+                    course.Fee = updatedCourseFee;
 
                     Console.Write("Enter new department ID: ");
-                    if (!int.TryParse(Console.ReadLine(), out int departmentId))
+
+                    if (!int.TryParse(
+                        Console.ReadLine(),
+                        out int updatedCourseDepartmentId))
                     {
                         Console.WriteLine("Invalid department ID.");
                         break;
                     }
-                    course.DepartmentId = departmentId;
 
-                    bool updated = await courseService.UpdateAsync(course);
-                    Console.WriteLine(updated
+                    course.DepartmentId = updatedCourseDepartmentId;
+
+                    bool courseUpdated =
+                        await courseService.UpdateAsync(course);
+
+                    Console.WriteLine(courseUpdated
                         ? "Course updated successfully."
                         : "Course not found.");
+
                     break;
                 }
 
             case "12":
                 {
                     Console.Write("Enter course ID to delete: ");
-                    if (!int.TryParse(Console.ReadLine(), out int courseId))
+
+                    if (!int.TryParse(
+                        Console.ReadLine(), out int deleteCourseId))
                     {
                         Console.WriteLine("Invalid course ID.");
                         break;
                     }
 
-                    bool deleted = await courseService.DeleteAsync(courseId);
-                    Console.WriteLine(deleted
+                    bool courseDeleted =
+                        await courseService.DeleteAsync(deleteCourseId);
+
+                    Console.WriteLine(courseDeleted
                         ? "Course deleted successfully."
                         : "Course not found.");
+
                     break;
                 }
 
-            case "0":
-                running = false;
-                Console.WriteLine("Exiting application...");
-                break;
-
             default:
-                Console.WriteLine("Invalid choice. Try again.");
-                break;
+                {
+                    Console.WriteLine(
+                        "Invalid option. Please choose a number from 0 to 12.");
+                    break;
+                }
         }
     }
     catch (ArgumentException ex)
     {
         Console.WriteLine($"Validation error: {ex.Message}");
     }
-    catch (Microsoft.Data.SqlClient.SqlException ex)
+    catch (SqlException ex)
     {
-        Console.WriteLine(
-            $"Database error: {ex.Message}");
+        Console.WriteLine($"Database error: {ex.Message}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Unexpected error: {ex.Message}");
     }
 }
