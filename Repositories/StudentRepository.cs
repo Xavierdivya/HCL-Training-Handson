@@ -1,0 +1,89 @@
+
+using Microsoft.Data.SqlClient;
+using StudentCourseManagement.Helpers;
+using StudentCourseManagement.Models;
+using System.Data;
+
+namespace StudentCourseManagement.Repositories;
+
+public class StudentRepository
+{
+    public async Task<int> AddAsync(Student student)
+    {
+        const string sql = """
+            INSERT INTO Students
+                (Name, Email, Age, DepartmentId)
+            VALUES
+                (@Name, @Email, @Age, @DepartmentId);
+
+            SELECT CAST(SCOPE_IDENTITY() AS INT);
+            """;
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add(
+            "@Name", SqlDbType.NVarChar, 100)
+            .Value = student.Name;
+
+        command.Parameters.Add(
+            "@Email", SqlDbType.NVarChar, 255)
+            .Value = student.Email;
+
+        command.Parameters.Add(
+            "@Age", SqlDbType.Int)
+            .Value = student.Age;
+
+        command.Parameters.Add(
+            "@DepartmentId", SqlDbType.Int)
+            .Value = student.DepartmentId;
+
+        await connection.OpenAsync();
+
+        object? result = await command.ExecuteScalarAsync();
+
+        return Convert.ToInt32(result);
+    }
+
+    public async Task<List<Student>> GetAllAsync()
+    {
+        const string sql = """
+            SELECT StudentId, Name, Email, Age, DepartmentId,
+                   AdmissionDate, IsActive
+            FROM Students
+            ORDER BY StudentId;
+            """;
+
+        List<Student> students = new();
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        await connection.OpenAsync();
+
+        await using SqlDataReader reader =
+            await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            Student student = new()
+            {
+                StudentId = reader.GetInt32(0),
+                Name = reader.GetString(1),
+                Email = reader.GetString(2),
+                Age = reader.GetInt32(3),
+                DepartmentId = reader.GetInt32(4),
+                AdmissionDate = reader.GetDateTime(5),
+                IsActive = reader.GetBoolean(6)
+            };
+
+            students.Add(student);
+        }
+
+        return students;
+    }
+}
