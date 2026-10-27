@@ -29,7 +29,7 @@ The purpose of this repository is to maintain and organize my daily practice pro
 | Day 12 | [JSON Practice](Day12/) |
 | Day 13 | [File Handling](Day13/) |
 | Day 14 | [Course Management](Day14/) |
-| Day 15 | [Daily Practice](Day15/) |
+| Day 15 | [DBMS Learning](Day15/) |
 
 *Note: The folders and files will be updated as I progress through the training.*
 
