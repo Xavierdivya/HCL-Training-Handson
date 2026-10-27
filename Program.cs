@@ -13,6 +13,8 @@ CourseRepository courseRepository = new();
 DepartmentService departmentService = new(departmentRepository);
 StudentService studentService = new(studentRepository);
 CourseService courseService = new(courseRepository);
+EnrollmentRepository enrollmentRepository = new();
+EnrollmentService enrollmentService = new(enrollmentRepository);
 
 while (true)
 {
@@ -34,6 +36,11 @@ while (true)
     Console.WriteLine("10. View All Courses");
     Console.WriteLine("11. Update Course");
     Console.WriteLine("12. Delete Course");
+    Console.WriteLine("------------------------------------");
+    Console.WriteLine("13. Add Enrollment");
+    Console.WriteLine("14. View All Enrollments");
+    Console.WriteLine("15. Update Enrollment Status");
+    Console.WriteLine("16. Delete Enrollment");
     Console.WriteLine("------------------------------------");
     Console.WriteLine("0.  Exit");
     Console.WriteLine("====================================");
@@ -452,6 +459,96 @@ while (true)
                         ? "Course deleted successfully."
                         : "Course not found.");
 
+                    break;
+                }
+
+
+            case "13":
+                {
+                    Enrollment enrollment = new();
+
+                    Console.Write("Enter student ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int enrollmentStudentId))
+                    {
+                        Console.WriteLine("Invalid student ID.");
+                        break;
+                    }
+                    enrollment.StudentId = enrollmentStudentId;
+
+                    Console.Write("Enter course ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int enrollmentCourseId))
+                    {
+                        Console.WriteLine("Invalid course ID.");
+                        break;
+                    }
+                    enrollment.CourseId = enrollmentCourseId;
+
+                    int newEnrollmentId = await enrollmentService.AddAsync(enrollment);
+
+                    Console.WriteLine(
+                        $"Enrollment added successfully. ID: {newEnrollmentId}");
+                    break;
+                }
+
+            case "14":
+                {
+                    List<Enrollment> enrollments =
+                        await enrollmentService.GetAllAsync();
+
+                    if (enrollments.Count == 0)
+                    {
+                        Console.WriteLine("No enrollments found.");
+                        break;
+                    }
+
+                    foreach (Enrollment enrollment in enrollments)
+                    {
+                        Console.WriteLine(
+                            $"Enrollment ID: {enrollment.EnrollmentId} | " +
+                            $"Student ID: {enrollment.StudentId} | " +
+                            $"Course ID: {enrollment.CourseId} | " +
+                            $"Enrolled At: {enrollment.EnrolledAt:g} | " +
+                            $"Status: {enrollment.Status}");
+                    }
+                    break;
+                }
+
+            case "15":
+                {
+                    Console.Write("Enter enrollment ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int statusEnrollmentId))
+                    {
+                        Console.WriteLine("Invalid enrollment ID.");
+                        break;
+                    }
+
+                    Console.Write("Enter status (Enrolled/Completed/Cancelled): ");
+                    string enrollmentStatus = Console.ReadLine() ?? "";
+
+                    bool statusUpdated = await enrollmentService.UpdateStatusAsync(
+                        statusEnrollmentId, enrollmentStatus);
+
+                    Console.WriteLine(statusUpdated
+                        ? "Enrollment status updated successfully."
+                        : "Enrollment not found.");
+                    break;
+                }
+
+            case "16":
+                {
+                    Console.Write("Enter enrollment ID to delete: ");
+                    if (!int.TryParse(Console.ReadLine(), out int deleteEnrollmentId))
+                    {
+                        Console.WriteLine("Invalid enrollment ID.");
+                        break;
+                    }
+
+                    bool enrollmentDeleted =
+                        await enrollmentService.DeleteAsync(deleteEnrollmentId);
+
+                    Console.WriteLine(enrollmentDeleted
+                        ? "Enrollment deleted successfully."
+                        : "Enrollment not found.");
                     break;
                 }
 
