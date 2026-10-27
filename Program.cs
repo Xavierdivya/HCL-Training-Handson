@@ -13,6 +13,8 @@ while (running)
     Console.WriteLine("\n===== Student Course Management =====");
     Console.WriteLine("1. Add Department");
     Console.WriteLine("2. View All Departments");
+    Console.WriteLine("3. Update Department");
+    Console.WriteLine("4. Delete Department");
     Console.WriteLine("0. Exit");
     Console.Write("Enter your choice: ");
 
@@ -63,6 +65,56 @@ while (running)
                         $"Location: {item.Location ?? "N/A"} | " +
                         $"Active: {item.IsActive}");
                 }
+                break;
+
+
+            case "3":
+                Console.Write("Enter department ID to update: ");
+
+                if (!int.TryParse(Console.ReadLine(), out int updateId) ||
+                    updateId <= 0)
+                {
+                    Console.WriteLine("Invalid department ID.");
+                    break;
+                }
+
+                Console.Write("Enter new department name: ");
+                string newName = Console.ReadLine() ?? "";
+
+                Console.Write("Enter new location (optional): ");
+                string? newLocation = Console.ReadLine();
+
+                Department updatedDepartment = new()
+                {
+                    DepartmentId = updateId,
+                    DepartmentName = newName,
+                    Location = string.IsNullOrWhiteSpace(newLocation)
+                        ? null
+                        : newLocation
+                };
+
+                bool updated = await service.UpdateAsync(updatedDepartment);
+
+                Console.WriteLine(updated
+                    ? "Department updated successfully!"
+                    : "Department not found.");
+                break;
+
+            case "4":
+                Console.Write("Enter department ID to delete: ");
+
+                if (!int.TryParse(Console.ReadLine(), out int deleteId) ||
+                    deleteId <= 0)
+                {
+                    Console.WriteLine("Invalid department ID.");
+                    break;
+                }
+
+                bool deleted = await service.DeleteAsync(deleteId);
+
+                Console.WriteLine(deleted
+                    ? "Department deleted successfully!"
+                    : "Department not found.");
                 break;
 
             case "0":
