@@ -9,6 +9,7 @@ DepartmentRepository departmentRepository = new();
 StudentRepository studentRepository = new();
 CourseRepository courseRepository = new();
 ReportRepository reportRepository = new();
+AuditLogRepository auditLogRepository = new();
 
 // Initialize services
 DepartmentService departmentService = new(departmentRepository);
@@ -16,6 +17,7 @@ StudentService studentService = new(studentRepository);
 CourseService courseService = new(courseRepository);
 EnrollmentRepository enrollmentRepository = new();
 EnrollmentService enrollmentService = new(enrollmentRepository);
+AuditLogService auditLogService = new(auditLogRepository);
 
 while (true)
 {
@@ -44,7 +46,7 @@ while (true)
     Console.WriteLine("16. Delete Enrollment");
     Console.WriteLine("------------------------------------");
     Console.WriteLine("17. View Enrollment Report");
-    Console.WriteLine("0.  Exit");
+    Console.WriteLine("18. View Audit Logs");
     Console.WriteLine("0.  Exit");
     Console.WriteLine("====================================");
     Console.Write("Choose an option: ");
@@ -577,6 +579,37 @@ while (true)
                     Console.WriteLine("=======================================");
                     break;
                 }
+
+
+            case "18":
+                {
+                    List<AuditLog> auditLogs =
+                        await auditLogService.GetAllAsync();
+
+                    if (auditLogs.Count == 0)
+                    {
+                        Console.WriteLine("No audit logs found.");
+                        break;
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("========== AUDIT LOGS ==========");
+
+                    foreach (AuditLog auditLog in auditLogs)
+                    {
+                        Console.WriteLine(
+                            $"Audit ID: {auditLog.AuditId} | " +
+                            $"Entity: {auditLog.EntityName} | " +
+                            $"Entity ID: {auditLog.EntityId} | " +
+                            $"Action: {auditLog.Action} | " +
+                            $"Details: {auditLog.Details ?? "N/A"} | " +
+                            $"Date: {auditLog.CreatedAt:g}");
+                    }
+
+                    Console.WriteLine("================================");
+                    break;
+                }
+
 
             default:
                 {
