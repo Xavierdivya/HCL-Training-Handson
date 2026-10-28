@@ -64,6 +64,53 @@ public class CourseRepository
         return courses;
     }
 
+
+
+    public async Task<List<Course>> SearchByNameAsync(string name)
+    {
+        const string sql = """
+        SELECT CourseId, CourseName, DurationMonths, Fee,
+               DepartmentId, IsActive
+        FROM Courses
+        WHERE CourseName LIKE @Name
+        ORDER BY CourseId;
+        """;
+
+        List<Course> courses = new();
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add("@Name", SqlDbType.NVarChar, 100)
+            .Value = $"%{name}%";
+
+        await connection.OpenAsync();
+
+        await using SqlDataReader reader =
+            await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            Course course = new()
+            {
+                CourseId = reader.GetInt32(0),
+                CourseName = reader.GetString(1),
+                DurationMonths = reader.GetInt32(2),
+                Fee = reader.GetDecimal(3),
+                DepartmentId = reader.GetInt32(4),
+                IsActive = reader.GetBoolean(5)
+            };
+
+            courses.Add(course);
+        }
+
+        return courses;
+    }
+
+
+
     public async Task<bool> UpdateAsync(Course course)
     {
         const string sql = """

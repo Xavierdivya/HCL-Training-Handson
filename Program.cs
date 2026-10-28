@@ -48,6 +48,7 @@ while (true)
     Console.WriteLine("17. View Enrollment Report");
     Console.WriteLine("18. View Audit Logs");
     Console.WriteLine("19. Search Students by Name");
+    Console.WriteLine("20. Search Courses by Name");
     Console.WriteLine("0.  Exit");
     Console.WriteLine("====================================");
     Console.Write("Choose an option: ");
@@ -742,6 +743,37 @@ while (true)
 
                     break;
                 }
+
+
+            case "20":
+                {
+                    Console.Write("Enter course name to search: ");
+                    string name = Console.ReadLine() ?? string.Empty;
+
+                    List<Course> courses =
+                        await courseRepository.SearchByNameAsync(name);
+
+                    if (courses.Count == 0)
+                    {
+                        Console.WriteLine("No courses found.");
+                    }
+                    else
+                    {
+                        foreach (Course course in courses)
+                        {
+                            Console.WriteLine(
+                                $"ID: {course.CourseId} | " +
+                                $"Name: {course.CourseName} | " +
+                                $"Duration: {course.DurationMonths} months | " +
+                                $"Fee: {course.Fee} | " +
+                                $"Department ID: {course.DepartmentId} | " +
+                                $"Active: {course.IsActive}");
+                        }
+                    }
+
+                    break;
+                }
+
 
 
             default:
