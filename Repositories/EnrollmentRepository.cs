@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using StudentCourseManagement.Helpers;
 using StudentCourseManagement.Models;
+using StudentCourseManagement.Services;
 using System.Data;
 
 namespace StudentCourseManagement.Repositories;
@@ -76,6 +77,123 @@ public class EnrollmentRepository
         return Convert.ToInt32(
             await command.ExecuteScalarAsync());
     }
+
+
+    public async Task<int> AddWithAuditAsync(
+        Enrollment enrollment,
+        AuditLogService auditLogService)
+    {
+        // Step 1: Validate the student.
+        StudentRepository studentRepository = new();
+
+        bool studentIsActive =
+            await studentRepository.IsStudentActiveAsync(
+                enrollment.StudentId);
+
+        if (!studentIsActive)
+        {
+            throw new InvalidOperationException(
+                "Student does not exist or is inactive.");
+        }
+
+        // Step 2: Validate the course.
+        CourseRepository courseRepository = new();
+
+        bool courseIsActive =
+            await courseRepository.IsCourseActiveAsync(
+                enrollment.CourseId);
+
+        if (!courseIsActive)
+        {
+            throw new InvalidOperationException(
+                "Course does not exist or is inactive.");
+        }
+
+        // Step 3: Check the active enrollment limit.
+        int activeEnrollmentCount =
+            await GetActiveEnrollmentCountAsync(
+                enrollment.StudentId);
+
+        if (activeEnrollmentCount >= 5)
+        {
+            throw new InvalidOperationException(
+                "Student cannot have more than five active enrollments.");
+        }
+
+        // Step 4: Open one connection and begin one transaction.
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await connection.OpenAsync();
+
+        await using SqlTransaction transaction =
+            (SqlTransaction)await connection.BeginTransactionAsync();
+
+        try
+        {
+            // Step 5: Insert the enrollment.
+            const string sql = """
+            INSERT INTO Enrollments
+                (StudentId, CourseId, Status)
+            VALUES
+                (@StudentId, @CourseId, @Status);
+
+            SELECT CAST(SCOPE_IDENTITY() AS INT);
+            """;
+
+            int enrollmentId;
+
+            await using (SqlCommand command =
+                new(sql, connection, transaction))
+            {
+                command.Parameters.Add("@StudentId", SqlDbType.Int)
+                    .Value = enrollment.StudentId;
+
+                command.Parameters.Add("@CourseId", SqlDbType.Int)
+                    .Value = enrollment.CourseId;
+
+                command.Parameters.Add("@Status", SqlDbType.NVarChar, 20)
+                    .Value = enrollment.Status;
+
+                enrollmentId = Convert.ToInt32(
+                    await command.ExecuteScalarAsync());
+            }
+
+            // Step 6: Insert the audit log in the same transaction.
+            AuditLog auditLog = new()
+            {
+                EntityName = "Enrollment",
+                EntityId = enrollmentId,
+                Action = "Created",
+                Details =
+                    $"Student ID {enrollment.StudentId} enrolled " +
+                    $"in Course ID {enrollment.CourseId}."
+            };
+
+            await auditLogService.AddAsync(
+                auditLog, connection, transaction);
+
+            // Step 7: Commit both inserts together.
+            await transaction.CommitAsync();
+
+            return enrollmentId;
+        }
+        catch
+        {
+            // Roll back both inserts if an operation fails.
+            try
+            {
+                await transaction.RollbackAsync();
+            }
+            catch
+            {
+                // Preserve the original exception.
+            }
+
+            throw;
+        }
+    }
+
 
     public async Task<List<Enrollment>> GetAllAsync()
     {

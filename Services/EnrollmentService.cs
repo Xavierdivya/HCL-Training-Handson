@@ -90,4 +90,20 @@ public class EnrollmentService
                 "Course ID must be greater than zero.");
         }
     }
+
+
+
+    public Task<int> AddWithAuditAsync(
+        Enrollment enrollment,
+        AuditLogService auditLogService)
+    {
+        ValidateIds(enrollment.StudentId, enrollment.CourseId);
+
+        enrollment.Status = "Enrolled";
+
+        return _repository.AddWithAuditAsync(
+            enrollment, auditLogService);
+    }
+
+
 }

@@ -546,58 +546,61 @@ while (true)
 
 
 
+
             case "13":
                 {
                     Enrollment enrollment = new();
 
                     Console.Write("Enter student ID: ");
-                    if (!int.TryParse(Console.ReadLine(), out int enrollmentStudentId))
+
+                    if (!int.TryParse(Console.ReadLine(), out int studentId))
                     {
                         Console.WriteLine("Invalid student ID.");
                         break;
                     }
 
-                    enrollment.StudentId = enrollmentStudentId;
+                    enrollment.StudentId = studentId;
 
                     Console.Write("Enter course ID: ");
-                    if (!int.TryParse(Console.ReadLine(), out int enrollmentCourseId))
+
+                    if (!int.TryParse(Console.ReadLine(), out int courseId))
                     {
                         Console.WriteLine("Invalid course ID.");
                         break;
                     }
 
-                    enrollment.CourseId = enrollmentCourseId;
+                    enrollment.CourseId = courseId;
 
                     try
                     {
                         int newEnrollmentId =
-                            await enrollmentService.AddAsync(enrollment);
-
-                        await auditLogService.AddAsync(new AuditLog
-                        {
-                            EntityName = "Enrollment",
-                            EntityId = newEnrollmentId,
-                            Action = "Created",
-                            Details =
-                                $"Student ID {enrollment.StudentId} enrolled " +
-                                $"in Course ID {enrollment.CourseId}."
-                        });
+                            await enrollmentService.AddWithAuditAsync(
+                                enrollment, auditLogService);
 
                         Console.WriteLine(
-                            $"Enrollment added successfully. ID: {newEnrollmentId}");
+                            $"Enrollment and audit log saved successfully. " +
+                            $"Enrollment ID: {newEnrollmentId}");
                     }
                     catch (InvalidOperationException ex)
                     {
                         Console.WriteLine($"Enrollment failed: {ex.Message}");
                     }
-                    catch (SqlException)
+
+                    catch (SqlException ex)
                     {
-                        Console.WriteLine(
-                            "Enrollment failed because of a database error.");
+                        Console.WriteLine($"Database error: {ex.Message}");
+                        Console.WriteLine($"SQL Error Number: {ex.Number}");
+                        Console.WriteLine($"SQL Error State: {ex.State}");
+                    }
+
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Unexpected error: {ex.Message}");
                     }
 
                     break;
                 }
+
 
             case "14":
                 {
@@ -949,10 +952,12 @@ while (true)
     {
         Console.WriteLine($"Validation error: {ex.Message}");
     }
+
     catch (SqlException ex)
     {
         Console.WriteLine($"Database error: {ex.Message}");
     }
+
     catch (Exception ex)
     {
         Console.WriteLine($"Unexpected error: {ex.Message}");

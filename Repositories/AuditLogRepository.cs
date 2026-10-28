@@ -7,7 +7,43 @@ namespace StudentCourseManagement.Repositories;
 
 public class AuditLogRepository
 {
+    // 1. Add an audit log using a new connection and transaction.
     public async Task AddAsync(AuditLog auditLog)
+    {
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await connection.OpenAsync();
+
+        await using SqlTransaction transaction =
+            (SqlTransaction)await connection.BeginTransactionAsync();
+
+        try
+        {
+            await AddAsync(auditLog, connection, transaction);
+
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            try
+            {
+                await transaction.RollbackAsync();
+            }
+            catch
+            {
+                // Preserve the original exception.
+            }
+
+            throw;
+        }
+    }
+
+    // 2. Add an audit log using an existing connection and transaction.
+    public async Task AddAsync(
+        AuditLog auditLog,
+        SqlConnection connection,
+        SqlTransaction transaction)
     {
         const string sql = """
             INSERT INTO AuditLogs
@@ -16,10 +52,8 @@ public class AuditLogRepository
                 (@EntityName, @EntityId, @Action, @Details);
             """;
 
-        await using SqlConnection connection =
-            DatabaseHelper.CreateConnection();
-
-        await using SqlCommand command = new(sql, connection);
+        await using SqlCommand command =
+            new(sql, connection, transaction);
 
         command.Parameters.AddWithValue(
             "@EntityName", auditLog.EntityName);
@@ -31,12 +65,13 @@ public class AuditLogRepository
             "@Action", auditLog.Action);
 
         command.Parameters.AddWithValue(
-            "@Details", (object?)auditLog.Details ?? DBNull.Value);
+            "@Details",
+            (object?)auditLog.Details ?? DBNull.Value);
 
-        await connection.OpenAsync();
         await command.ExecuteNonQueryAsync();
     }
 
+    // 3. Retrieve all audit logs.
     public async Task<List<AuditLog>> GetAllAsync()
     {
         const string sql = """
@@ -51,7 +86,8 @@ public class AuditLogRepository
         await using SqlConnection connection =
             DatabaseHelper.CreateConnection();
 
-        await using SqlCommand command = new(sql, connection);
+        await using SqlCommand command =
+            new(sql, connection);
 
         await connection.OpenAsync();
 

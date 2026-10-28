@@ -1,4 +1,5 @@
 
+using Microsoft.Data.SqlClient;
 using StudentCourseManagement.Models;
 using StudentCourseManagement.Repositories;
 
@@ -13,7 +14,31 @@ public class AuditLogService
         _auditLogRepository = auditLogRepository;
     }
 
+    // Normal audit logging using its own database connection.
     public async Task AddAsync(AuditLog auditLog)
+    {
+        ValidateAuditLog(auditLog);
+
+        await _auditLogRepository.AddAsync(auditLog);
+    }
+
+    // Transaction-based audit logging using an existing connection.
+    public async Task AddAsync(
+        AuditLog auditLog,
+        SqlConnection connection,
+        SqlTransaction transaction)
+    {
+        ValidateAuditLog(auditLog);
+
+        ArgumentNullException.ThrowIfNull(connection);
+        ArgumentNullException.ThrowIfNull(transaction);
+
+        await _auditLogRepository.AddAsync(
+            auditLog, connection, transaction);
+    }
+
+    // Shared validation for both methods.
+    private static void ValidateAuditLog(AuditLog auditLog)
     {
         ArgumentNullException.ThrowIfNull(auditLog);
 
@@ -52,8 +77,6 @@ public class AuditLogService
             throw new ArgumentException(
                 "Details cannot exceed 500 characters.");
         }
-
-        await _auditLogRepository.AddAsync(auditLog);
     }
 
     public async Task<List<AuditLog>> GetAllAsync()
