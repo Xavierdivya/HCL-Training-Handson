@@ -383,6 +383,14 @@ while (true)
                     int newCourseId =
                         await courseService.AddAsync(course);
 
+                    await auditLogService.AddAsync(new AuditLog
+                    {
+                        EntityName = "Course",
+                        EntityId = newCourseId,
+                        Action = "Created",
+                        Details = $"Course '{course.CourseName}' was created."
+                    });
+
                     Console.WriteLine(
                         $"Course added successfully. ID: {newCourseId}");
 
@@ -469,6 +477,17 @@ while (true)
                     bool courseUpdated =
                         await courseService.UpdateAsync(course);
 
+                    if (courseUpdated)
+                    {
+                        await auditLogService.AddAsync(new AuditLog
+                        {
+                            EntityName = "Course",
+                            EntityId = course.CourseId,
+                            Action = "Updated",
+                            Details = $"Course '{course.CourseName}' was updated."
+                        });
+                    }
+
                     Console.WriteLine(courseUpdated
                         ? "Course updated successfully."
                         : "Course not found.");
@@ -489,6 +508,17 @@ while (true)
 
                     bool courseDeleted =
                         await courseService.DeleteAsync(deleteCourseId);
+
+                    if (courseDeleted)
+                    {
+                        await auditLogService.AddAsync(new AuditLog
+                        {
+                            EntityName = "Course",
+                            EntityId = deleteCourseId,
+                            Action = "Deleted",
+                            Details = $"Course ID {deleteCourseId} was deleted."
+                        });
+                    }
 
                     Console.WriteLine(courseDeleted
                         ? "Course deleted successfully."
