@@ -199,6 +199,14 @@ while (true)
 
                     int newStudentId =
                         await studentService.AddAsync(student);
+                    
+                    await auditLogService.AddAsync(new AuditLog
+                    {
+                        EntityName = "Student",
+                        EntityId = newStudentId,
+                        Action = "Created",
+                        Details = $"Student '{student.Name}' was added."
+                    });
 
                     Console.WriteLine(
                         $"Student added successfully. ID: {newStudentId}");
@@ -489,6 +497,16 @@ while (true)
                     enrollment.CourseId = enrollmentCourseId;
 
                     int newEnrollmentId = await enrollmentService.AddAsync(enrollment);
+
+                    await auditLogService.AddAsync(new AuditLog
+                    {
+                        EntityName = "Enrollment",
+                        EntityId = newEnrollmentId,
+                        Action = "Created",
+                        Details =
+        $"Student ID {enrollment.StudentId} enrolled " +
+        $"in Course ID {enrollment.CourseId}."
+                    });
 
                     Console.WriteLine(
                         $"Enrollment added successfully. ID: {newEnrollmentId}");
