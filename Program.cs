@@ -52,6 +52,7 @@ while (true)
     Console.WriteLine("21. Search Departments by Name");
     Console.WriteLine("22. View Courses by Student ID");
     Console.WriteLine("23. View Students by Course ID");
+    Console.WriteLine("24. View Enrollment Count by Course");
     Console.WriteLine("0.  Exit");
     Console.WriteLine("====================================");
     Console.Write("Choose an option: ");
@@ -876,7 +877,23 @@ while (true)
                     break;
                 }
 
+            case "24":
+                {
 
+                    Dictionary<string, int> report =
+                        await courseRepository.GetEnrollmentCountByCourseAsync();
+
+                    Console.WriteLine("\nEnrollment Count by Course");
+                    Console.WriteLine("--------------------------");
+
+                    foreach (var item in report)
+                    {
+                        Console.WriteLine(
+                            $"Course: {item.Key} | Enrollments: {item.Value}");
+                    }
+
+                    break;
+                }
 
             default:
                 {

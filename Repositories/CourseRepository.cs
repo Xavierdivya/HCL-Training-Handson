@@ -110,6 +110,41 @@ public class CourseRepository
     }
 
 
+    public async Task<Dictionary<string, int>> GetEnrollmentCountByCourseAsync()
+    {
+        const string sql = """
+        SELECT c.CourseName,
+               COUNT(e.EnrollmentId) AS EnrollmentCount
+        FROM Courses c
+        LEFT JOIN Enrollments e
+            ON c.CourseId = e.CourseId
+        GROUP BY c.CourseId, c.CourseName
+        ORDER BY c.CourseName;
+        """;
+
+        Dictionary<string, int> report = new();
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        await connection.OpenAsync();
+
+        await using SqlDataReader reader =
+            await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            string courseName = reader.GetString(0);
+            int enrollmentCount = reader.GetInt32(1);
+
+            report[courseName] = enrollmentCount;
+        }
+
+        return report;
+    }
+
 
     public async Task<bool> UpdateAsync(Course course)
     {
