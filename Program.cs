@@ -8,6 +8,7 @@ using StudentCourseManagement.Services;
 DepartmentRepository departmentRepository = new();
 StudentRepository studentRepository = new();
 CourseRepository courseRepository = new();
+ReportRepository reportRepository = new();
 
 // Initialize services
 DepartmentService departmentService = new(departmentRepository);
@@ -42,6 +43,8 @@ while (true)
     Console.WriteLine("15. Update Enrollment Status");
     Console.WriteLine("16. Delete Enrollment");
     Console.WriteLine("------------------------------------");
+    Console.WriteLine("17. View Enrollment Report");
+    Console.WriteLine("0.  Exit");
     Console.WriteLine("0.  Exit");
     Console.WriteLine("====================================");
     Console.Write("Choose an option: ");
@@ -552,10 +555,33 @@ while (true)
                     break;
                 }
 
+            case "17":
+                {
+                    List<string> enrollmentReport =
+                        await reportRepository.GetEnrollmentReportAsync();
+
+                    if (enrollmentReport.Count == 0)
+                    {
+                        Console.WriteLine("No enrollment records found.");
+                        break;
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("========== ENROLLMENT REPORT ==========");
+
+                    foreach (string reportLine in enrollmentReport)
+                    {
+                        Console.WriteLine(reportLine);
+                    }
+
+                    Console.WriteLine("=======================================");
+                    break;
+                }
+
             default:
                 {
                     Console.WriteLine(
-                        "Invalid option. Please choose a number from 0 to 12.");
+                        "Invalid option. Please choose a number from 0 to 17.");
                     break;
                 }
         }
