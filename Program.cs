@@ -53,6 +53,7 @@ while (true)
     Console.WriteLine("22. View Courses by Student ID");
     Console.WriteLine("23. View Students by Course ID");
     Console.WriteLine("24. View Enrollment Count by Course");
+    Console.WriteLine("25. View Student Enrollment Report");
     Console.WriteLine("0.  Exit");
     Console.WriteLine("====================================");
     Console.Write("Choose an option: ");
@@ -890,6 +891,30 @@ while (true)
                     {
                         Console.WriteLine(
                             $"Course: {item.Key} | Enrollments: {item.Value}");
+                    }
+
+                    break;
+                }
+
+            case "25":
+                {
+
+                    List<string> report =
+                        await enrollmentRepository.GetStudentEnrollmentReportAsync();
+
+                    Console.WriteLine("\nStudent Enrollment Report");
+                    Console.WriteLine("-------------------------");
+
+                    if (report.Count == 0)
+                    {
+                        Console.WriteLine("No enrollments found.");
+                    }
+                    else
+                    {
+                        foreach (string item in report)
+                        {
+                            Console.WriteLine(item);
+                        }
                     }
 
                     break;

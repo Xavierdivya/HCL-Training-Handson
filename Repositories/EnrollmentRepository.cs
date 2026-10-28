@@ -213,4 +213,50 @@ public class EnrollmentRepository
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
+
+
+    public async Task<List<string>> GetStudentEnrollmentReportAsync()
+    {
+        const string sql = """
+        SELECT s.StudentId,
+               s.Name,
+               c.CourseName,
+               e.Status
+        FROM Enrollments e
+        INNER JOIN Students s
+            ON e.StudentId = s.StudentId
+        INNER JOIN Courses c
+            ON e.CourseId = c.CourseId
+        ORDER BY s.Name, c.CourseName;
+        """;
+
+        List<string> report = new();
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        await connection.OpenAsync();
+
+        await using SqlDataReader reader =
+            await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            int studentId = reader.GetInt32(0);
+            string studentName = reader.GetString(1);
+            string courseName = reader.GetString(2);
+            string status = reader.GetString(3);
+
+            report.Add(
+                $"Student ID: {studentId} | " +
+                $"Name: {studentName} | " +
+                $"Course: {courseName} | " +
+                $"Status: {status}");
+        }
+
+        return report;
+    }
+
 }
