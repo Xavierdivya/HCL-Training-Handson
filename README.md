@@ -30,6 +30,9 @@ The purpose of this repository is to maintain and organize my daily practice pro
 | Day 13 | [File Handling](Day13/) |
 | Day 14 | [Course Management](Day14/) |
 | Day 15 | [DBMS Learning](Day15/) |
+| Day 16 | [Git Learning](Day16/) |
+| Day 17 | [ADO.NET Learning](Day17/) |
+| Day 18 | [ADO.NET Learning](Day18/) |
 
 *Note: The folders and files will be updated as I progress through the training.*
 
