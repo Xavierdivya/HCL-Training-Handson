@@ -67,6 +67,7 @@ while (true)
             // DEPARTMENT OPERATIONS
             // =========================================
 
+
             case "1":
                 {
                     Department department = new();
@@ -80,11 +81,20 @@ while (true)
                     int newDepartmentId =
                         await departmentService.AddAsync(department);
 
+                    await auditLogService.AddAsync(new AuditLog
+                    {
+                        EntityName = "Department",
+                        EntityId = newDepartmentId,
+                        Action = "Created",
+                        Details = "Department created successfully"
+                    });
+
                     Console.WriteLine(
                         $"Department added successfully. ID: {newDepartmentId}");
 
                     break;
                 }
+
 
             case "2":
                 {
