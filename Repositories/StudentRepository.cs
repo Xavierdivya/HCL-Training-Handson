@@ -193,4 +193,30 @@ public class StudentRepository
     }
 
 
+    public async Task<bool> IsStudentActiveAsync(int studentId)
+    {
+        const string sql = """
+        SELECT COUNT(1)
+        FROM Students
+        WHERE StudentId = @StudentId
+          AND IsActive = 1;
+        """;
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add("@StudentId", SqlDbType.Int).Value =
+            studentId;
+
+        await connection.OpenAsync();
+
+        int count = Convert.ToInt32(
+            await command.ExecuteScalarAsync());
+
+        return count > 0;
+    }
+
+
 }

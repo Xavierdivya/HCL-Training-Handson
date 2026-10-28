@@ -8,14 +8,54 @@ namespace StudentCourseManagement.Repositories;
 
 public class EnrollmentRepository
 {
+
+
     public async Task<int> AddAsync(Enrollment enrollment)
     {
-        const string sql = """
-            INSERT INTO Enrollments (StudentId, CourseId, Status)
-            VALUES (@StudentId, @CourseId, @Status);
+        // Step 1: Check that the student exists and is active.
+        StudentRepository studentRepository = new();
 
-            SELECT CAST(SCOPE_IDENTITY() AS INT);
-            """;
+        bool studentIsActive =
+            await studentRepository.IsStudentActiveAsync(
+                enrollment.StudentId);
+
+        if (!studentIsActive)
+        {
+            throw new InvalidOperationException(
+                "Student does not exist or is inactive.");
+        }
+
+        // Step 2: Check that the course exists and is active.
+        CourseRepository courseRepository = new();
+
+        bool courseIsActive =
+            await courseRepository.IsCourseActiveAsync(
+                enrollment.CourseId);
+
+        if (!courseIsActive)
+        {
+            throw new InvalidOperationException(
+                "Course does not exist or is inactive.");
+        }
+
+        // Step 3: Check the student's active enrollment count.
+        int activeEnrollmentCount =
+            await GetActiveEnrollmentCountAsync(
+                enrollment.StudentId);
+
+        if (activeEnrollmentCount >= 5)
+        {
+            throw new InvalidOperationException(
+                "Student cannot have more than five active enrollments.");
+        }
+
+        // Step 4: Insert the enrollment after all validations pass.
+        const string sql = """
+        INSERT INTO Enrollments (StudentId, CourseId, Status)
+        VALUES (@StudentId, @CourseId, @Status);
+
+        SELECT CAST(SCOPE_IDENTITY() AS INT);
+        """;
 
         await using SqlConnection connection =
             DatabaseHelper.CreateConnection();
@@ -33,7 +73,8 @@ public class EnrollmentRepository
 
         await connection.OpenAsync();
 
-        return Convert.ToInt32(await command.ExecuteScalarAsync());
+        return Convert.ToInt32(
+            await command.ExecuteScalarAsync());
     }
 
     public async Task<List<Enrollment>> GetAllAsync()
@@ -257,6 +298,33 @@ public class EnrollmentRepository
         }
 
         return report;
+    }
+
+
+
+    public async Task<int> GetActiveEnrollmentCountAsync(int studentId)
+    {
+        const string sql = """
+        SELECT COUNT(*)
+        FROM Enrollments
+        WHERE StudentId = @StudentId
+          AND Status = @Status;
+        """;
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add("@StudentId", SqlDbType.Int)
+            .Value = studentId;
+
+        command.Parameters.Add("@Status", SqlDbType.NVarChar, 20)
+            .Value = "Enrolled";
+
+        await connection.OpenAsync();
+
+        return Convert.ToInt32(await command.ExecuteScalarAsync());
     }
 
 }

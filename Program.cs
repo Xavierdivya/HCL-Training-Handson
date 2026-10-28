@@ -545,6 +545,7 @@ while (true)
                 }
 
 
+
             case "13":
                 {
                     Enrollment enrollment = new();
@@ -555,6 +556,7 @@ while (true)
                         Console.WriteLine("Invalid student ID.");
                         break;
                     }
+
                     enrollment.StudentId = enrollmentStudentId;
 
                     Console.Write("Enter course ID: ");
@@ -563,22 +565,37 @@ while (true)
                         Console.WriteLine("Invalid course ID.");
                         break;
                     }
+
                     enrollment.CourseId = enrollmentCourseId;
 
-                    int newEnrollmentId = await enrollmentService.AddAsync(enrollment);
-
-                    await auditLogService.AddAsync(new AuditLog
+                    try
                     {
-                        EntityName = "Enrollment",
-                        EntityId = newEnrollmentId,
-                        Action = "Created",
-                        Details =
-        $"Student ID {enrollment.StudentId} enrolled " +
-        $"in Course ID {enrollment.CourseId}."
-                    });
+                        int newEnrollmentId =
+                            await enrollmentService.AddAsync(enrollment);
 
-                    Console.WriteLine(
-                        $"Enrollment added successfully. ID: {newEnrollmentId}");
+                        await auditLogService.AddAsync(new AuditLog
+                        {
+                            EntityName = "Enrollment",
+                            EntityId = newEnrollmentId,
+                            Action = "Created",
+                            Details =
+                                $"Student ID {enrollment.StudentId} enrolled " +
+                                $"in Course ID {enrollment.CourseId}."
+                        });
+
+                        Console.WriteLine(
+                            $"Enrollment added successfully. ID: {newEnrollmentId}");
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        Console.WriteLine($"Enrollment failed: {ex.Message}");
+                    }
+                    catch (SqlException)
+                    {
+                        Console.WriteLine(
+                            "Enrollment failed because of a database error.");
+                    }
+
                     break;
                 }
 

@@ -214,4 +214,31 @@ public class CourseRepository
         command.Parameters.Add("@DepartmentId", SqlDbType.Int)
             .Value = course.DepartmentId;
     }
+
+
+    public async Task<bool> IsCourseActiveAsync(int courseId)
+    {
+        const string sql = """
+        SELECT COUNT(1)
+        FROM Courses
+        WHERE CourseId = @CourseId
+          AND IsActive = 1;
+        """;
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add("@CourseId", SqlDbType.Int).Value =
+            courseId;
+
+        await connection.OpenAsync();
+
+        int count = Convert.ToInt32(
+            await command.ExecuteScalarAsync());
+
+        return count > 0;
+    }
+
 }
