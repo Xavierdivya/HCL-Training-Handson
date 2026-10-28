@@ -603,6 +603,17 @@ while (true)
                     bool statusUpdated = await enrollmentService.UpdateStatusAsync(
                         statusEnrollmentId, enrollmentStatus);
 
+                    if (statusUpdated)
+                    {
+                        await auditLogService.AddAsync(new AuditLog
+                        {
+                            EntityName = "Enrollment",
+                            EntityId = statusEnrollmentId,
+                            Action = "Updated",
+                            Details = $"Enrollment status changed to {enrollmentStatus}."
+                        });
+                    }
+
                     Console.WriteLine(statusUpdated
                         ? "Enrollment status updated successfully."
                         : "Enrollment not found.");
@@ -620,6 +631,17 @@ while (true)
 
                     bool enrollmentDeleted =
                         await enrollmentService.DeleteAsync(deleteEnrollmentId);
+
+                    if (enrollmentDeleted)
+                    {
+                        await auditLogService.AddAsync(new AuditLog
+                        {
+                            EntityName = "Enrollment",
+                            EntityId = deleteEnrollmentId,
+                            Action = "Deleted",
+                            Details = $"Enrollment ID {deleteEnrollmentId} was deleted."
+                        });
+                    }
 
                     Console.WriteLine(enrollmentDeleted
                         ? "Enrollment deleted successfully."
