@@ -47,6 +47,7 @@ while (true)
     Console.WriteLine("------------------------------------");
     Console.WriteLine("17. View Enrollment Report");
     Console.WriteLine("18. View Audit Logs");
+    Console.WriteLine("19. Search Students by Name");
     Console.WriteLine("0.  Exit");
     Console.WriteLine("====================================");
     Console.Write("Choose an option: ");
@@ -709,6 +710,36 @@ while (true)
                     }
 
                     Console.WriteLine("================================");
+                    break;
+                }
+
+
+            case "19":
+                {
+                    Console.Write("Enter student name to search: ");
+                    string name = Console.ReadLine() ?? string.Empty;
+
+                    List<Student> students =
+                        await studentRepository.SearchByNameAsync(name);
+
+                    if (students.Count == 0)
+                    {
+                        Console.WriteLine("No students found.");
+                    }
+                    else
+                    {
+                        foreach (Student student in students)
+                        {
+                            Console.WriteLine(
+                                $"ID: {student.StudentId} | " +
+                                $"Name: {student.Name} | " +
+                                $"Email: {student.Email} | " +
+                                $"Age: {student.Age} | " +
+                                $"Department ID: {student.DepartmentId} | " +
+                                $"Active: {student.IsActive}");
+                        }
+                    }
+
                     break;
                 }
 

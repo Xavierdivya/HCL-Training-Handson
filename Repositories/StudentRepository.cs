@@ -88,6 +88,51 @@ public class StudentRepository
     }
 
 
+    public async Task<List<Student>> SearchByNameAsync(string name)
+    {
+        const string sql = """
+        SELECT StudentId, Name, Email, Age, DepartmentId,
+               AdmissionDate, IsActive
+        FROM Students
+        WHERE Name LIKE @Name
+        ORDER BY StudentId;
+        """;
+
+        List<Student> students = new();
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add("@Name", SqlDbType.NVarChar, 100)
+            .Value = $"%{name}%";
+
+        await connection.OpenAsync();
+
+        await using SqlDataReader reader =
+            await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            Student student = new()
+            {
+                StudentId = reader.GetInt32(0),
+                Name = reader.GetString(1),
+                Email = reader.GetString(2),
+                Age = reader.GetInt32(3),
+                DepartmentId = reader.GetInt32(4),
+                AdmissionDate = reader.GetDateTime(5),
+                IsActive = reader.GetBoolean(6)
+            };
+
+            students.Add(student);
+        }
+
+        return students;
+    }
+
+
     public async Task<bool> UpdateAsync(Student student)
     {
         const string sql = """
