@@ -124,11 +124,14 @@ public class StudentRepository
         return await command.ExecuteNonQueryAsync() > 0;
     }
 
+
     public async Task<bool> DeleteAsync(int studentId)
     {
         const string sql = """
-        DELETE FROM Students
-        WHERE StudentId = @StudentId;
+        UPDATE Students
+        SET IsActive = 0
+        WHERE StudentId = @StudentId
+          AND IsActive = 1;
         """;
 
         await using SqlConnection connection =
@@ -143,5 +146,6 @@ public class StudentRepository
 
         return await command.ExecuteNonQueryAsync() > 0;
     }
+
 
 }
