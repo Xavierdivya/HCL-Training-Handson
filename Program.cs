@@ -286,6 +286,17 @@ while (true)
                     bool studentUpdated =
                         await studentService.UpdateAsync(student);
 
+                    if (studentUpdated)
+                    {
+                        await auditLogService.AddAsync(new AuditLog
+                        {
+                            EntityName = "Student",
+                            EntityId = student.StudentId,
+                            Action = "Updated",
+                            Details = $"Student '{student.Name}' was updated."
+                        });
+                    }
+
                     Console.WriteLine(studentUpdated
                         ? "Student updated successfully."
                         : "Student not found.");
@@ -306,6 +317,17 @@ while (true)
 
                     bool studentDeleted =
                         await studentService.DeleteAsync(deleteStudentId);
+
+                    if (studentDeleted)
+                    {
+                        await auditLogService.AddAsync(new AuditLog
+                        {
+                            EntityName = "Student",
+                            EntityId = deleteStudentId,
+                            Action = "Deleted",
+                            Details = $"Student ID {deleteStudentId} was deleted."
+                        });
+                    }
 
                     Console.WriteLine(studentDeleted
                         ? "Student deleted successfully."
