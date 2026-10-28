@@ -87,23 +87,29 @@ public class CourseRepository
         return await command.ExecuteNonQueryAsync() > 0;
     }
 
+
     public async Task<bool> DeleteAsync(int courseId)
     {
         const string sql = """
-            DELETE FROM Courses
-            WHERE CourseId = @CourseId;
-            """;
+        UPDATE Courses
+        SET IsActive = 0
+        WHERE CourseId = @CourseId
+          AND IsActive = 1;
+        """;
 
         await using SqlConnection connection =
             DatabaseHelper.CreateConnection();
+
         await using SqlCommand command = new(sql, connection);
 
         command.Parameters.Add("@CourseId", SqlDbType.Int)
             .Value = courseId;
 
         await connection.OpenAsync();
+
         return await command.ExecuteNonQueryAsync() > 0;
     }
+
 
     private static void AddParameters(
         SqlCommand command, Course course)
