@@ -51,6 +51,7 @@ while (true)
     Console.WriteLine("20. Search Courses by Name");
     Console.WriteLine("21. Search Departments by Name");
     Console.WriteLine("22. View Courses by Student ID");
+    Console.WriteLine("23. View Students by Course ID");
     Console.WriteLine("0.  Exit");
     Console.WriteLine("====================================");
     Console.Write("Choose an option: ");
@@ -839,6 +840,42 @@ while (true)
 
                     break;
                 }
+
+
+
+            case "23":
+                {
+                    Console.Write("Enter Course ID: ");
+
+                    if (!int.TryParse(Console.ReadLine(), out int courseId))
+                    {
+                        Console.WriteLine("Invalid Course ID.");
+                        break;
+                    }
+
+                    List<Enrollment> enrollments =
+                        await enrollmentRepository.GetByCourseIdAsync(courseId);
+
+                    if (enrollments.Count == 0)
+                    {
+                        Console.WriteLine("No enrollments found for this course.");
+                    }
+                    else
+                    {
+                        foreach (Enrollment enrollment in enrollments)
+                        {
+                            Console.WriteLine(
+                                $"Enrollment ID: {enrollment.EnrollmentId} | " +
+                                $"Student ID: {enrollment.StudentId} | " +
+                                $"Course ID: {enrollment.CourseId} | " +
+                                $"Date: {enrollment.EnrolledAt} | " +
+                                $"Status: {enrollment.Status}");
+                        }
+                    }
+
+                    break;
+                }
+
 
 
             default:
