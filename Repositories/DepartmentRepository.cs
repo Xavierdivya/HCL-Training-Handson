@@ -112,11 +112,15 @@ public class DepartmentRepository
         return rowsAffected > 0;
     }
 
+
+
     public async Task<bool> DeleteAsync(int departmentId)
     {
         const string sql = """
-        DELETE FROM Departments
-        WHERE DepartmentId = @DepartmentId;
+        UPDATE Departments
+        SET IsActive = 0
+        WHERE DepartmentId = @DepartmentId
+          AND IsActive = 1;
         """;
 
         await using SqlConnection connection =
@@ -134,5 +138,7 @@ public class DepartmentRepository
 
         return rowsAffected > 0;
     }
+
+
 
 }
