@@ -120,6 +120,41 @@ public class DepartmentRepository
     }
 
 
+    public async Task<Dictionary<string, int>> GetStudentCountByDepartmentAsync()
+    {
+        const string sql = """
+        SELECT d.DepartmentName,
+               COUNT(s.StudentId) AS StudentCount
+        FROM Departments d
+        LEFT JOIN Students s
+            ON d.DepartmentId = s.DepartmentId
+        GROUP BY d.DepartmentId, d.DepartmentName
+        ORDER BY d.DepartmentName;
+        """;
+
+        Dictionary<string, int> report = new();
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        await connection.OpenAsync();
+
+        await using SqlDataReader reader =
+            await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            string departmentName = reader.GetString(0);
+            int studentCount = reader.GetInt32(1);
+
+            report[departmentName] = studentCount;
+        }
+
+        return report;
+    }
+
 
     public async Task<bool> UpdateAsync(Department department)
     {
