@@ -72,6 +72,55 @@ public class EnrollmentRepository
         return enrollments;
     }
 
+
+    public async Task<List<Enrollment>> GetByStudentIdAsync(int studentId)
+    {
+        const string sql = """
+        SELECT e.EnrollmentId,
+               e.StudentId,
+               e.CourseId,
+               e.EnrolledAt,
+               e.Status
+        FROM Enrollments e
+        INNER JOIN Students s
+            ON e.StudentId = s.StudentId
+        INNER JOIN Courses c
+            ON e.CourseId = c.CourseId
+        WHERE e.StudentId = @StudentId
+        ORDER BY e.EnrolledAt DESC;
+        """;
+
+        List<Enrollment> enrollments = new();
+
+        await using SqlConnection connection =
+            DatabaseHelper.CreateConnection();
+
+        await using SqlCommand command = new(sql, connection);
+
+        command.Parameters.Add("@StudentId", SqlDbType.Int)
+            .Value = studentId;
+
+        await connection.OpenAsync();
+
+        await using SqlDataReader reader =
+            await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            enrollments.Add(new Enrollment
+            {
+                EnrollmentId = reader.GetInt32(0),
+                StudentId = reader.GetInt32(1),
+                CourseId = reader.GetInt32(2),
+                EnrolledAt = reader.GetDateTime(3),
+                Status = reader.GetString(4)
+            });
+        }
+
+        return enrollments;
+    }
+
+
     public async Task<bool> UpdateStatusAsync(
         int enrollmentId, string status)
     {
