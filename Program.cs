@@ -49,6 +49,7 @@ while (true)
     Console.WriteLine("18. View Audit Logs");
     Console.WriteLine("19. Search Students by Name");
     Console.WriteLine("20. Search Courses by Name");
+    Console.WriteLine("21. Search Departments by Name");
     Console.WriteLine("0.  Exit");
     Console.WriteLine("====================================");
     Console.Write("Choose an option: ");
@@ -774,6 +775,34 @@ while (true)
                     break;
                 }
 
+
+
+            case "21":
+                {
+                    Console.Write("Enter department name to search: ");
+                    string name = Console.ReadLine() ?? string.Empty;
+
+                    List<Department> departments =
+                        await departmentRepository.SearchByNameAsync(name);
+
+                    if (departments.Count == 0)
+                    {
+                        Console.WriteLine("No departments found.");
+                    }
+                    else
+                    {
+                        foreach (Department department in departments)
+                        {
+                            Console.WriteLine(
+                                $"ID: {department.DepartmentId} | " +
+                                $"Name: {department.DepartmentName} | " +
+                                $"Location: {department.Location ?? "N/A"} | " +
+                                $"Active: {department.IsActive}");
+                        }
+                    }
+
+                    break;
+                }
 
 
             default:
