@@ -57,6 +57,21 @@ namespace LeaveManagementSystem.Services
                     $"this leave type allows at most {leaveType.MaximumDays} days.");
             }
 
+            bool hasOverlappingLeave = await _context.LeaveRequests
+    .AnyAsync(lr =>
+        lr.EmployeeId == employeeId &&
+        (lr.Status == LeaveStatus.Pending ||
+         lr.Status == LeaveStatus.Approved) &&
+        lr.StartDate <= endDate &&
+        lr.EndDate >= startDate);
+
+if (hasOverlappingLeave)
+{
+    return (false,
+        "This employee already has a pending or approved leave " +
+        "request that overlaps these dates.");
+}
+
             var leaveRequest = new LeaveRequest
             {
                 EmployeeId = employeeId,
