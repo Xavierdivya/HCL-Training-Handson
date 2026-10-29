@@ -12,7 +12,9 @@ var options = new DbContextOptionsBuilder<ApplicationDbContext>()
     .Options;
 
 using var dbContext = new ApplicationDbContext(options);
+
 var employeeService = new EmployeeService(dbContext);
+var leaveTypeService = new LeaveTypeService(dbContext);
 
 bool running = true;
 
@@ -24,6 +26,11 @@ while (running)
     Console.WriteLine("3. Find employee by ID");
     Console.WriteLine("4. Update employee");
     Console.WriteLine("5. Delete employee");
+    Console.WriteLine("6. Add leave type");
+    Console.WriteLine("7. View all leave types");
+    Console.WriteLine("8. Find leave type by ID");
+    Console.WriteLine("9. Update leave type");
+    Console.WriteLine("10. Delete leave type");
     Console.WriteLine("0. Exit");
     Console.Write("Choose an option: ");
 
@@ -48,8 +55,7 @@ while (running)
                 };
 
                 await employeeService.AddEmployeeAsync(employee);
-                Console.WriteLine(
-                    $"Employee added successfully. ID: {employee.EmployeeId}");
+                Console.WriteLine($"Employee added. ID: {employee.EmployeeId}");
                 break;
             }
 
@@ -78,7 +84,7 @@ while (running)
 
             case "3":
             {
-                if (!TryReadId(out int id))
+                if (!TryReadId("Employee ID: ", out int id))
                     break;
 
                 var employee = await employeeService.GetEmployeeByIdAsync(id);
@@ -89,7 +95,6 @@ while (running)
                     break;
                 }
 
-                Console.WriteLine($"ID: {employee.EmployeeId}");
                 Console.WriteLine($"Name: {employee.FullName}");
                 Console.WriteLine($"Email: {employee.Email}");
                 Console.WriteLine($"Department: {employee.Department ?? "N/A"}");
@@ -99,7 +104,7 @@ while (running)
 
             case "4":
             {
-                if (!TryReadId(out int id))
+                if (!TryReadId("Employee ID: ", out int id))
                     break;
 
                 string name = ReadRequired("New full name: ");
@@ -112,13 +117,12 @@ while (running)
                 Console.WriteLine(updated
                     ? "Employee updated successfully."
                     : "Employee not found.");
-
                 break;
             }
 
             case "5":
             {
-                if (!TryReadId(out int id))
+                if (!TryReadId("Employee ID: ", out int id))
                     break;
 
                 bool deleted = await employeeService.DeleteEmployeeAsync(id);
@@ -126,7 +130,100 @@ while (running)
                 Console.WriteLine(deleted
                     ? "Employee deleted successfully."
                     : "Employee not found or has existing leave requests.");
+                break;
+            }
 
+            case "6":
+            {
+                string name = ReadRequired("Leave type name: ");
+
+                if (!TryReadPositiveInt("Maximum days: ", out int maximumDays))
+                    break;
+
+                var leaveType = new LeaveType
+                {
+                    LeaveTypeName = name,
+                    MaximumDays = maximumDays,
+                    IsActive = true
+                };
+
+                await leaveTypeService.AddLeaveTypeAsync(leaveType);
+
+                Console.WriteLine(
+                    $"Leave type added. ID: {leaveType.LeaveTypeId}");
+                break;
+            }
+
+            case "7":
+            {
+                var leaveTypes = await leaveTypeService.GetAllLeaveTypesAsync();
+
+                if (leaveTypes.Count == 0)
+                {
+                    Console.WriteLine("No leave types found.");
+                    break;
+                }
+
+                foreach (var leaveType in leaveTypes)
+                {
+                    Console.WriteLine(
+                        $"ID: {leaveType.LeaveTypeId} | " +
+                        $"Name: {leaveType.LeaveTypeName} | " +
+                        $"Maximum days: {leaveType.MaximumDays} | " +
+                        $"Active: {leaveType.IsActive}");
+                }
+
+                break;
+            }
+
+            case "8":
+            {
+                if (!TryReadId("Leave type ID: ", out int id))
+                    break;
+
+                var leaveType = await leaveTypeService.GetLeaveTypeByIdAsync(id);
+
+                if (leaveType == null)
+                {
+                    Console.WriteLine("Leave type not found.");
+                    break;
+                }
+
+                Console.WriteLine($"Name: {leaveType.LeaveTypeName}");
+                Console.WriteLine($"Maximum days: {leaveType.MaximumDays}");
+                Console.WriteLine($"Active: {leaveType.IsActive}");
+                break;
+            }
+
+            case "9":
+            {
+                if (!TryReadId("Leave type ID: ", out int id))
+                    break;
+
+                string name = ReadRequired("New leave type name: ");
+
+                if (!TryReadPositiveInt("New maximum days: ", out int maximumDays))
+                    break;
+
+                bool updated = await leaveTypeService.UpdateLeaveTypeAsync(
+                    id, name, maximumDays);
+
+                Console.WriteLine(updated
+                    ? "Leave type updated successfully."
+                    : "Leave type not found.");
+                break;
+            }
+
+            case "10":
+            {
+                if (!TryReadId("Leave type ID: ", out int id))
+                    break;
+
+                bool deleted = await leaveTypeService.DeleteLeaveTypeAsync(id);
+
+                Console.WriteLine(deleted
+                    ? "Leave type deleted successfully."
+                    : "Leave type not found or referenced by leave requests.");
                 break;
             }
 
@@ -136,7 +233,7 @@ while (running)
                 break;
 
             default:
-                Console.WriteLine("Invalid option. Choose 0 to 5.");
+                Console.WriteLine("Invalid option. Choose 0 to 10.");
                 break;
         }
     }
@@ -173,13 +270,24 @@ static string? ReadOptional(string prompt)
     return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 }
 
-static bool TryReadId(out int id)
+static bool TryReadId(string prompt, out int id)
 {
-    Console.Write("Employee ID: ");
+    Console.Write(prompt);
     bool valid = int.TryParse(Console.ReadLine(), out id) && id > 0;
 
     if (!valid)
-        Console.WriteLine("Enter a valid positive employee ID.");
+        Console.WriteLine("Enter a valid positive ID.");
+
+    return valid;
+}
+
+static bool TryReadPositiveInt(string prompt, out int value)
+{
+    Console.Write(prompt);
+    bool valid = int.TryParse(Console.ReadLine(), out value) && value > 0;
+
+    if (!valid)
+        Console.WriteLine("Enter a positive whole number.");
 
     return valid;
 }
