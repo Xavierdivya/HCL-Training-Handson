@@ -3,7 +3,6 @@ using LeaveManagementSystem.Data;
 using LeaveManagementSystem.Models;
 using LeaveManagementSystem.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 var connectionString =
     "Server=localhost\\SQLEXPRESS;Database=LeaveManagementDb;Trusted_Connection=True;TrustServerCertificate=True;";
@@ -17,6 +16,7 @@ using var dbContext = new ApplicationDbContext(options);
 var employeeService = new EmployeeService(dbContext);
 var leaveTypeService = new LeaveTypeService(dbContext);
 var leaveRequestService = new LeaveRequestService(dbContext);
+var leaveApprovalService = new LeaveApprovalService(dbContext);
 
 bool running = true;
 
@@ -36,6 +36,8 @@ while (running)
     Console.WriteLine("11. Submit leave request");
     Console.WriteLine("12. View all leave requests");
     Console.WriteLine("13. Find leave request by ID");
+    Console.WriteLine("14. View pending leave requests");
+    Console.WriteLine("15. Approve or reject a leave request");
     Console.WriteLine("0. Exit");
     Console.Write("Choose an option: ");
 
@@ -49,7 +51,8 @@ while (running)
             {
                 string name = ReadRequired("Full name: ");
                 string email = ReadRequired("Email: ");
-                string? department = ReadOptional("Department (optional): ");
+                string? department =
+                    ReadOptional("Department (optional): ");
 
                 var employee = new Employee
                 {
@@ -60,13 +63,16 @@ while (running)
                 };
 
                 await employeeService.AddEmployeeAsync(employee);
-                Console.WriteLine($"Employee added. ID: {employee.EmployeeId}");
+
+                Console.WriteLine(
+                    $"Employee added. ID: {employee.EmployeeId}");
                 break;
             }
 
             case "2":
             {
-                var employees = await employeeService.GetAllEmployeesAsync();
+                var employees =
+                    await employeeService.GetAllEmployeesAsync();
 
                 if (employees.Count == 0)
                 {
@@ -92,7 +98,8 @@ while (running)
                 if (!TryReadId("Employee ID: ", out int id))
                     break;
 
-                var employee = await employeeService.GetEmployeeByIdAsync(id);
+                var employee =
+                    await employeeService.GetEmployeeByIdAsync(id);
 
                 if (employee == null)
                 {
@@ -102,7 +109,8 @@ while (running)
 
                 Console.WriteLine($"Name: {employee.FullName}");
                 Console.WriteLine($"Email: {employee.Email}");
-                Console.WriteLine($"Department: {employee.Department ?? "N/A"}");
+                Console.WriteLine(
+                    $"Department: {employee.Department ?? "N/A"}");
                 Console.WriteLine($"Active: {employee.IsActive}");
                 break;
             }
@@ -114,14 +122,17 @@ while (running)
 
                 string name = ReadRequired("New full name: ");
                 string email = ReadRequired("New email: ");
-                string? department = ReadOptional("New department (optional): ");
+                string? department =
+                    ReadOptional("New department (optional): ");
 
-                bool updated = await employeeService.UpdateEmployeeAsync(
-                    id, name, email, department);
+                bool updated =
+                    await employeeService.UpdateEmployeeAsync(
+                        id, name, email, department);
 
                 Console.WriteLine(updated
                     ? "Employee updated successfully."
                     : "Employee not found.");
+
                 break;
             }
 
@@ -130,11 +141,13 @@ while (running)
                 if (!TryReadId("Employee ID: ", out int id))
                     break;
 
-                bool deleted = await employeeService.DeleteEmployeeAsync(id);
+                bool deleted =
+                    await employeeService.DeleteEmployeeAsync(id);
 
                 Console.WriteLine(deleted
                     ? "Employee deleted successfully."
                     : "Employee not found or has existing leave requests.");
+
                 break;
             }
 
@@ -142,7 +155,8 @@ while (running)
             {
                 string name = ReadRequired("Leave type name: ");
 
-                if (!TryReadPositiveInt("Maximum days: ", out int maximumDays))
+                if (!TryReadPositiveInt(
+                    "Maximum days: ", out int maximumDays))
                     break;
 
                 var leaveType = new LeaveType
@@ -156,12 +170,14 @@ while (running)
 
                 Console.WriteLine(
                     $"Leave type added. ID: {leaveType.LeaveTypeId}");
+
                 break;
             }
 
             case "7":
             {
-                var leaveTypes = await leaveTypeService.GetAllLeaveTypesAsync();
+                var leaveTypes =
+                    await leaveTypeService.GetAllLeaveTypesAsync();
 
                 if (leaveTypes.Count == 0)
                 {
@@ -186,7 +202,8 @@ while (running)
                 if (!TryReadId("Leave type ID: ", out int id))
                     break;
 
-                var leaveType = await leaveTypeService.GetLeaveTypeByIdAsync(id);
+                var leaveType =
+                    await leaveTypeService.GetLeaveTypeByIdAsync(id);
 
                 if (leaveType == null)
                 {
@@ -195,7 +212,8 @@ while (running)
                 }
 
                 Console.WriteLine($"Name: {leaveType.LeaveTypeName}");
-                Console.WriteLine($"Maximum days: {leaveType.MaximumDays}");
+                Console.WriteLine(
+                    $"Maximum days: {leaveType.MaximumDays}");
                 Console.WriteLine($"Active: {leaveType.IsActive}");
                 break;
             }
@@ -205,17 +223,21 @@ while (running)
                 if (!TryReadId("Leave type ID: ", out int id))
                     break;
 
-                string name = ReadRequired("New leave type name: ");
+                string name =
+                    ReadRequired("New leave type name: ");
 
-                if (!TryReadPositiveInt("New maximum days: ", out int maximumDays))
+                if (!TryReadPositiveInt(
+                    "New maximum days: ", out int maximumDays))
                     break;
 
-                bool updated = await leaveTypeService.UpdateLeaveTypeAsync(
-                    id, name, maximumDays);
+                bool updated =
+                    await leaveTypeService.UpdateLeaveTypeAsync(
+                        id, name, maximumDays);
 
                 Console.WriteLine(updated
                     ? "Leave type updated successfully."
                     : "Leave type not found.");
+
                 break;
             }
 
@@ -224,11 +246,13 @@ while (running)
                 if (!TryReadId("Leave type ID: ", out int id))
                     break;
 
-                bool deleted = await leaveTypeService.DeleteLeaveTypeAsync(id);
+                bool deleted =
+                    await leaveTypeService.DeleteLeaveTypeAsync(id);
 
                 Console.WriteLine(deleted
                     ? "Leave type deleted successfully."
                     : "Leave type not found or referenced by leave requests.");
+
                 break;
             }
 
@@ -240,20 +264,23 @@ while (running)
                 if (!TryReadId("Leave type ID: ", out int leaveTypeId))
                     break;
 
-                if (!TryReadDate("Start date (yyyy-MM-dd): ", out DateOnly startDate))
+                if (!TryReadDate("Start date (yyyy-MM-dd): ",
+                    out DateOnly startDate))
                     break;
 
-                if (!TryReadDate("End date (yyyy-MM-dd): ", out DateOnly endDate))
+                if (!TryReadDate("End date (yyyy-MM-dd): ",
+                    out DateOnly endDate))
                     break;
 
                 string reason = ReadRequired("Reason for leave: ");
 
-                var result = await leaveRequestService.AddLeaveRequestAsync(
-                    employeeId,
-                    leaveTypeId,
-                    startDate,
-                    endDate,
-                    reason);
+                var result =
+                    await leaveRequestService.AddLeaveRequestAsync(
+                        employeeId,
+                        leaveTypeId,
+                        startDate,
+                        endDate,
+                        reason);
 
                 Console.WriteLine(result.Message);
                 break;
@@ -273,6 +300,7 @@ while (running)
                 foreach (var request in requests)
                 {
                     DisplayLeaveRequest(request);
+                    Console.WriteLine("------------------------------");
                 }
 
                 break;
@@ -280,11 +308,12 @@ while (running)
 
             case "13":
             {
-                if (!TryReadId("Leave request ID: ", out int id))
+                if (!TryReadId("Leave Request ID: ", out int requestId))
                     break;
 
                 var request =
-                    await leaveRequestService.GetLeaveRequestByIdAsync(id);
+                    await leaveRequestService.GetLeaveRequestByIdAsync(
+                        requestId);
 
                 if (request == null)
                 {
@@ -296,14 +325,78 @@ while (running)
                 break;
             }
 
+            case "14":
+            {
+                var pendingRequests =
+                    await leaveApprovalService.GetPendingRequestsAsync();
+
+                if (pendingRequests.Count == 0)
+                {
+                    Console.WriteLine("No pending leave requests found.");
+                    break;
+                }
+
+                foreach (var request in pendingRequests)
+                {
+                    DisplayLeaveRequest(request);
+                    Console.WriteLine("------------------------------");
+                }
+
+                break;
+            }
+
+            case "15":
+            {
+                if (!TryReadId(
+                    "Leave Request ID: ", out int requestId))
+                    break;
+
+                Console.WriteLine("1. Approve");
+                Console.WriteLine("2. Reject");
+                Console.Write("Choose an action: ");
+
+                string? approvalChoice = Console.ReadLine();
+
+                LeaveStatus newStatus;
+
+                if (approvalChoice == "1")
+                {
+                    newStatus = LeaveStatus.Approved;
+                }
+                else if (approvalChoice == "2")
+                {
+                    newStatus = LeaveStatus.Rejected;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choice.");
+                    break;
+                }
+
+                bool success =
+                    await leaveApprovalService.UpdateRequestStatusAsync(
+                        requestId, newStatus);
+
+                Console.WriteLine(success
+                    ? $"Request {requestId} updated to {newStatus}."
+                    : "Request not found or it is no longer pending.");
+
+                break;
+            }
+
             case "0":
+            {
                 running = false;
                 Console.WriteLine("Exiting application.");
                 break;
+            }
 
             default:
-                Console.WriteLine("Invalid option. Choose 0 to 13.");
+            {
+                Console.WriteLine(
+                    "Invalid option. Choose a number from 0 to 15.");
                 break;
+            }
         }
     }
     catch (DbUpdateException ex)
@@ -315,20 +408,6 @@ while (running)
     {
         Console.WriteLine($"Operation failed: {ex.Message}");
     }
-}
-
-static void DisplayLeaveRequest(LeaveRequest request)
-{
-    Console.WriteLine(
-        $"Request ID: {request.LeaveRequestId} | " +
-        $"Employee: {request.Employee.FullName} | " +
-        $"Leave type: {request.LeaveType.LeaveTypeName} | " +
-        $"From: {request.StartDate:yyyy-MM-dd} | " +
-        $"To: {request.EndDate:yyyy-MM-dd} | " +
-        $"Status: {request.Status} | " +
-        $"Requested on: {request.RequestedOn:u}");
-
-    Console.WriteLine($"Reason: {request.Reason}");
 }
 
 static string ReadRequired(string prompt)
@@ -350,13 +429,17 @@ static string? ReadOptional(string prompt)
     Console.Write(prompt);
     string? value = Console.ReadLine();
 
-    return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+    return string.IsNullOrWhiteSpace(value)
+        ? null
+        : value.Trim();
 }
 
 static bool TryReadId(string prompt, out int id)
 {
     Console.Write(prompt);
-    bool valid = int.TryParse(Console.ReadLine(), out id) && id > 0;
+
+    bool valid =
+        int.TryParse(Console.ReadLine(), out id) && id > 0;
 
     if (!valid)
         Console.WriteLine("Enter a valid positive ID.");
@@ -367,7 +450,9 @@ static bool TryReadId(string prompt, out int id)
 static bool TryReadPositiveInt(string prompt, out int value)
 {
     Console.Write(prompt);
-    bool valid = int.TryParse(Console.ReadLine(), out value) && value > 0;
+
+    bool valid =
+        int.TryParse(Console.ReadLine(), out value) && value > 0;
 
     if (!valid)
         Console.WriteLine("Enter a positive whole number.");
@@ -382,12 +467,26 @@ static bool TryReadDate(string prompt, out DateOnly date)
     bool valid = DateOnly.TryParseExact(
         Console.ReadLine(),
         "yyyy-MM-dd",
-        CultureInfo.InvariantCulture,
-        DateTimeStyles.None,
+        System.Globalization.CultureInfo.InvariantCulture,
+        System.Globalization.DateTimeStyles.None,
         out date);
 
     if (!valid)
         Console.WriteLine("Enter a valid date in yyyy-MM-dd format.");
 
     return valid;
+}
+
+static void DisplayLeaveRequest(LeaveRequest request)
+{
+    Console.WriteLine($"Request ID: {request.LeaveRequestId}");
+    Console.WriteLine(
+        $"Employee: {request.Employee?.FullName ?? "Unknown"}");
+    Console.WriteLine(
+        $"Leave type: {request.LeaveType?.LeaveTypeName ?? "Unknown"}");
+    Console.WriteLine($"Start date: {request.StartDate:yyyy-MM-dd}");
+    Console.WriteLine($"End date: {request.EndDate:yyyy-MM-dd}");
+    Console.WriteLine($"Reason: {request.Reason}");
+    Console.WriteLine($"Status: {request.Status}");
+    Console.WriteLine($"Requested on: {request.RequestedOn:yyyy-MM-dd HH:mm} UTC");
 }
