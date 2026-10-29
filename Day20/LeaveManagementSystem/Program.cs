@@ -3,6 +3,7 @@ using LeaveManagementSystem.Data;
 using LeaveManagementSystem.Models;
 using LeaveManagementSystem.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var connectionString =
     "Server=localhost\\SQLEXPRESS;Database=LeaveManagementDb;Trusted_Connection=True;TrustServerCertificate=True;";
@@ -15,6 +16,7 @@ using var dbContext = new ApplicationDbContext(options);
 
 var employeeService = new EmployeeService(dbContext);
 var leaveTypeService = new LeaveTypeService(dbContext);
+var leaveRequestService = new LeaveRequestService(dbContext);
 
 bool running = true;
 
@@ -31,6 +33,9 @@ while (running)
     Console.WriteLine("8. Find leave type by ID");
     Console.WriteLine("9. Update leave type");
     Console.WriteLine("10. Delete leave type");
+    Console.WriteLine("11. Submit leave request");
+    Console.WriteLine("12. View all leave requests");
+    Console.WriteLine("13. Find leave request by ID");
     Console.WriteLine("0. Exit");
     Console.Write("Choose an option: ");
 
@@ -227,13 +232,77 @@ while (running)
                 break;
             }
 
+            case "11":
+            {
+                if (!TryReadId("Employee ID: ", out int employeeId))
+                    break;
+
+                if (!TryReadId("Leave type ID: ", out int leaveTypeId))
+                    break;
+
+                if (!TryReadDate("Start date (yyyy-MM-dd): ", out DateOnly startDate))
+                    break;
+
+                if (!TryReadDate("End date (yyyy-MM-dd): ", out DateOnly endDate))
+                    break;
+
+                string reason = ReadRequired("Reason for leave: ");
+
+                var result = await leaveRequestService.AddLeaveRequestAsync(
+                    employeeId,
+                    leaveTypeId,
+                    startDate,
+                    endDate,
+                    reason);
+
+                Console.WriteLine(result.Message);
+                break;
+            }
+
+            case "12":
+            {
+                var requests =
+                    await leaveRequestService.GetAllLeaveRequestsAsync();
+
+                if (requests.Count == 0)
+                {
+                    Console.WriteLine("No leave requests found.");
+                    break;
+                }
+
+                foreach (var request in requests)
+                {
+                    DisplayLeaveRequest(request);
+                }
+
+                break;
+            }
+
+            case "13":
+            {
+                if (!TryReadId("Leave request ID: ", out int id))
+                    break;
+
+                var request =
+                    await leaveRequestService.GetLeaveRequestByIdAsync(id);
+
+                if (request == null)
+                {
+                    Console.WriteLine("Leave request not found.");
+                    break;
+                }
+
+                DisplayLeaveRequest(request);
+                break;
+            }
+
             case "0":
                 running = false;
                 Console.WriteLine("Exiting application.");
                 break;
 
             default:
-                Console.WriteLine("Invalid option. Choose 0 to 10.");
+                Console.WriteLine("Invalid option. Choose 0 to 13.");
                 break;
         }
     }
@@ -246,6 +315,20 @@ while (running)
     {
         Console.WriteLine($"Operation failed: {ex.Message}");
     }
+}
+
+static void DisplayLeaveRequest(LeaveRequest request)
+{
+    Console.WriteLine(
+        $"Request ID: {request.LeaveRequestId} | " +
+        $"Employee: {request.Employee.FullName} | " +
+        $"Leave type: {request.LeaveType.LeaveTypeName} | " +
+        $"From: {request.StartDate:yyyy-MM-dd} | " +
+        $"To: {request.EndDate:yyyy-MM-dd} | " +
+        $"Status: {request.Status} | " +
+        $"Requested on: {request.RequestedOn:u}");
+
+    Console.WriteLine($"Reason: {request.Reason}");
 }
 
 static string ReadRequired(string prompt)
@@ -288,6 +371,23 @@ static bool TryReadPositiveInt(string prompt, out int value)
 
     if (!valid)
         Console.WriteLine("Enter a positive whole number.");
+
+    return valid;
+}
+
+static bool TryReadDate(string prompt, out DateOnly date)
+{
+    Console.Write(prompt);
+
+    bool valid = DateOnly.TryParseExact(
+        Console.ReadLine(),
+        "yyyy-MM-dd",
+        CultureInfo.InvariantCulture,
+        DateTimeStyles.None,
+        out date);
+
+    if (!valid)
+        Console.WriteLine("Enter a valid date in yyyy-MM-dd format.");
 
     return valid;
 }
