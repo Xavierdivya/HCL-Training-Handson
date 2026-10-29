@@ -38,10 +38,7 @@ namespace LeaveManagementSystem.Services
 
         // UPDATE
         public async Task<bool> UpdateEmployeeAsync(
-            int id,
-            string fullName,
-            string email,
-            string? department)
+            int id, string fullName, string email, string? department)
         {
             var employee = await _context.Employees.FindAsync(id);
 
@@ -64,6 +61,7 @@ namespace LeaveManagementSystem.Services
             if (employee == null)
                 return false;
 
+            // Preserve employees who have existing leave requests.
             bool hasLeaveRequests = await _context.LeaveRequests
                 .AnyAsync(lr => lr.EmployeeId == id);
 

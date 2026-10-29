@@ -12,6 +12,7 @@ namespace LeaveManagementSystem.Data
         {
             var connectionString =
     "Server=localhost\\SQLEXPRESS;Database=LeaveManagementDb;Trusted_Connection=True;TrustServerCertificate=True;";
+
             var optionsBuilder =
                 new DbContextOptionsBuilder<ApplicationDbContext>();
 
