@@ -15,7 +15,7 @@ namespace LeaveManagementSystem.Services
         }
 
         // CREATE: Submit a leave request.
-        public async Task<(bool Success, string Message)> AddLeaveRequestAsync(
+        public async Task<(bool Success, string Message, int RequestId)> AddLeaveRequestAsync(
             int employeeId,
             int leaveTypeId,
             DateOnly startDate,
@@ -24,12 +24,12 @@ namespace LeaveManagementSystem.Services
         {
             if (endDate < startDate)
             {
-                return (false, "End date cannot be before start date.");
+                return (false, "End date cannot be before start date.", 0);
             }
 
             if (string.IsNullOrWhiteSpace(reason))
             {
-                return (false, "Reason is required.");
+                return (false, "Reason is required.", 0);
             }
 
             var employee = await _context.Employees
@@ -37,7 +37,7 @@ namespace LeaveManagementSystem.Services
 
             if (employee == null || !employee.IsActive)
             {
-                return (false, "Employee does not exist or is inactive.");
+                return (false, "Employee does not exist or is inactive.", 0);
             }
 
             var leaveType = await _context.LeaveTypes
@@ -45,32 +45,35 @@ namespace LeaveManagementSystem.Services
 
             if (leaveType == null || !leaveType.IsActive)
             {
-                return (false, "Leave type does not exist or is inactive.");
+                return (false, "Leave type does not exist or is inactive.", 0);
             }
 
-            int requestedDays = endDate.DayNumber - startDate.DayNumber + 1;
+            int requestedDays =
+                endDate.DayNumber - startDate.DayNumber + 1;
 
             if (requestedDays > leaveType.MaximumDays)
             {
                 return (false,
                     $"Requested {requestedDays} calendar days, but " +
-                    $"this leave type allows at most {leaveType.MaximumDays} days.");
+                    $"this leave type allows at most {leaveType.MaximumDays} days.",
+                    0);
             }
 
-            bool hasOverlappingLeave = await _context.LeaveRequests
-    .AnyAsync(lr =>
-        lr.EmployeeId == employeeId &&
-        (lr.Status == LeaveStatus.Pending ||
-         lr.Status == LeaveStatus.Approved) &&
-        lr.StartDate <= endDate &&
-        lr.EndDate >= startDate);
+            bool hasOverlappingLeave =
+                await _context.LeaveRequests.AnyAsync(lr =>
+                    lr.EmployeeId == employeeId &&
+                    (lr.Status == LeaveStatus.Pending ||
+                     lr.Status == LeaveStatus.Approved) &&
+                    lr.StartDate <= endDate &&
+                    lr.EndDate >= startDate);
 
-if (hasOverlappingLeave)
-{
-    return (false,
-        "This employee already has a pending or approved leave " +
-        "request that overlaps these dates.");
-}
+            if (hasOverlappingLeave)
+            {
+                return (false,
+                    "This employee already has a pending or approved leave " +
+                    "request that overlaps these dates.",
+                    0);
+            }
 
             var leaveRequest = new LeaveRequest
             {
@@ -88,7 +91,8 @@ if (hasOverlappingLeave)
 
             return (true,
                 $"Leave request submitted successfully. " +
-                $"Request ID: {leaveRequest.LeaveRequestId}");
+                $"Request ID: {leaveRequest.LeaveRequestId}",
+                leaveRequest.LeaveRequestId);
         }
 
         // READ: Get all leave requests with employee and leave type details.
