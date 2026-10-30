@@ -7,8 +7,22 @@ using Microsoft.EntityFrameworkCore;
 var connectionString =
     "Server=localhost\\SQLEXPRESS;Database=LeaveManagementDb;Trusted_Connection=True;TrustServerCertificate=True;";
 
-var services = new ServiceCollection();
+// Ask for the username when the application starts
+Console.Write("Enter your username: ");
+string? currentUser = Console.ReadLine();
 
+while (string.IsNullOrWhiteSpace(currentUser))
+{
+    Console.Write("Username cannot be empty. Enter your username: ");
+    currentUser = Console.ReadLine();
+}
+
+currentUser = currentUser.Trim();
+
+Console.WriteLine($"Welcome, {currentUser}!");
+
+// Create the dependency injection container
+var services = new ServiceCollection();
 // Register database context
 services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -18,6 +32,8 @@ services.AddScoped<EmployeeService>();
 services.AddScoped<LeaveTypeService>();
 services.AddScoped<LeaveRequestService>();
 services.AddScoped<LeaveApprovalService>();
+services.AddScoped<AuditLogService>();
+
 
 // Build the dependency injection container
 using var serviceProvider = services.BuildServiceProvider();
@@ -37,6 +53,9 @@ var leaveRequestService = scope.ServiceProvider
 
 var leaveApprovalService = scope.ServiceProvider
     .GetRequiredService<LeaveApprovalService>();
+
+var auditLogService = scope.ServiceProvider
+    .GetRequiredService<AuditLogService>();
 
 bool running = true;
 
@@ -58,6 +77,7 @@ while (running)
     Console.WriteLine("13. Find leave request by ID");
     Console.WriteLine("14. View pending leave requests");
     Console.WriteLine("15. Approve or reject a leave request");
+    Console.WriteLine("16. View Audit Logs");
     Console.WriteLine("0. Exit");
     Console.Write("Choose an option: ");
 
@@ -82,11 +102,19 @@ while (running)
                     IsActive = true
                 };
 
-                await employeeService.AddEmployeeAsync(employee);
+                    await employeeService.AddEmployeeAsync(employee);
 
-                Console.WriteLine(
-                    $"Employee added. ID: {employee.EmployeeId}");
-                break;
+                    // Save audit log
+                    await auditLogService.LogAsync(
+                        "CREATE",
+                        "Employee",
+                        employee.EmployeeId,
+                        $"Employee {employee.FullName} was added.",
+                        currentUser);
+
+                    Console.WriteLine(
+                        $"Employee added. ID: {employee.EmployeeId}");
+                    break;
             }
 
             case "2":
@@ -145,15 +173,26 @@ while (running)
                 string? department =
                     ReadOptional("New department (optional): ");
 
-                bool updated =
-                    await employeeService.UpdateEmployeeAsync(
-                        id, name, email, department);
+                    bool updated =
+        await employeeService.UpdateEmployeeAsync(
+            id, name, email, department);
 
-                Console.WriteLine(updated
-                    ? "Employee updated successfully."
-                    : "Employee not found.");
+                    if (updated)
+                    {
+                        await auditLogService.LogAsync(
+                            "UPDATE",
+                            "Employee",
+                            id,
+                            $"Employee {name} was updated.",
+                            currentUser);
 
-                break;
+                        Console.WriteLine("Employee updated successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Employee not found.");
+                    }
+                    break;
             }
 
             case "5":
@@ -161,14 +200,26 @@ while (running)
                 if (!TryReadId("Employee ID: ", out int id))
                     break;
 
-                bool deleted =
-                    await employeeService.DeleteEmployeeAsync(id);
+                    bool deleted =
+         await employeeService.DeleteEmployeeAsync(id);
 
-                Console.WriteLine(deleted
-                    ? "Employee deleted successfully."
-                    : "Employee not found or has existing leave requests.");
+                    if (deleted)
+                    {
+                        await auditLogService.LogAsync(
+                            "DELETE",
+                            "Employee",
+                            id,
+                            $"Employee with ID {id} was deleted.",
+                            currentUser);
 
-                break;
+                        Console.WriteLine("Employee deleted successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            "Employee not found or has existing leave requests.");
+                    }
+                    break;
             }
 
             case "6":
@@ -186,12 +237,18 @@ while (running)
                     IsActive = true
                 };
 
-                await leaveTypeService.AddLeaveTypeAsync(leaveType);
+                    await leaveTypeService.AddLeaveTypeAsync(leaveType);
 
-                Console.WriteLine(
-                    $"Leave type added. ID: {leaveType.LeaveTypeId}");
+                    await auditLogService.LogAsync(
+                        "CREATE",
+                        "LeaveType",
+                        leaveType.LeaveTypeId,
+                        $"Leave type {leaveType.LeaveTypeName} was added.",
+                        currentUser);
 
-                break;
+                    Console.WriteLine(
+                        $"Leave type added. ID: {leaveType.LeaveTypeId}");
+                    break;
             }
 
             case "7":
@@ -250,15 +307,27 @@ while (running)
                     "New maximum days: ", out int maximumDays))
                     break;
 
-                bool updated =
-                    await leaveTypeService.UpdateLeaveTypeAsync(
-                        id, name, maximumDays);
+                    bool updated =
+        await leaveTypeService.UpdateLeaveTypeAsync(
+            id, name, maximumDays);
 
-                Console.WriteLine(updated
-                    ? "Leave type updated successfully."
-                    : "Leave type not found.");
+                    if (updated)
+                    {
+                        await auditLogService.LogAsync(
+                            "UPDATE",
+                            "LeaveType",
+                            id,
+                            $"Leave type {name} was updated.",
+                            currentUser);
 
-                break;
+                        Console.WriteLine("Leave type updated successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Leave type not found.");
+                    }
+
+                    break;
             }
 
             case "10":
@@ -266,45 +335,66 @@ while (running)
                 if (!TryReadId("Leave type ID: ", out int id))
                     break;
 
-                bool deleted =
-                    await leaveTypeService.DeleteLeaveTypeAsync(id);
+                    bool deleted =
+        await leaveTypeService.DeleteLeaveTypeAsync(id);
 
-                Console.WriteLine(deleted
-                    ? "Leave type deleted successfully."
-                    : "Leave type not found or referenced by leave requests.");
+                    if (deleted)
+                    {
+                        await auditLogService.LogAsync(
+                            "DELETE",
+                            "LeaveType",
+                            id,
+                            $"Leave type with ID {id} was deleted.",
+                            currentUser);
 
-                break;
+                        Console.WriteLine("Leave type deleted successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            "Leave type not found or referenced by leave requests.");
+                    }
+                    break;
             }
 
             case "11":
-            {
-                if (!TryReadId("Employee ID: ", out int employeeId))
+                {
+                    if (!TryReadId("Employee ID: ", out int employeeId))
+                        break;
+
+                    if (!TryReadId("Leave Type ID: ", out int leaveTypeId))
+                        break;
+
+                    if (!TryReadDate("Start Date (yyyy-MM-dd): ", out DateOnly startDate))
+                        break;
+
+                    if (!TryReadDate("End Date (yyyy-MM-dd): ", out DateOnly endDate))
+                        break;
+
+                    Console.Write("Reason: ");
+                    string reason = Console.ReadLine() ?? "";
+
+                    var result =
+                        await leaveRequestService.AddLeaveRequestAsync(
+                            employeeId,
+                            leaveTypeId,
+                            startDate,
+                            endDate,
+                            reason);
+
+                    if (result.Success)
+                    {
+                        await auditLogService.LogAsync(
+                            "CREATE",
+                            "LeaveRequest",
+                            result.RequestId,
+                            $"Leave request submitted by employee ID {employeeId}.",
+                            currentUser);
+                    }
+
+                    Console.WriteLine(result.Message);
                     break;
-
-                if (!TryReadId("Leave type ID: ", out int leaveTypeId))
-                    break;
-
-                if (!TryReadDate("Start date (yyyy-MM-dd): ",
-                    out DateOnly startDate))
-                    break;
-
-                if (!TryReadDate("End date (yyyy-MM-dd): ",
-                    out DateOnly endDate))
-                    break;
-
-                string reason = ReadRequired("Reason for leave: ");
-
-                var result =
-                    await leaveRequestService.AddLeaveRequestAsync(
-                        employeeId,
-                        leaveTypeId,
-                        startDate,
-                        endDate,
-                        reason);
-
-                Console.WriteLine(result.Message);
-                break;
-            }
+                }
 
             case "12":
             {
@@ -363,46 +453,92 @@ while (running)
                 }
 
                 break;
-            }
+                }
 
-            case "15":
-            {
-                if (!TryReadId(
-                    "Leave Request ID: ", out int requestId))
+case "15":
+                {
+                    if (!TryReadId(
+                        "Leave Request ID: ", out int requestId))
+                        break;
+
+                    Console.WriteLine("1. Approve");
+                    Console.WriteLine("2. Reject");
+                    Console.Write("Choose an action: ");
+
+                    string? approvalChoice = Console.ReadLine();
+
+                    LeaveStatus newStatus;
+                    string auditAction;
+
+                    if (approvalChoice == "1")
+                    {
+                        newStatus = LeaveStatus.Approved;
+                        auditAction = "APPROVE";
+                    }
+                    else if (approvalChoice == "2")
+                    {
+                        newStatus = LeaveStatus.Rejected;
+                        auditAction = "REJECT";
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid choice.");
+                        break;
+                    }
+
+                    bool success =
+                        await leaveApprovalService.UpdateRequestStatusAsync(
+                            requestId, newStatus);
+
+                    if (success)
+                    {
+                        await auditLogService.LogAsync(
+                            auditAction,
+                            "LeaveRequest",
+                            requestId,
+                            $"Leave request {requestId} was {newStatus}.",
+                            currentUser);
+
+                        Console.WriteLine(
+                            $"Request {requestId} updated to {newStatus}.");
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            "Request not found or it is no longer pending.");
+                    }
+
                     break;
-
-                Console.WriteLine("1. Approve");
-                Console.WriteLine("2. Reject");
-                Console.Write("Choose an action: ");
-
-                string? approvalChoice = Console.ReadLine();
-
-                LeaveStatus newStatus;
-
-                if (approvalChoice == "1")
-                {
-                    newStatus = LeaveStatus.Approved;
                 }
-                else if (approvalChoice == "2")
+
+            case "16":
                 {
-                    newStatus = LeaveStatus.Rejected;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid choice.");
+                    var auditLogs =
+                        await auditLogService.GetAllAuditLogsAsync();
+
+                    if (auditLogs.Count == 0)
+                    {
+                        Console.WriteLine("No audit logs found.");
+                        break;
+                    }
+
+                    Console.WriteLine("\n========== AUDIT HISTORY ==========");
+
+                    foreach (var log in auditLogs)
+                    {
+                        Console.WriteLine("-----------------------------------");
+                        Console.WriteLine($"Audit ID    : {log.AuditLogId}");
+                        Console.WriteLine($"Action      : {log.Action}");
+                        Console.WriteLine($"Entity      : {log.EntityName}");
+                        Console.WriteLine($"Entity ID   : {log.EntityId}");
+                        Console.WriteLine($"Description : {log.Description}");
+                        Console.WriteLine($"Performed By: {log.PerformedBy}");
+                        Console.WriteLine($"Date & Time : {log.PerformedAt:dd-MM-yyyy HH:mm:ss}");
+                    }
+
+                    Console.WriteLine("===================================");
                     break;
                 }
-
-                bool success =
-                    await leaveApprovalService.UpdateRequestStatusAsync(
-                        requestId, newStatus);
-
-                Console.WriteLine(success
-                    ? $"Request {requestId} updated to {newStatus}."
-                    : "Request not found or it is no longer pending.");
-
-                break;
-            }
 
             case "0":
             {
