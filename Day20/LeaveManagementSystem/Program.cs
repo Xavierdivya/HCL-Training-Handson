@@ -1,4 +1,4 @@
-﻿
+﻿using Microsoft.Extensions.DependencyInjection;
 using LeaveManagementSystem.Data;
 using LeaveManagementSystem.Models;
 using LeaveManagementSystem.Services;
@@ -7,16 +7,36 @@ using Microsoft.EntityFrameworkCore;
 var connectionString =
     "Server=localhost\\SQLEXPRESS;Database=LeaveManagementDb;Trusted_Connection=True;TrustServerCertificate=True;";
 
-var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-    .UseSqlServer(connectionString)
-    .Options;
+var services = new ServiceCollection();
 
-using var dbContext = new ApplicationDbContext(options);
+// Register database context
+services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
-var employeeService = new EmployeeService(dbContext);
-var leaveTypeService = new LeaveTypeService(dbContext);
-var leaveRequestService = new LeaveRequestService(dbContext);
-var leaveApprovalService = new LeaveApprovalService(dbContext);
+// Register application services
+services.AddScoped<EmployeeService>();
+services.AddScoped<LeaveTypeService>();
+services.AddScoped<LeaveRequestService>();
+services.AddScoped<LeaveApprovalService>();
+
+// Build the dependency injection container
+using var serviceProvider = services.BuildServiceProvider();
+
+// Create a scope
+using var scope = serviceProvider.CreateScope();
+
+// Get services from the DI container
+var employeeService = scope.ServiceProvider
+    .GetRequiredService<EmployeeService>();
+
+var leaveTypeService = scope.ServiceProvider
+    .GetRequiredService<LeaveTypeService>();
+
+var leaveRequestService = scope.ServiceProvider
+    .GetRequiredService<LeaveRequestService>();
+
+var leaveApprovalService = scope.ServiceProvider
+    .GetRequiredService<LeaveApprovalService>();
 
 bool running = true;
 
