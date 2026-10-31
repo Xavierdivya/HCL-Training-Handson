@@ -55,7 +55,7 @@ public class ApplicationDbContext : DbContext
                 .WithOne(s => s.Department)
                 .HasForeignKey(s => s.DepartmentId);
 
-            
+
         });
     }
- }
+}
