@@ -15,4 +15,3 @@ public class UpdateStudentDto
     [Range(17, 60)]
     public int Age { get; set; }
 }
-

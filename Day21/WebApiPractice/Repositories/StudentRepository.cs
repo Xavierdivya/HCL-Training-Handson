@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApiPractice.Data;
+﻿using WebApiPractice.Data;
 using WebApiPractice.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace WebApiPractice.Repositories;
 
