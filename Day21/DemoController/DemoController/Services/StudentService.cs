@@ -1,7 +1,7 @@
 ﻿using DemoController.Models;
 namespace DemoController.Services;
 
-public class StudentService
+public class StudentService : IStudentService
 {
     private readonly List<Student> _students = new()
         {
