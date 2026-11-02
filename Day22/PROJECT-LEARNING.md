@@ -1282,3 +1282,94 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 **Git commit:**
 
 `feat: add entity model configuration method`
+
+
+## Operation 20 – Configure All Entities Using EF Core Fluent API
+
+**Objective:** Configure all eight database entities using `OnModelCreating()` in `ApplicationDbContext.cs`.
+
+### Implementation
+
+Configured the following entities:
+
+1. **Movie**
+   - Configured primary key `MovieId`.
+   - Made `Title`, `DurationMinutes`, `ReleaseDate`, `Language`, and `Genre` required.
+   - Set maximum lengths for `Title`, `Description`, `Language`, and `Genre`.
+   - Added a check constraint to ensure `DurationMinutes > 0`.
+
+2. **Theatre**
+   - Configured primary key `TheatreId`.
+   - Made `Name` and `Location` required.
+   - Configured maximum lengths.
+
+3. **Screen**
+   - Configured primary key `ScreenId`.
+   - Configured the relationship between `Screen` and `Theatre`.
+   - Used `DeleteBehavior.Restrict`.
+   - Added a unique index on `TheatreId` and `ScreenName` to prevent duplicate screen names within the same theatre.
+
+4. **Seat**
+   - Configured primary key `SeatId`.
+   - Configured the relationship between `Seat` and `Screen`.
+   - Used `DeleteBehavior.Restrict`.
+   - Added a check constraint to ensure `SeatNumber > 0`.
+   - Added a unique index on `ScreenId`, `RowName`, and `SeatNumber`.
+
+5. **Show**
+   - Configured primary key `ShowId`.
+   - Configured relationships with `Movie` and `Screen`.
+   - Used `DeleteBehavior.Restrict` for both relationships.
+   - Configured `StartTime` and `EndTime` as `datetime2`.
+   - Configured `TicketPrice` with precision `(10,2)`.
+   - Added check constraints to ensure `EndTime > StartTime` and `TicketPrice >= 0`.
+
+6. **ShowSeat**
+   - Configured primary key `ShowSeatId`.
+   - Configured relationships with `Show` and `Seat`.
+   - Used `DeleteBehavior.Restrict`.
+   - Added a unique index on `ShowId` and `SeatId`.
+   - Added a check constraint allowing only `Available` or `Booked` statuses.
+
+7. **Booking**
+   - Configured primary key `BookingId`.
+   - Configured the relationship with `Show`.
+   - Used `DeleteBehavior.Restrict`.
+   - Added a unique index on `BookingReference`.
+   - Configured `TotalAmount` with precision `(10,2)`.
+   - Added check constraints to ensure `TotalAmount >= 0` and status is either `Confirmed` or `Cancelled`.
+
+8. **BookingSeat**
+   - Configured primary key `BookingSeatId`.
+   - Configured relationships with `Booking` and `Seat`.
+   - Used `DeleteBehavior.Restrict`.
+   - Configured `Price` with precision `(10,2)`.
+   - Added a check constraint to ensure `Price >= 0`.
+
+### Important EF Core Concepts Learned
+
+- **HasKey():** Configures the primary key of an entity.
+- **IsRequired():** Makes a property mandatory in the database.
+- **HasMaxLength():** Sets the maximum length of a string property.
+- **HasPrecision():** Configures decimal precision and scale.
+- **HasOne() / WithMany():** Configures one-to-many relationships.
+- **HasForeignKey():** Specifies the foreign key property.
+- **OnDelete(DeleteBehavior.Restrict):** Prevents deleting a parent record when dependent records exist.
+- **HasIndex().IsUnique():** Prevents duplicate values for the configured index or combination of columns.
+- **HasCheckConstraint():** Enforces a condition on database values.
+
+### Build Verification
+
+Command:
+
+```powershell
+dotnet build
+```
+
+Result: **Build succeeded.**
+
+### Git Commit
+
+```text
+feat: configure all entities using fluent api
+```
