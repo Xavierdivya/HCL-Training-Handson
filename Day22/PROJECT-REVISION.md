@@ -823,3 +823,31 @@ It suppresses the nullable-reference warning. It does not create or load an obje
 `TheatreId`.
 
 **Interview revision:** Explain reference navigation properties versus collection navigation properties.
+
+## Seat Navigation Properties – Revision Notes
+
+**1. What is the relationship between Screen and Seat?**
+
+One Screen can contain multiple Seats.
+
+**2. What is ShowSeats?**
+
+It represents the availability records of a physical seat across different shows.
+
+**3. What is BookingSeats?**
+
+It represents the booking records involving a physical seat.
+
+**4. Why can one Seat have multiple ShowSeat records?**
+
+Because the same physical seat can be associated with different shows.
+
+**5. Why can one Seat have multiple BookingSeat records?**
+
+Because the same physical seat can be booked for different shows at different times.
+
+**6. What is ScreenId?**
+
+It is the foreign key connecting Seat to Screen.
+
+**Interview revision:** Explain why Seat is connected to both ShowSeat and BookingSeat instead of storing booking availability directly inside Seat.

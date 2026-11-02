@@ -11,5 +11,11 @@
         public int SeatNumber { get; set; }
 
         public string SeatType { get; set; } = string.Empty;
+
+        public Screen Screen { get; set; } = null!;
+
+        public ICollection<ShowSeat> ShowSeats { get; set; } = new List<ShowSeat>();
+
+        public ICollection<BookingSeat> BookingSeats { get; set; } = new List<BookingSeat>();
     }
 }

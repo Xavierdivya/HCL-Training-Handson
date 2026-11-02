@@ -959,3 +959,47 @@ public ICollection<Seat> Seats { get; set; } = new List<Seat>();
 **Git commit:**
 
 `feat: add screen navigation properties`
+
+### Operation 12: Add Navigation Properties to Seat
+
+**File modified:** `Models/Seat.cs`
+
+**Purpose:**
+
+Added navigation properties to connect Seat with Screen, ShowSeat and BookingSeat.
+
+**Code added:**
+
+```csharp
+public Screen Screen { get; set; } = null!;
+
+public ICollection<ShowSeat> ShowSeats { get; set; } = new List<ShowSeat>();
+
+public ICollection<BookingSeat> BookingSeats { get; set; } = new List<BookingSeat>();
+```
+
+**Important concepts learned:**
+
+- Each Seat belongs to one Screen.
+- One Seat can have multiple ShowSeat records.
+- One Seat can have multiple BookingSeat records across different shows and bookings.
+- `Screen` is a reference navigation property.
+- `ShowSeats` and `BookingSeats` are collection navigation properties.
+- `ScreenId` is the foreign key connecting Seat to Screen.
+- `null!` suppresses the nullable-reference warning for a navigation property populated by EF Core.
+
+**Relationships:**
+
+- Screen (One) → Seats (Many)
+- Seat (One) → ShowSeats (Many)
+- Seat (One) → BookingSeats (Many)
+
+**Verification:**
+
+- Added three navigation properties to Seat.cs.
+- Built the project successfully.
+- No compilation errors.
+
+**Git commit:**
+
+`feat: add seat navigation properties`
