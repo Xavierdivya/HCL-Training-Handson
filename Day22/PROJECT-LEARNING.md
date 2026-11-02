@@ -1003,3 +1003,50 @@ public ICollection<BookingSeat> BookingSeats { get; set; } = new List<BookingSea
 **Git commit:**
 
 `feat: add seat navigation properties`
+
+### Operation 13: Add Navigation Properties to Show
+
+**File modified:** `Models/Show.cs`
+
+**Purpose:**
+
+Added navigation properties connecting Show with Movie, Screen, ShowSeat and Booking.
+
+**Code added:**
+
+```csharp
+public Movie Movie { get; set; } = null!;
+
+public Screen Screen { get; set; } = null!;
+
+public ICollection<ShowSeat> ShowSeats { get; set; } = new List<ShowSeat>();
+
+public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+```
+
+**Important concepts learned:**
+
+- Each Show belongs to one Movie.
+- Each Show takes place on one Screen.
+- One Show can have multiple ShowSeat records.
+- One Show can have multiple Bookings.
+- `MovieId` and `ScreenId` are foreign keys.
+- `Movie` and `Screen` are reference navigation properties.
+- `ShowSeats` and `Bookings` are collection navigation properties.
+
+**Relationships:**
+
+- Movie (One) → Shows (Many)
+- Screen (One) → Shows (Many)
+- Show (One) → ShowSeats (Many)
+- Show (One) → Bookings (Many)
+
+**Verification:**
+
+- Added four navigation properties to Show.cs.
+- Built the project successfully.
+- No compilation errors.
+
+**Git commit:**
+
+`feat: add show navigation properties`

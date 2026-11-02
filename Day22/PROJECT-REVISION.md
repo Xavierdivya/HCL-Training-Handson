@@ -851,3 +851,32 @@ Because the same physical seat can be booked for different shows at different ti
 It is the foreign key connecting Seat to Screen.
 
 **Interview revision:** Explain why Seat is connected to both ShowSeat and BookingSeat instead of storing booking availability directly inside Seat.
+
+## Show Navigation Properties – Revision Notes
+
+**1. What is the relationship between Movie and Show?**
+
+One Movie can have multiple Shows.
+
+**2. What is the relationship between Screen and Show?**
+
+One Screen can host multiple Shows at different times.
+
+**3. What is ShowSeats?**
+
+It represents the seat availability records associated with a particular show.
+
+**4. What is Bookings?**
+
+It represents all bookings made for a particular show.
+
+**5. What are the foreign keys in Show?**
+
+`MovieId` and `ScreenId`.
+
+**6. What is the difference between reference and collection navigation properties?**
+
+- Reference: represents one related entity.
+- Collection: represents multiple related entities.
+
+**Interview revision:** Explain how Movie, Screen, ShowSeat and Booking are connected through Show.
