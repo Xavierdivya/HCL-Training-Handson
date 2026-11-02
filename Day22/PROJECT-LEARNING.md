@@ -1605,3 +1605,159 @@ The database tables, primary keys, foreign keys, and unique indexes were success
 docs: document database schema verification
 ```
 
+## Operation 24 – Implement Complete Repository Layer
+
+**Objective:** Implement the repository layer using Entity Framework Core to separate database operations from business logic.
+
+### 1. Repository Architecture
+
+Implemented the following application flow:
+
+Controller → Service → Repository → ApplicationDbContext → SQL Server
+
+The repository layer communicates with the database using EF Core. The service layer will use repository interfaces to execute business operations.
+
+### 2. Repository Interfaces Created
+
+Created six repository interfaces inside `Repositories/Interfaces/`:
+
+1. `IMovieRepository`
+2. `ITheatreRepository`
+3. `IScreenRepository`
+4. `ISeatRepository`
+5. `IShowRepository`
+6. `IBookingRepository`
+
+Each interface defines the database operations required for its entity.
+
+### 3. Repository Implementations Created
+
+Created six implementation classes inside `Repositories/`:
+
+1. `MovieRepository`
+2. `TheatreRepository`
+3. `ScreenRepository`
+4. `SeatRepository`
+5. `ShowRepository`
+6. `BookingRepository`
+
+### 4. MovieRepository
+
+Implemented:
+- Add a movie.
+- Retrieve movies with pagination.
+- Filter movies by title.
+- Retrieve a movie by ID.
+- Update a movie.
+- Delete a movie.
+
+Used `Skip()` and `Take()` for pagination.
+
+### 5. TheatreRepository
+
+Implemented:
+- Add a theatre.
+- Retrieve all theatres.
+- Retrieve a theatre by ID.
+- Update a theatre.
+- Delete a theatre.
+
+### 6. ScreenRepository
+
+Implemented:
+- Add a screen.
+- Retrieve all screens.
+- Retrieve a screen by ID.
+- Retrieve screens by theatre ID.
+- Update a screen.
+- Delete a screen.
+
+Used `Include()` to retrieve related theatre information.
+
+### 7. SeatRepository
+
+Implemented:
+- Add a seat.
+- Add multiple seats using `AddRangeAsync()`.
+- Retrieve all seats.
+- Retrieve a seat by ID.
+- Retrieve seats by screen ID.
+- Update a seat.
+- Delete a seat.
+
+Used `OrderBy()` and `ThenBy()` to organize seat records.
+
+### 8. ShowRepository
+
+Implemented:
+- Add a show.
+- Retrieve all shows.
+- Retrieve a show by ID.
+- Retrieve shows by movie ID.
+- Retrieve shows by screen ID.
+- Retrieve shows by date.
+- Update a show.
+
+Used `Include()` to retrieve related movie and screen information.
+
+### 9. BookingRepository
+
+Implemented:
+- Add a booking.
+- Retrieve a booking by ID.
+- Retrieve a booking using its reference.
+- Update a booking.
+
+Used `Include()` and `ThenInclude()` to retrieve related show, movie, booking-seat, and seat information.
+
+### 10. Important EF Core Methods Learned
+
+| Method | Purpose |
+|---|---|
+| `AddAsync()` | Adds an entity asynchronously |
+| `AddRangeAsync()` | Adds multiple entities |
+| `ToListAsync()` | Retrieves a list of records |
+| `FirstOrDefaultAsync()` | Retrieves the first matching record or null |
+| `FindAsync()` | Finds an entity using its primary key |
+| `SaveChangesAsync()` | Saves database changes |
+| `Update()` | Marks an entity for updating |
+| `Remove()` | Marks an entity for deletion |
+| `AsNoTracking()` | Retrieves entities without change tracking |
+| `Include()` | Loads related entity data |
+| `ThenInclude()` | Loads nested related entity data |
+| `Where()` | Filters records |
+| `OrderBy()` | Sorts records |
+| `Skip()` | Skips records for pagination |
+| `Take()` | Limits the number of records |
+
+### 11. Asynchronous Programming
+
+Repository methods use `async` and `await` for database operations.
+
+This allows database calls to execute asynchronously without blocking the request thread while waiting for the database.
+
+### 12. Important Design Decisions
+
+- Repository interfaces define operation contracts.
+- Repository classes contain EF Core database logic.
+- Constructor injection provides `ApplicationDbContext`.
+- `AsNoTracking()` is used for read-only queries.
+- `DeleteBehavior.Restrict` protects records that have dependent data.
+- Booking cancellation and seat availability updates will be handled in the service layer using transactions.
+
+### 13. Build Verification
+
+Command:
+
+```powershell
+dotnet build
+```
+
+Result: **Build succeeded.**
+
+### Git Commit
+
+```text
+feat: implement repository layer
+```
+

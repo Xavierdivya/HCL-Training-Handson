@@ -1282,3 +1282,118 @@ Primary key verification – **Succeeded.**
 Foreign key verification – **Succeeded.**
 
 Unique index verification – **Succeeded.**
+
+## Operation 24 – Repository Layer Revision
+
+### 1. What is the Repository Pattern?
+
+The Repository Pattern separates database access logic from business logic.
+
+It provides methods to perform database operations through repository classes.
+
+### 2. Application Flow
+
+Controller → Service → Repository → DbContext → Database
+
+### 3. Interface vs Implementation
+
+**Interface:**
+
+Defines which operations are available.
+
+Example: `IMovieRepository`
+
+**Implementation:**
+
+Contains the actual EF Core database queries.
+
+Example: `MovieRepository`
+
+### 4. Dependency Injection Through Constructor
+
+```csharp
+private readonly ApplicationDbContext _context;
+
+public MovieRepository(ApplicationDbContext context)
+{
+    _context = context;
+}
+```
+
+- `ApplicationDbContext` provides access to database tables.
+- `_context` stores the injected DbContext instance.
+- Constructor injection supplies the dependency.
+
+### 5. Important EF Core Methods
+
+| Method | Explanation |
+|---|---|
+| `AddAsync()` | Adds a record |
+| `AddRangeAsync()` | Adds multiple records |
+| `SaveChangesAsync()` | Saves changes to the database |
+| `ToListAsync()` | Returns a list |
+| `FirstOrDefaultAsync()` | Returns the first match or null |
+| `FindAsync()` | Searches by primary key |
+| `Update()` | Updates an entity |
+| `Remove()` | Deletes an entity |
+| `AsNoTracking()` | Disables tracking for read-only queries |
+| `Include()` | Loads related data |
+| `ThenInclude()` | Loads nested related data |
+
+### 6. Pagination
+
+Example:
+
+```csharp
+.Skip((pageNumber - 1) * pageSize)
+.Take(pageSize)
+.ToListAsync();
+```
+
+Explanation:
+
+- `Skip()` ignores records from previous pages.
+- `Take()` retrieves the requested number of records.
+
+### 7. Filtering
+
+Example:
+
+```csharp
+.Where(m => m.Title.Contains(title))
+```
+
+Retrieves movies whose titles contain the supplied search text.
+
+### 8. Include and ThenInclude
+
+Example:
+
+```csharp
+.Include(b => b.BookingSeats)
+    .ThenInclude(bs => bs.Seat)
+```
+
+- `Include()` loads the booking-seat collection.
+- `ThenInclude()` loads each related seat.
+
+### 9. Asynchronous Programming
+
+- `async` allows a method to execute asynchronously.
+- `await` waits for an asynchronous operation to finish without blocking the current thread.
+- `Task<T>` represents an asynchronous operation that returns a value of type `T`.
+- `Task` represents an asynchronous operation without a return value.
+
+### 10. Important Concepts
+
+- Repository Interface: Defines available operations.
+- Repository Implementation: Contains database query logic.
+- DbContext: Manages database access and entity tracking.
+- LINQ: Used to query and filter data.
+- Pagination: Retrieves data in smaller pages.
+- Navigation Property: Represents relationships between entities.
+- Transaction: Groups database operations so they succeed or fail together.
+
+### 11. Build Verification
+
+`dotnet build` – **Succeeded.**
