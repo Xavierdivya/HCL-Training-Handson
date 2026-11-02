@@ -237,8 +237,8 @@ namespace MovieTicketBooking.Migrations
 
                     b.Property<string>("BookingReference")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CustomerEmail")
                         .IsRequired()

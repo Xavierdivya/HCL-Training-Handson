@@ -270,7 +270,7 @@ namespace MovieTicketBooking.Data
 
                 entity.Property(b => b.BookingReference)
                       .IsRequired()
-                      .HasMaxLength(30);
+                      .HasMaxLength(50);
 
                 entity.Property(b => b.CustomerName)
                       .IsRequired()

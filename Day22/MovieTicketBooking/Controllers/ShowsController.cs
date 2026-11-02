@@ -109,6 +109,15 @@ public class ShowsController : ControllerBase
         return NoContent();
     }
 
+    // DELETE: api/Shows/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteShow(int id)
+    {
+        await _showService.DeleteAsync(id);
+
+        return NoContent();
+    }
+
     private static ShowResponseDto MapToResponse(Show show)
     {
         return new ShowResponseDto

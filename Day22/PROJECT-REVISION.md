@@ -1792,3 +1792,378 @@ dotnet build
 ```
 
 **Remember:** Never commit JWT signing keys or passwords to GitHub.
+
+
+# Day 22 – Movie Ticket Booking API
+# Quick Revision Notes
+
+## 1. What is ASP.NET Core Web API?
+
+ASP.NET Core Web API is used to build HTTP-based services that allow clients such as Postman, web applications and mobile applications to communicate with a backend.
+
+Common HTTP methods:
+
+| Method | Purpose |
+|---|---|
+| GET | Retrieve data |
+| POST | Create data |
+| PUT | Update data |
+| DELETE | Delete data |
+
+## 2. What is DTO?
+
+DTO means Data Transfer Object.
+
+It transfers data between the client and API without exposing the complete database entity.
+
+Example:
+
+```csharp
+public class CreateBookingDto
+{
+    public int ShowId { get; set; }
+    public List<int> SeatIds { get; set; }
+    public string CustomerName { get; set; }
+    public string CustomerEmail { get; set; }
+    public string CustomerPhone { get; set; }
+}
+```
+
+Benefits:
+- Controls which data the client can submit.
+- Prevents unnecessary entity properties from being exposed.
+- Supports input validation.
+- Separates API contracts from database models.
+
+## 3. Data Annotation Attributes
+
+| Attribute | Purpose |
+|---|---|
+| `[Required]` | Value is mandatory |
+| `[Range]` | Restricts numeric values |
+| `[StringLength]` | Restricts string length |
+| `[EmailAddress]` | Validates email format |
+| `[Phone]` | Validates phone format |
+| `[MinLength]` | Specifies minimum collection or string length |
+
+## 4. What is Dependency Injection?
+
+Dependency Injection provides required objects to a class instead of creating those objects manually.
+
+Example:
+
+```csharp
+builder.Services.AddScoped<IBookingService, BookingService>();
+```
+
+`IBookingService` is the interface.
+
+`BookingService` is its implementation.
+
+`AddScoped` creates one service instance per HTTP request scope.
+
+Other DI lifetimes:
+
+- AddTransient: New instance whenever requested.
+- AddScoped: One instance per request scope.
+- AddSingleton: One instance for the application lifetime.
+
+## 5. Repository and Service Layers
+
+### Repository
+
+Responsible for database operations.
+
+Examples:
+- Add booking.
+- Find booking.
+- Update booking.
+- Retrieve booking details.
+
+### Service
+
+Responsible for business logic.
+
+Examples:
+- Validate show.
+- Check seat availability.
+- Calculate booking amount.
+- Generate booking reference.
+- Cancel booking.
+
+### Controller
+
+Receives HTTP requests and returns HTTP responses.
+
+Flow:
+
+```text
+Postman
+   |
+   v
+Controller
+   |
+   v
+Service
+   |
+   v
+Repository
+   |
+   v
+ApplicationDbContext
+   |
+   v
+SQL Server
+```
+
+## 6. Entity Framework Core
+
+EF Core is an Object-Relational Mapper (ORM).
+
+It allows C# applications to interact with relational databases using entity classes and LINQ.
+
+Important concepts:
+
+- DbContext: Manages database interactions.
+- DbSet: Represents a database table.
+- Migration: Records database schema changes.
+- Database Update: Applies migrations to the database.
+- Fluent API: Configures entities and relationships.
+
+### Migration Commands
+
+Create migration:
+
+```powershell
+dotnet ef migrations add MigrationName
+```
+
+Apply migration:
+
+```powershell
+dotnet ef database update
+```
+
+Remove the latest unapplied migration:
+
+```powershell
+dotnet ef migrations remove
+```
+
+## 7. Database Relationships
+
+Examples in the project:
+
+- One Theatre has many Screens.
+- One Screen has many Seats.
+- One Movie has many Shows.
+- One Screen has many Shows.
+- One Show has many Bookings.
+- One Booking has many BookingSeats.
+
+### DeleteBehavior.Restrict
+
+Prevents deleting a parent record while dependent child records exist.
+
+Example:
+
+```csharp
+.OnDelete(DeleteBehavior.Restrict);
+```
+
+This protects related records from accidental deletion.
+
+## 8. Transactions
+
+A database transaction groups multiple operations into one logical unit.
+
+In booking creation:
+
+1. Create booking.
+2. Create booking-seat records.
+3. Mark seats as booked.
+4. Save changes.
+
+If an operation fails, the transaction can roll back so partial booking data is not committed.
+
+## 9. JWT Authentication
+
+JWT means JSON Web Token.
+
+It is used to authenticate API requests.
+
+Authentication flow:
+
+```text
+User Login
+    |
+    v
+Validate Credentials
+    |
+    v
+Generate JWT
+    |
+    v
+Client Stores Token
+    |
+    v
+Send Bearer Token
+    |
+    v
+API Validates Token
+    |
+    v
+Access Granted / Denied
+```
+
+Postman Authorization header:
+
+```text
+Authorization: Bearer <access_token>
+```
+
+Never commit JWT signing keys, passwords or live access tokens to GitHub.
+
+## 10. HTTP Status Codes
+
+| Status | Meaning |
+|---|---|
+| 200 | OK |
+| 201 | Created |
+| 204 | No Content |
+| 400 | Bad Request |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Not Found |
+| 500 | Internal Server Error |
+
+## 11. Booking API Endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/Bookings` | Create booking |
+| GET | `/api/Bookings/{id}` | Get booking by ID |
+| GET | `/api/Bookings/reference/{bookingReference}` | Get booking by reference |
+| PUT | `/api/Bookings/{id}/cancel` | Cancel booking |
+
+## 12. Booking Business Logic
+
+### Create Booking
+
+- Validate show ID.
+- Validate seat IDs.
+- Check seat availability.
+- Prevent duplicate seat selection.
+- Calculate total amount.
+- Generate unique booking reference.
+- Save booking and booking seats.
+- Mark seats as booked.
+
+### Cancel Booking
+
+- Find booking.
+- Change status to Cancelled.
+- Release associated seats.
+- Save changes.
+
+## 13. Common Errors and Solutions
+
+### Error 1: Unable to resolve service
+
+Cause: Service implementation was not registered in Program.cs.
+
+Solution:
+
+```csharp
+builder.Services.AddScoped<IBookingService, BookingService>();
+```
+
+### Error 2: String or binary data would be truncated
+
+Cause: Application generated a longer booking reference than the database column allowed.
+
+Solution:
+
+```csharp
+entity.Property(b => b.BookingReference)
+      .HasMaxLength(50);
+```
+
+Then create and apply a migration.
+
+### Error 3: AppHost.exe Access Denied
+
+Workaround:
+
+```powershell
+dotnet build -p:UseAppHost=false
+dotnet run -p:UseAppHost=false
+```
+
+### Error 4: ECONNREFUSED in Postman
+
+Cause: API server is not running or the request uses the wrong URL or port.
+
+Solution:
+- Start the API.
+- Verify the listening URL.
+- Check the Postman baseUrl variable.
+
+## 14. Important Interview Questions
+
+**Q1. What is DTO?**
+
+A DTO transfers data between the client and application without exposing the database entity directly.
+
+**Q2. What is Dependency Injection?**
+
+Dependency Injection provides the required dependencies to a class rather than making the class create them.
+
+**Q3. What is the Repository Pattern?**
+
+It separates database access logic from business logic.
+
+**Q4. What is a migration?**
+
+A migration records changes to the database schema.
+
+**Q5. What is JWT?**
+
+JWT is a token format used to securely transmit claims and authenticate API requests.
+
+**Q6. What is the difference between Authentication and Authorization?**
+
+Authentication verifies who the user is. Authorization determines what the user is allowed to access.
+
+**Q7. What is a transaction?**
+
+A transaction ensures that a group of database operations succeeds together or rolls back on failure.
+
+**Q8. Why use DeleteBehavior.Restrict?**
+
+It prevents deleting a parent record when dependent child records exist.
+
+**Q9. Why use AddScoped?**
+
+It creates one service instance per request scope, which is suitable for many services that depend on EF Core DbContext.
+
+**Q10. Why use a BookingReference?**
+
+It provides a unique reference that customers can use to identify and retrieve their bookings.
+
+## 15. Revision Checklist
+
+- [ ] Understand ASP.NET Core Web API.
+- [ ] Understand DTOs and validation.
+- [ ] Understand Controllers, Services and Repositories.
+- [ ] Understand Dependency Injection.
+- [ ] Understand EF Core migrations.
+- [ ] Understand parent-child relationships.
+- [ ] Understand transactions.
+- [ ] Understand JWT authentication.
+- [ ] Test booking creation.
+- [ ] Test booking retrieval by ID.
+- [ ] Test booking retrieval by reference.
+- [ ] Test booking cancellation.
+- [ ] Verify seat availability after cancellation.
+- [ ] Understand Git feature branches and Pull Requests.

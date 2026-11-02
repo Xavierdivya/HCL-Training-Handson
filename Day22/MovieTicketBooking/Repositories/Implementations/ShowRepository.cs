@@ -84,6 +84,32 @@ namespace MovieTicketBooking.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            var show = await _context.Shows
+                .Include(s => s.ShowSeats)
+                .FirstOrDefaultAsync(s => s.ShowId == id);
+
+            if (show == null)
+                throw new KeyNotFoundException("Show not found.");
+
+            // Prevent deletion if booking records exist
+            bool hasBookings = await _context.Bookings
+                .AnyAsync(b => b.ShowId == id);
+
+            if (hasBookings)
+                throw new InvalidOperationException(
+                    "Cannot delete this show because bookings already exist.");
+
+            // Delete associated ShowSeat records
+            _context.ShowSeats.RemoveRange(show.ShowSeats);
+
+            // Delete the Show
+            _context.Shows.Remove(show);
+
+            await _context.SaveChangesAsync();
+        }
+
 
         public async Task<Show> AddWithSeatsAsync(Show show)
         {

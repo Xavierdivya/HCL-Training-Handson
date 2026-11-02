@@ -1,14 +1,15 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using MovieTicketBooking.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MovieTicketBooking.Data;
+using MovieTicketBooking.Data.Seed;
+using MovieTicketBooking.Models;
 using MovieTicketBooking.Repositories.Implementations;
 using MovieTicketBooking.Repositories.Interfaces;
-using MovieTicketBooking.Services.Interfaces;
 using MovieTicketBooking.Services.Implementations;
+using MovieTicketBooking.Services.Interfaces;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services.AddScoped<IScreenService, ScreenService>();
 builder.Services.AddScoped<ISeatService, SeatService>();
 builder.Services.AddScoped<IShowService, ShowService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 
 // Configure JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"]
@@ -84,6 +86,9 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+// Create Admin and Customer roles and provision Admin account.
+await IdentitySeeder.SeedAsync(app.Services);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
