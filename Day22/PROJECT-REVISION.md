@@ -1517,3 +1517,122 @@ if (movie.DurationMinutes <= 0)
 Controller → Service → Repository → DbContext → Database
 
 **Important:** Services handle business rules, while repositories handle data access.
+
+
+# Controller Layer – Revision Notes
+
+## 1. What is a Controller?
+
+A Controller handles incoming HTTP requests and returns HTTP responses to the client.
+
+It connects the API layer with the Service layer.
+
+## 2. What is `[ApiController]`?
+
+It identifies a class as an API controller and enables API-specific behaviors, including automatic validation error responses.
+
+## 3. What is `[Route]`?
+
+It defines the URL pattern used to access controller endpoints.
+
+Example:
+
+```csharp
+[Route("api/[controller]")]
+```
+
+For `MoviesController`, the base route is:
+
+`/api/Movies`
+
+## 4. HTTP Methods
+
+| HTTP Method | Purpose |
+|---|---|
+| GET | Retrieve data |
+| POST | Create data |
+| PUT | Update data |
+| DELETE | Delete data |
+
+## 5. Important HTTP Status Codes
+
+| Status Code | Meaning |
+|---|---|
+| 200 | OK – Request successful |
+| 201 | Created – Resource created |
+| 204 | No Content – Successful operation without response body |
+| 400 | Bad Request – Invalid request |
+| 404 | Not Found – Resource does not exist |
+| 500 | Internal Server Error |
+
+## 6. Dependency Injection in Controllers
+
+Example:
+
+```csharp
+public MoviesController(IMovieService movieService)
+{
+    _movieService = movieService;
+}
+```
+
+The service is injected through the constructor.
+
+This avoids directly creating service objects inside the controller.
+
+## 7. What is IActionResult?
+
+`IActionResult` represents the result returned by a controller action.
+
+Example:
+
+```csharp
+return Ok(movie);
+```
+
+```csharp
+return NotFound();
+```
+
+```csharp
+return NoContent();
+```
+
+## 8. What is CreatedAtAction()?
+
+It returns HTTP 201 Created and provides a route to retrieve the newly created resource.
+
+Example:
+
+```csharp
+return CreatedAtAction(
+    nameof(GetById),
+    new { id = result.MovieId },
+    result);
+```
+
+## 9. Application Architecture
+
+Remember this execution flow:
+
+**Controller → Service → Repository → DbContext → SQL Server**
+
+- Controller handles HTTP requests.
+- Service handles business logic and validation.
+- Repository handles database operations.
+- DbContext communicates with SQL Server.
+
+## 10. Day22 Progress
+
+Completed:
+- Eight entity models.
+- Entity Framework Core configuration.
+- Initial migration.
+- SQL Server database creation.
+- Six repository interfaces and implementations.
+- Repository Dependency Injection.
+- Six service interfaces and implementations.
+- Service Dependency Injection.
+- Six API controllers.
+
+Next: Improve request DTOs and error handling, then test API endpoints using Scalar.

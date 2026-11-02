@@ -1889,3 +1889,147 @@ Controller → Service → Repository → ApplicationDbContext → SQL Server
 
 **Next operation:** Implement ShowService and BookingService with scheduling, seat availability and booking business logic.
 
+
+
+# Operation 29 – Implement API Controllers
+
+## Objective
+Implement the ASP.NET Core Web API Controller layer for the Movie Ticket Booking System and connect HTTP requests to the Service layer using Dependency Injection.
+
+## Controllers Created
+
+Six controllers were implemented:
+
+1. **MoviesController**
+   - Create a movie.
+   - Retrieve all movies with pagination and optional title filtering.
+   - Retrieve a movie by ID.
+   - Update a movie.
+   - Delete a movie.
+
+2. **TheatresController**
+   - Create a theatre.
+   - Retrieve all theatres.
+   - Retrieve a theatre by ID.
+   - Update a theatre.
+   - Delete a theatre.
+
+3. **ScreensController**
+   - Create a screen.
+   - Retrieve all screens.
+   - Retrieve a screen by ID.
+   - Retrieve screens by theatre ID.
+   - Update a screen.
+   - Delete a screen.
+
+4. **SeatsController**
+   - Create a seat.
+   - Create multiple seats using bulk insertion.
+   - Retrieve all seats.
+   - Retrieve a seat by ID.
+   - Retrieve seats by screen ID.
+   - Update a seat.
+   - Delete a seat.
+
+5. **ShowsController**
+   - Create a show.
+   - Retrieve all shows.
+   - Retrieve a show by ID.
+   - Retrieve shows by movie ID.
+   - Retrieve shows by screen ID.
+   - Retrieve shows by date.
+   - Update a show.
+
+6. **BookingsController**
+   - Create a booking.
+   - Retrieve a booking by ID.
+   - Retrieve a booking using its reference.
+   - Cancel a booking.
+
+## Important ASP.NET Core Concepts
+
+### 1. ApiController Attribute
+`[ApiController]` identifies a class as an API controller and enables API-specific behaviors such as automatic model validation responses.
+
+### 2. Route Attribute
+`[Route("api/[controller]")]` defines the base URL using the controller name.
+
+Examples:
+- `/api/Movies`
+- `/api/Theatres`
+- `/api/Screens`
+- `/api/Seats`
+- `/api/Shows`
+- `/api/Bookings`
+
+### 3. HTTP Method Attributes
+- `[HttpGet]` – Retrieve data.
+- `[HttpPost]` – Create data.
+- `[HttpPut]` – Update data.
+- `[HttpDelete]` – Delete data.
+
+### 4. Dependency Injection
+Controllers receive their respective service interfaces through constructors instead of creating service objects manually.
+
+Example:
+
+```csharp
+private readonly IMovieService _movieService;
+
+public MoviesController(IMovieService movieService)
+{
+    _movieService = movieService;
+}
+```
+
+### 5. IActionResult
+`IActionResult` allows controller actions to return different HTTP responses.
+
+Common responses:
+- `Ok()` – HTTP 200.
+- `CreatedAtAction()` – HTTP 201.
+- `NoContent()` – HTTP 204.
+- `BadRequest()` – HTTP 400.
+- `NotFound()` – HTTP 404.
+
+## Application Architecture
+
+```text
+Client / API Request
+        |
+        v
+    Controller
+        |
+        v
+     Service
+        |
+        v
+   Repository
+        |
+        v
+  ApplicationDbContext
+        |
+        v
+    SQL Server
+```
+
+## Learning Outcome
+
+- Understood controller-based Web API development.
+- Implemented HTTP endpoints for six application modules.
+- Connected controllers with service interfaces.
+- Practised constructor-based Dependency Injection.
+- Learned how to return appropriate HTTP status codes.
+- Completed the initial Controller layer.
+
+## Build Verification
+
+Command:
+
+```powershell
+dotnet build
+```
+
+Result: Build succeeded.
+
+**Next operation:** Improve API request models and error handling, then test the endpoints using Scalar.
