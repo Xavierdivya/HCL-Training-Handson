@@ -2033,3 +2033,522 @@ dotnet build
 Result: Build succeeded.
 
 **Next operation:** Improve API request models and error handling, then test the endpoints using Scalar.
+
+
+# Operation 30 – DTO Implementation
+
+## 1. What is a DTO?
+
+DTO stands for Data Transfer Object.
+
+A DTO transfers data between the client and the application without exposing database entities directly.
+
+Previously, controllers accepted and returned EF Core entities. Now they use separate request and response DTOs.
+
+## 2. DTO Folder Structure
+
+```text
+DTOs/
+├── Movies/
+│   ├── CreateMovieDto.cs
+│   ├── UpdateMovieDto.cs
+│   └── MovieResponseDto.cs
+├── Theatres/
+│   ├── CreateTheatreDto.cs
+│   ├── UpdateTheatreDto.cs
+│   └── TheatreResponseDto.cs
+├── Screens/
+│   ├── CreateScreenDto.cs
+│   ├── UpdateScreenDto.cs
+│   └── ScreenResponseDto.cs
+├── Seats/
+│   ├── CreateSeatDto.cs
+│   ├── BulkCreateSeatsDto.cs
+│   └── SeatResponseDto.cs
+├── Shows/
+│   ├── CreateShowDto.cs
+│   ├── UpdateShowDto.cs
+│   └── ShowResponseDto.cs
+└── Bookings/
+    ├── CreateBookingDto.cs
+    └── BookingResponseDto.cs
+```
+
+Total: 17 DTO classes.
+
+## 3. Request DTOs
+
+Request DTOs define the information accepted from API clients.
+
+Examples:
+- CreateMovieDto
+- UpdateMovieDto
+- CreateTheatreDto
+- CreateScreenDto
+- CreateSeatDto
+- CreateShowDto
+- CreateBookingDto
+
+Data Annotation attributes such as `[Required]`, `[StringLength]`, `[Range]`, `[EmailAddress]` and `[Phone]` provide request validation.
+
+## 4. Response DTOs
+
+Response DTOs define the information returned by the API.
+
+Examples:
+- MovieResponseDto
+- TheatreResponseDto
+- ScreenResponseDto
+- SeatResponseDto
+- ShowResponseDto
+- BookingResponseDto
+
+They prevent the API from directly exposing EF Core entities.
+
+## 5. Controller Integration
+
+Updated all six API controllers:
+
+1. MoviesController
+2. TheatresController
+3. ScreensController
+4. SeatsController
+5. ShowsController
+6. BookingsController
+
+Each controller converts incoming DTOs into entities before calling its service.
+
+The returned entities are mapped into response DTOs.
+
+## 6. Mapping Example
+
+```csharp
+var movie = new Movie
+{
+    Title = dto.Title,
+    Description = dto.Description,
+    DurationMinutes = dto.DurationMinutes,
+    ReleaseDate = dto.ReleaseDate,
+    Language = dto.Language,
+    Genre = dto.Genre
+};
+```
+
+Response mapping:
+
+```csharp
+private static MovieResponseDto MapToResponse(Movie movie)
+{
+    return new MovieResponseDto
+    {
+        MovieId = movie.MovieId,
+        Title = movie.Title,
+        Description = movie.Description,
+        DurationMinutes = movie.DurationMinutes,
+        ReleaseDate = movie.ReleaseDate,
+        Language = movie.Language,
+        Genre = movie.Genre
+    };
+}
+```
+
+## 7. Booking DTO Integration
+
+CreateBookingDto accepts:
+- ShowId
+- SeatIds
+- CustomerName
+- CustomerEmail
+- CustomerPhone
+
+BookingResponseDto returns booking information and the associated seat IDs.
+
+BookingRepository retrieval methods use Include and ThenInclude to load BookingSeats and their Seat navigation properties.
+
+## 8. Concepts Learned
+
+- Data Transfer Object (DTO)
+- Request DTO and Response DTO
+- Entity-to-DTO mapping
+- DTO-to-Entity mapping
+- Data Annotation validation
+- LINQ Select()
+- CreatedAtAction()
+- Separation between API contracts and database entities
+
+## 9. Build Verification
+
+Command:
+
+```powershell
+dotnet build
+```
+
+Result: Build succeeded.
+
+## 10. Architecture Flow
+
+API Client → Request DTO → Controller → Service → Repository → Database
+
+Database → Repository → Service → Controller → Response DTO → API Client
+
+## 11. Review Notes
+
+The existing show-update workflow requires additional review before allowing a screen change, because generated ShowSeat records must remain consistent with the show's screen.
+
+Booking retrieval was verified to include BookingSeats and their Seat navigation properties.
+
+---
+
+Progress: Operation 30 – DTO implementation completed and build verified.
+
+## Operation 31 – Authentication, Authorization and JWT Setup
+
+### Completed work
+
+1. Installed `Microsoft.AspNetCore.Authentication.JwtBearer`.
+2. Installed `Microsoft.AspNetCore.Identity.EntityFrameworkCore`.
+3. Created `ApplicationUser` extending `IdentityUser`, with a `FullName` property.
+4. Updated `ApplicationDbContext` to inherit from `IdentityDbContext<ApplicationUser>`.
+5. Configured ASP.NET Core Identity and JWT authentication in `Program.cs`.
+6. Stored the JWT signing key securely using .NET User Secrets instead of committing it to `appsettings.json`.
+7. Configured JWT issuer, audience, token expiry and signature validation.
+8. Created authentication request and response DTOs.
+9. Implemented `IAuthService` and `AuthService` for registration, login and JWT generation.
+10. Created `AuthController` with registration and login endpoints.
+11. Created `ApplicationDbContextFactory` to support EF Core design-time migrations.
+12. Created and applied the `AddIdentityAuthentication` migration.
+
+### Database changes
+
+Added seven ASP.NET Core Identity tables:
+
+- AspNetUsers
+- AspNetRoles
+- AspNetUserRoles
+- AspNetUserClaims
+- AspNetUserLogins
+- AspNetUserTokens
+- AspNetRoleClaims
+
+The existing eight movie-booking tables were preserved.
+
+### Verification
+
+- Project build succeeded.
+- Identity migration was generated and applied successfully.
+- JWT signing key is stored in User Secrets.
+
+### Pending work
+
+- Configure and provision the Admin role.
+- Apply role-based authorization.
+- Test customer registration, login and JWT authentication.
+
+
+# Day 22 – Movie Ticket Booking API
+
+## 1. Project Overview
+
+Developed a Movie Ticket Booking REST API using ASP.NET Core Web API, Entity Framework Core, SQL Server and JWT Authentication.
+
+The application allows customers to browse movies, theatres, screens, seats and shows, create movie ticket bookings and cancel bookings.
+
+## 2. Technologies Used
+
+- C#
+- .NET 10
+- ASP.NET Core Web API
+- Entity Framework Core 10
+- SQL Server Express
+- ASP.NET Core Identity
+- JWT Bearer Authentication
+- Postman
+- Git and GitHub
+
+## 3. Project Architecture
+
+Implemented a layered architecture:
+
+- **Models:** Entity classes representing database tables.
+- **DTOs:** Data Transfer Objects used for API requests and responses.
+- **Controllers:** Handle HTTP requests and return HTTP responses.
+- **Services:** Implement application business logic.
+- **Repositories:** Handle database operations.
+- **Data:** Contains ApplicationDbContext and database seeding logic.
+
+## 4. Database Entities
+
+Created the following entities:
+
+1. Movie
+2. Theatre
+3. Screen
+4. Seat
+5. Show
+6. ShowSeat
+7. Booking
+8. BookingSeat
+9. ApplicationUser
+
+Configured entity relationships, foreign keys, unique indexes, check constraints and delete behaviors using EF Core Fluent API.
+
+## 5. CRUD API Implementation
+
+Implemented and tested API operations for:
+
+- Movies
+- Theatres
+- Screens
+- Seats
+- Shows
+
+Tested GET, POST, PUT and DELETE operations where supported.
+
+### Show Management
+
+- Created shows for movies and screens.
+- Validated show scheduling.
+- Prevented overlapping shows on the same screen.
+- Automatically initialized ShowSeat records when creating a show.
+- Added show deletion with booking validation.
+
+## 6. DTO Implementation
+
+Created DTOs to separate API request and response data from database entities.
+
+Implemented DTOs for:
+
+- Movies
+- Theatres
+- Screens
+- Seats
+- Shows
+- Bookings
+- Authentication
+
+Used Data Annotations such as:
+
+- `[Required]`
+- `[Range]`
+- `[StringLength]`
+- `[EmailAddress]`
+- `[Phone]`
+- `[MinLength]`
+
+### CreateBookingDto
+
+Contains:
+
+- ShowId
+- SeatIds
+- CustomerName
+- CustomerEmail
+- CustomerPhone
+
+### BookingResponseDto
+
+Returns:
+
+- BookingId
+- BookingReference
+- ShowId
+- CustomerName
+- CustomerEmail
+- BookingDate
+- TotalAmount
+- Status
+- SeatIds
+
+## 7. Booking Management
+
+Implemented booking functionality using repository and service layers.
+
+### Booking Creation
+
+1. Receive booking details through CreateBookingDto.
+2. Validate the show and selected seats.
+3. Check seat availability.
+4. Prevent duplicate seat selection.
+5. Calculate the total amount using the show ticket price.
+6. Generate a unique booking reference.
+7. Create the booking and associated BookingSeat records.
+8. Mark selected seats as booked.
+9. Save changes transactionally.
+
+### Booking Cancellation
+
+1. Receive the booking ID.
+2. Find the booking.
+3. Update its status to Cancelled.
+4. Release the associated seats.
+5. Save the changes.
+
+### Booking API Endpoints
+
+| HTTP Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/Bookings` | Create booking |
+| GET | `/api/Bookings/{id}` | Get booking by ID |
+| GET | `/api/Bookings/reference/{bookingReference}` | Get booking by reference |
+| PUT | `/api/Bookings/{id}/cancel` | Cancel booking |
+
+Note: Booking management uses cancellation rather than a general booking update endpoint.
+
+## 8. Authentication and Authorization
+
+Implemented ASP.NET Core Identity and JWT authentication.
+
+### Features
+
+- User registration.
+- User login.
+- Password hashing through ASP.NET Core Identity.
+- Admin and Customer roles.
+- JWT token generation.
+- JWT Bearer authentication middleware.
+- Role-based authorization support.
+
+### Authentication Flow
+
+1. Customer registers.
+2. Customer logs in.
+3. API validates credentials.
+4. API generates a JWT token.
+5. Client stores the token.
+6. Client sends the token in the Authorization header.
+7. API validates the token before allowing access to protected endpoints.
+
+JWT configuration and admin credentials are stored using .NET User Secrets rather than committed to GitHub.
+
+## 9. Dependency Injection
+
+Registered repositories and services in Program.cs using AddScoped.
+
+Example:
+
+```csharp
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+```
+
+Resolved a dependency injection error caused by the missing IBookingService registration.
+
+## 10. EF Core Migration
+
+Created the initial database migration:
+
+```powershell
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
+
+### BookingReference Length Fix
+
+During booking creation, SQL Server returned:
+
+`String or binary data would be truncated`
+
+Cause:
+- Application generated a 32-character GUID booking reference.
+- Database column was configured with a maximum length of 30.
+
+Solution:
+
+Updated ApplicationDbContext:
+
+```csharp
+entity.Property(b => b.BookingReference)
+      .IsRequired()
+      .HasMaxLength(50);
+```
+
+Created and applied the migration:
+
+```powershell
+dotnet ef migrations add IncreaseBookingReferenceLength
+dotnet ef database update
+```
+
+This increased the BookingReference database column length from 30 to 50.
+
+## 11. Postman API Testing
+
+Created a Postman collection named **Movie Ticket Booking API**.
+
+Created an environment named **Movie Ticket Booking - Local**.
+
+Configured:
+
+- Base URL: `http://localhost:5156`
+- JWT access token environment variable.
+- Collection-level Bearer Token authorization.
+- No Auth for registration and login requests.
+
+### Authentication Testing
+
+- Register customer: 200 OK.
+- Login customer: 200 OK.
+- JWT token generated and saved in the Postman environment.
+
+### Booking Creation Testing
+
+Successfully created a booking.
+
+Sample response:
+
+```json
+{
+  "bookingId": 3,
+  "bookingReference": "E1F702A63C4640CCBF3A704675FA7E16",
+  "showId": 2,
+  "customerName": "Divya",
+  "customerEmail": "customer1@example.com",
+  "bookingDate": "2026-11-02T22:49:31.9565363+05:30",
+  "totalAmount": 300.00,
+  "status": "Confirmed",
+  "seatIds": [2]
+}
+```
+
+Result: **201 Created**
+
+Other booking retrieval and cancellation endpoints should be marked completed after their Postman tests are verified.
+
+## 12. Issues Faced and Solutions
+
+| Issue | Solution |
+|---|---|
+| Missing controller folder | Checked project structure and controller setup |
+| Dependency injection error | Registered IBookingService and BookingService |
+| BookingReference truncation | Increased column length to 50 and applied migration |
+| AppHost.exe access denied | Built and ran using `-p:UseAppHost=false` |
+| SQL Server connection issues | Checked SQL Server Express service and database connection |
+
+### AppHost Workaround
+
+```powershell
+dotnet build -p:UseAppHost=false
+dotnet run -p:UseAppHost=false
+```
+
+## 13. Learning Outcomes
+
+- Built a layered ASP.NET Core Web API.
+- Understood controllers, services and repositories.
+- Implemented DTOs and validation attributes.
+- Practised EF Core relationships and migrations.
+- Implemented transactional booking operations.
+- Understood JWT authentication and Identity roles.
+- Practised dependency injection.
+- Tested APIs using Postman.
+- Troubleshot database and build errors.
+- Used Git feature branches and conventional commits.
+
+## 14. Final Project Status
+
+Core Movie Ticket Booking APIs, DTOs, Identity authentication, JWT setup and booking creation have been implemented.
+
+Remaining verification: booking retrieval by ID, retrieval by reference and cancellation, if not yet completed.
+
+GitHub documentation and final branch merge are to be completed after API verification.

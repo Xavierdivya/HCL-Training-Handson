@@ -1,68 +1,102 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
+using MovieTicketBooking.DTOs.Theatres;
 using MovieTicketBooking.Models;
 using MovieTicketBooking.Services.Interfaces;
 
-namespace MovieTicketBooking.Controllers
+namespace MovieTicketBooking.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class TheatresController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class TheatresController : ControllerBase
+    private readonly ITheatreService _theatreService;
+
+    public TheatresController(ITheatreService theatreService)
     {
-        private readonly ITheatreService _theatreService;
+        _theatreService = theatreService;
+    }
 
-        public TheatresController(ITheatreService theatreService)
+    // POST: api/Theatres
+    [HttpPost]
+    public async Task<IActionResult> CreateTheatre(CreateTheatreDto dto)
+    {
+        var theatre = new Theatre
         {
-            _theatreService = theatreService;
-        }
+            Name = dto.Name,
+            Location = dto.Location
+        };
 
-        [HttpPost]
-        public async Task<IActionResult> Create(Theatre theatre)
+        var createdTheatre = await _theatreService.AddAsync(theatre);
+
+        var response = MapToResponse(createdTheatre);
+
+        return CreatedAtAction(
+            nameof(GetTheatreById),
+            new { id = response.TheatreId },
+            response);
+    }
+
+    // GET: api/Theatres
+    [HttpGet]
+    public async Task<IActionResult> GetAllTheatres()
+    {
+        var theatres = await _theatreService.GetAllAsync();
+
+        var response = theatres.Select(MapToResponse).ToList();
+
+        return Ok(response);
+    }
+
+    // GET: api/Theatres/5
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTheatreById(int id)
+    {
+        var theatre = await _theatreService.GetByIdAsync(id);
+
+        if (theatre == null)
+            return NotFound();
+
+        return Ok(MapToResponse(theatre));
+    }
+
+    // PUT: api/Theatres/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateTheatre(
+        int id, UpdateTheatreDto dto)
+    {
+        var existingTheatre = await _theatreService.GetByIdAsync(id);
+
+        if (existingTheatre == null)
+            return NotFound();
+
+        existingTheatre.Name = dto.Name;
+        existingTheatre.Location = dto.Location;
+
+        await _theatreService.UpdateAsync(existingTheatre);
+
+        return NoContent();
+    }
+
+    // DELETE: api/Theatres/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTheatre(int id)
+    {
+        var deleted = await _theatreService.DeleteAsync(id);
+
+        if (!deleted)
+            return NotFound();
+
+        return NoContent();
+    }
+
+    private static TheatreResponseDto MapToResponse(Theatre theatre)
+    {
+        return new TheatreResponseDto
         {
-            var result = await _theatreService.AddAsync(theatre);
-
-            return CreatedAtAction(nameof(GetById),
-                new { id = result.TheatreId }, result);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await _theatreService.GetAllAsync());
-        }
-
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var theatre = await _theatreService.GetByIdAsync(id);
-
-            if (theatre == null)
-                return NotFound();
-
-            return Ok(theatre);
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, Theatre theatre)
-        {
-            if (id != theatre.TheatreId)
-                return BadRequest("Theatre ID mismatch.");
-
-            if (await _theatreService.GetByIdAsync(id) == null)
-                return NotFound();
-
-            await _theatreService.UpdateAsync(theatre);
-            return NoContent();
-        }
-
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var deleted = await _theatreService.DeleteAsync(id);
-
-            if (!deleted)
-                return NotFound();
-
-            return NoContent();
-        }
+            TheatreId = theatre.TheatreId,
+            Name = theatre.Name,
+            Location = theatre.Location
+        };
     }
 }

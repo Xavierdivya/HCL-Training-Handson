@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MovieTicketBooking.Models;
 
 namespace MovieTicketBooking.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -269,7 +270,7 @@ namespace MovieTicketBooking.Data
 
                 entity.Property(b => b.BookingReference)
                       .IsRequired()
-                      .HasMaxLength(30);
+                      .HasMaxLength(50);
 
                 entity.Property(b => b.CustomerName)
                       .IsRequired()

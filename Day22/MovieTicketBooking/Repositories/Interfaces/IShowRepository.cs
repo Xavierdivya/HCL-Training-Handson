@@ -12,6 +12,8 @@ namespace MovieTicketBooking.Repositories.Interfaces
         Task<List<Show>> GetByScreenIdAsync(int screenId);
         Task<List<Show>> GetByDateAsync(DateTime date);
         Task UpdateAsync(Show show);
+
+        Task DeleteAsync(int id);
         Task<Show> AddWithSeatsAsync(Show show);
 
         Task<bool> HasScheduleConflictAsync(

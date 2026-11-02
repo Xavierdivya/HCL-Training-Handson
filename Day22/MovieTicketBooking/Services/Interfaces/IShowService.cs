@@ -12,5 +12,7 @@ namespace MovieTicketBooking.Services.Interfaces
         Task<List<Show>> GetByScreenIdAsync(int screenId);
         Task<List<Show>> GetByDateAsync(DateTime date);
         Task UpdateAsync(Show show);
+
+        Task DeleteAsync(int id);
     }
 }

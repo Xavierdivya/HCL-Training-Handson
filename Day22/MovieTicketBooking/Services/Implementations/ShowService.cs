@@ -91,6 +91,19 @@ namespace MovieTicketBooking.Services.Implementations
             await _showRepository.UpdateAsync(show);
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Invalid show ID.");
+
+            var show = await _showRepository.GetByIdAsync(id);
+
+            if (show == null)
+                throw new KeyNotFoundException("Show not found.");
+
+            await _showRepository.DeleteAsync(id);
+        }
+
         private static void ValidateShow(Show show)
         {
             if (show == null)
