@@ -744,3 +744,66 @@ The following rules will be implemented during validation and service developmen
 ### Next operation
 
 Create the ShowSeat entity to track the availability of physical seats for individual shows.
+
+### Operation 6: Create ShowSeat Entity
+
+**File:** `MovieTicketBooking/Models/ShowSeat.cs`
+
+**Objective:** Create an entity to track the availability of each physical seat for an individual movie show.
+
+### Properties implemented
+
+| Property | Data type | Purpose |
+|---|---|---|
+| ShowSeatId | int | Unique identifier and primary key |
+| ShowId | int | Foreign key connecting Show to ShowSeat |
+| SeatId | int | Foreign key connecting physical Seat to ShowSeat |
+| Status | string | Stores the current seat availability status |
+
+### Concepts learned
+
+1. A ShowSeat entity represents a physical seat's availability for a particular show.
+2. `ShowSeatId` is recognized as the primary key by EF Core convention.
+3. `ShowId` connects the availability record to a movie show.
+4. `SeatId` connects the availability record to a physical seat.
+5. `Status` stores whether the seat is Available or Booked.
+6. The default value of Status is initialized as `"Available"`.
+
+### Why do we need ShowSeat?
+
+A physical seat can have different availability statuses for different shows.
+
+Example:
+
+| Show | Physical Seat | Status |
+|---|---|---|
+| 6:00 PM | A1 | Booked |
+| 9:00 PM | A1 | Available |
+
+The Seat entity stores physical seat information, whereas ShowSeat stores availability for an individual show.
+
+### Important database rule
+
+The combination of `ShowId` and `SeatId` must be unique.
+
+This prevents duplicate availability records for the same physical seat in the same show.
+
+### Verification
+
+- Created `Models/ShowSeat.cs` using Visual Studio.
+- Added ShowSeatId, ShowId, SeatId and Status properties.
+- Saved the file.
+- Visual Studio Build Solution succeeded.
+
+**Build Result:** Succeeded.
+
+### Git history
+
+**Commit type:** feat
+
+**Commit message:**
+`feat: add show seat entity`
+
+### Next operation
+
+Create the Booking entity to store customer booking information.

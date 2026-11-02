@@ -631,3 +631,66 @@ No. The application must validate screen scheduling to prevent overlapping shows
 **Q5. Where should show validation logic be implemented?**
 
 Business validation should be implemented in the Service layer.
+
+## ShowSeat Entity – Revision Notes
+
+### 1. What is ShowSeat?
+
+ShowSeat represents the availability of a physical seat for a particular movie show.
+
+### 2. Why do we need ShowSeat separately from Seat?
+
+A physical seat can be booked for one show and remain available for another show.
+
+Therefore, availability must be maintained separately for each show.
+
+### 3. What is ShowId?
+
+ShowId is a foreign key connecting the availability record to a particular movie show.
+
+### 4. What is SeatId?
+
+SeatId is a foreign key connecting the availability record to a physical seat.
+
+### 5. What is Status?
+
+Status stores the current availability of the seat.
+
+Our Version 1 supports:
+
+- Available
+- Booked
+
+The default status is Available.
+
+### 6. What is a composite unique constraint?
+
+It prevents duplicate combinations of column values.
+
+In our project:
+
+`ShowId + SeatId`
+
+The same physical seat can appear in different shows, but it must appear only once within a particular show.
+
+### Interview questions
+
+**Q1. Why do we need the ShowSeat entity?**
+
+To track seat availability separately for each movie show.
+
+**Q2. Can the same SeatId appear in multiple ShowSeat records?**
+
+Yes. A physical seat can belong to multiple shows.
+
+**Q3. Can the same ShowId and SeatId combination appear twice?**
+
+No. That combination must be unique.
+
+**Q4. What is the default status of a new ShowSeat?**
+
+Available.
+
+**Q5. What is the difference between Seat and ShowSeat?**
+
+Seat stores physical seat information. ShowSeat stores the availability of that seat for a particular show.
