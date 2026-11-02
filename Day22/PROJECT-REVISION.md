@@ -694,3 +694,32 @@ Available.
 **Q5. What is the difference between Seat and ShowSeat?**
 
 Seat stores physical seat information. ShowSeat stores the availability of that seat for a particular show.
+
+## Booking Entity – Revision Notes
+
+**1. What is the purpose of the Booking entity?**
+
+It stores customer details and booking information for a movie show.
+
+**2. Why do we use BookingReference?**
+
+It provides a unique reference that customers can use to identify their bookings.
+
+**3. Why is TotalAmount a decimal?**
+
+Because ticket prices and booking totals can contain decimal values.
+
+**4. What is the purpose of ShowId?**
+
+It identifies which movie show the customer booked.
+
+**5. What are the booking statuses?**
+
+- Confirmed
+- Cancelled
+
+**6. Why should cancelled bookings not be deleted?**
+
+Keeping cancelled bookings preserves booking history.
+
+**Interview revision:** Explain how a Booking connects a customer to a particular Show and how its status changes during cancellation.

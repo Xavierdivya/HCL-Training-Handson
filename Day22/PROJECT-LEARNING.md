@@ -807,3 +807,35 @@ This prevents duplicate availability records for the same physical seat in the s
 ### Next operation
 
 Create the Booking entity to store customer booking information.
+
+### Operation 7: Create Booking Entity
+
+**File created:** `Models/Booking.cs`
+
+**Purpose:** The Booking entity stores customer booking information for a particular movie show.
+
+**Properties added:**
+
+| Property | Purpose |
+|---|---|
+| BookingId | Primary key for the booking |
+| BookingReference | Unique reference provided for the booking |
+| ShowId | Identifies the selected show |
+| CustomerName | Stores the customer's name |
+| CustomerEmail | Stores the customer's email |
+| CustomerPhone | Stores the customer's phone number |
+| BookingDate | Stores when the booking was created |
+| TotalAmount | Stores the total booking amount |
+| Status | Stores the booking status; defaults to Confirmed |
+
+**Concepts learned:**
+
+- `decimal` is suitable for storing monetary values.
+- `DateTime` stores the booking date and time.
+- `ShowId` connects a booking to its selected show.
+- `BookingReference` will be configured with a unique database constraint.
+- Booking status will be either `Confirmed` or `Cancelled`.
+
+**Verification:** Visual Studio Build Solution completed successfully.
+
+**Git commit:** `feat: add booking entity`
