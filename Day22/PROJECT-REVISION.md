@@ -1446,3 +1446,74 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 ```
 
 **Remember:** Registering repositories makes them available through DI. It does not automatically create the service layer or API endpoints.
+
+## Operation 26 – Service Layer Revision
+
+### What is the Service Layer?
+
+The service layer contains business logic and validation. It acts as a bridge between controllers and repositories.
+
+### Why do we need services?
+
+- Keeps controllers simple.
+- Separates business rules from database operations.
+- Improves maintainability.
+- Makes unit testing easier.
+
+### Service and Repository difference
+
+| Service Layer | Repository Layer |
+|---|---|
+| Handles business logic | Handles database operations |
+| Validates input | Executes queries |
+| Checks related entity existence | Saves and retrieves records |
+| Coordinates workflows | Communicates with DbContext |
+
+### Constructor Dependency Injection
+
+```csharp
+private readonly IMovieRepository _movieRepository;
+
+public MovieService(IMovieRepository movieRepository)
+{
+    _movieRepository = movieRepository;
+}
+```
+
+The repository is supplied through the constructor rather than created manually.
+
+### Asynchronous programming
+
+```csharp
+public async Task<Movie> AddAsync(Movie movie)
+{
+    ValidateMovie(movie);
+    return await _movieRepository.AddAsync(movie);
+}
+```
+
+- `async`: allows asynchronous execution.
+- `Task<Movie>`: represents an asynchronous operation returning a Movie.
+- `await`: waits for the asynchronous repository operation without blocking the thread.
+
+### Validation example
+
+```csharp
+if (movie.DurationMinutes <= 0)
+{
+    throw new ArgumentException(
+        "Movie duration must be greater than zero.");
+}
+```
+
+### Important exception types
+
+- `ArgumentException`: invalid input.
+- `ArgumentNullException`: null object.
+- `KeyNotFoundException`: requested record does not exist.
+
+### Architecture to remember
+
+Controller → Service → Repository → DbContext → Database
+
+**Important:** Services handle business rules, while repositories handle data access.

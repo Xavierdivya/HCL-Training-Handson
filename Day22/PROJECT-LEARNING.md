@@ -1819,3 +1819,73 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 **Next operation:** Implement the service layer.
 
+## Operation 26 – Implement Movie, Theatre, Screen and Seat Services
+
+### Objective
+Implement the service layer for the first four entities in the Movie Ticket Booking System.
+
+### Files created
+
+**Interfaces folder**
+- IMovieService.cs
+- ITheatreService.cs
+- IScreenService.cs
+- ISeatService.cs
+
+**Implementations folder**
+- MovieService.cs
+- TheatreService.cs
+- ScreenService.cs
+- SeatService.cs
+
+### Architecture
+
+Controller → Service → Repository → ApplicationDbContext → SQL Server
+
+### Responsibilities
+
+**MovieService**
+- Add, retrieve, update and delete movies.
+- Validate movie title, duration, language and genre.
+- Validate pagination parameters.
+- Check movie existence before updating.
+
+**TheatreService**
+- Manage theatre records.
+- Validate theatre name and location.
+- Check theatre existence before updating.
+
+**ScreenService**
+- Manage screens.
+- Validate screen name.
+- Verify that the referenced theatre exists.
+- Retrieve screens belonging to a theatre.
+
+**SeatService**
+- Manage individual seats and bulk seat insertion.
+- Validate row name, seat number and seat type.
+- Verify that the referenced screen exists.
+- Retrieve seats belonging to a screen.
+
+### Important programming concepts
+
+- Interface-based programming
+- Constructor injection
+- Asynchronous methods using Task and async/await
+- Repository pattern
+- Input validation
+- Entity existence validation
+- List-based bulk operations
+
+### Verification
+
+- Created four service interfaces.
+- Implemented four service classes.
+- Connected services to repository interfaces.
+- Executed `dotnet build`.
+- Build succeeded.
+
+**Result:** The first four service modules are implemented and compile successfully.
+
+**Next operation:** Implement ShowService and BookingService with scheduling, seat availability and booking business logic.
+
