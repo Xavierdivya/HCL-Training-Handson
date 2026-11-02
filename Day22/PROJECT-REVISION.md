@@ -1754,3 +1754,41 @@ Result: Build succeeded.
 - [x] Build succeeded
 
 Next: Operation 31 – Authentication, Authorization and JWT.
+
+## Operation 31 – Authentication, Identity and JWT Revision
+
+**Authentication:** Verifies who the user is.
+
+**Authorization:** Determines what an authenticated user is allowed to do.
+
+**ASP.NET Core Identity:** Manages users, passwords and roles.
+
+**ApplicationUser:** Custom Identity user model containing FullName.
+
+**IdentityDbContext:** Provides database support for Identity entities.
+
+**JWT (JSON Web Token):** A signed token issued after successful authentication.
+
+**JWT Claims:** Information about the user, such as User ID, email and role.
+
+**UserManager:** Manages user creation, password verification and role assignment.
+
+**RoleManager:** Manages application roles.
+
+**JwtBearer:** Validates JWT tokens sent with API requests.
+
+**User Secrets:** Stores development secrets outside the project configuration files.
+
+**IDesignTimeDbContextFactory:** Provides EF Core with a DbContext during design-time commands such as migrations.
+
+### Important commands
+
+```powershell
+dotnet user-secrets set "Jwt:Key" "YOUR_SECRET_KEY"
+dotnet ef migrations add AddIdentityAuthentication
+dotnet ef database update
+dotnet ef migrations list
+dotnet build
+```
+
+**Remember:** Never commit JWT signing keys or passwords to GitHub.

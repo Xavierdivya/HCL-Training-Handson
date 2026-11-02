@@ -2201,3 +2201,46 @@ Booking retrieval was verified to include BookingSeats and their Seat navigation
 ---
 
 Progress: Operation 30 – DTO implementation completed and build verified.
+
+## Operation 31 – Authentication, Authorization and JWT Setup
+
+### Completed work
+
+1. Installed `Microsoft.AspNetCore.Authentication.JwtBearer`.
+2. Installed `Microsoft.AspNetCore.Identity.EntityFrameworkCore`.
+3. Created `ApplicationUser` extending `IdentityUser`, with a `FullName` property.
+4. Updated `ApplicationDbContext` to inherit from `IdentityDbContext<ApplicationUser>`.
+5. Configured ASP.NET Core Identity and JWT authentication in `Program.cs`.
+6. Stored the JWT signing key securely using .NET User Secrets instead of committing it to `appsettings.json`.
+7. Configured JWT issuer, audience, token expiry and signature validation.
+8. Created authentication request and response DTOs.
+9. Implemented `IAuthService` and `AuthService` for registration, login and JWT generation.
+10. Created `AuthController` with registration and login endpoints.
+11. Created `ApplicationDbContextFactory` to support EF Core design-time migrations.
+12. Created and applied the `AddIdentityAuthentication` migration.
+
+### Database changes
+
+Added seven ASP.NET Core Identity tables:
+
+- AspNetUsers
+- AspNetRoles
+- AspNetUserRoles
+- AspNetUserClaims
+- AspNetUserLogins
+- AspNetUserTokens
+- AspNetRoleClaims
+
+The existing eight movie-booking tables were preserved.
+
+### Verification
+
+- Project build succeeded.
+- Identity migration was generated and applied successfully.
+- JWT signing key is stored in User Secrets.
+
+### Pending work
+
+- Configure and provision the Admin role.
+- Apply role-based authorization.
+- Test customer registration, login and JWT authentication.
