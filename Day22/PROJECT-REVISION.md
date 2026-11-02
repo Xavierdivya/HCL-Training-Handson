@@ -880,3 +880,33 @@ It represents all bookings made for a particular show.
 - Collection: represents multiple related entities.
 
 **Interview revision:** Explain how Movie, Screen, ShowSeat and Booking are connected through Show.
+
+## ShowSeat Navigation Properties – Revision Notes
+
+**1. What is ShowSeat?**
+
+ShowSeat connects a particular movie show with a physical seat.
+
+**2. Why do we need ShowSeat?**
+
+The same physical seat can have different availability statuses for different shows.
+
+**3. What are the foreign keys in ShowSeat?**
+
+- `ShowId`
+- `SeatId`
+
+**4. What does Status represent?**
+
+It indicates whether the seat is Available or Booked for a particular show.
+
+**5. Why do we need a unique constraint on ShowId and SeatId?**
+
+To prevent duplicate availability records for the same seat in the same show.
+
+**6. What are the navigation properties?**
+
+- `Show`
+- `Seat`
+
+**Interview revision:** Explain why seat availability belongs to ShowSeat rather than directly to Seat.

@@ -1050,3 +1050,44 @@ public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 **Git commit:**
 
 `feat: add show navigation properties`
+
+### Operation 14: Add Navigation Properties to ShowSeat
+
+**File modified:** `Models/ShowSeat.cs`
+
+**Purpose:**
+
+Added navigation properties to connect ShowSeat with Show and Seat.
+
+**Code added:**
+
+```csharp
+public Show Show { get; set; } = null!;
+
+public Seat Seat { get; set; } = null!;
+```
+
+**Important concepts learned:**
+
+- Each ShowSeat belongs to one Show.
+- Each ShowSeat belongs to one physical Seat.
+- `ShowId` is the foreign key to Show.
+- `SeatId` is the foreign key to Seat.
+- `Show` and `Seat` are reference navigation properties.
+- `Status` stores the availability of a seat for a particular show.
+- A unique constraint on `(ShowId, SeatId)` will prevent duplicate availability records for the same seat in one show.
+
+**Relationships:**
+
+- Show (One) → ShowSeats (Many)
+- Seat (One) → ShowSeats (Many)
+
+**Verification:**
+
+- Added Show and Seat navigation properties to ShowSeat.cs.
+- Built the project successfully.
+- No compilation errors.
+
+**Git commit:**
+
+`feat: add show seat navigation properties`

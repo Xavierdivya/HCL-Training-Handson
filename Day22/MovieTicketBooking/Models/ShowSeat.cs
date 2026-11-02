@@ -9,5 +9,10 @@
         public int SeatId { get; set; }
 
         public string Status { get; set; } = "Available";
+
+        // Navigation Properties
+        public Show Show { get; set; } = null!;
+
+        public Seat Seat { get; set; } = null!;
     }
 }
