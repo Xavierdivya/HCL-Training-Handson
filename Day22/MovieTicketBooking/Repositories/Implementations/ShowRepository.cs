@@ -83,5 +83,77 @@ namespace MovieTicketBooking.Repositories.Implementations
             _context.Shows.Update(show);
             await _context.SaveChangesAsync();
         }
+
+
+        public async Task<Show> AddWithSeatsAsync(Show show)
+        {
+            await using var transaction =
+                await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                // Check whether another show overlaps on the same screen
+                bool hasOverlap = await _context.Shows.AnyAsync(s =>
+                    s.ScreenId == show.ScreenId &&
+                    s.StartTime < show.EndTime &&
+                    s.EndTime > show.StartTime);
+
+                if (hasOverlap)
+                    throw new InvalidOperationException(
+                        "Another show is already scheduled during this time.");
+
+                // Save the show first to generate its ShowId
+                await _context.Shows.AddAsync(show);
+                await _context.SaveChangesAsync();
+
+                // Retrieve all physical seats belonging to this screen
+                var seats = await _context.Seats
+                    .Where(s => s.ScreenId == show.ScreenId)
+                    .ToListAsync();
+
+                if (seats.Count == 0)
+                {
+                    throw new InvalidOperationException(
+                        "Cannot create a show because this screen has no seats.");
+                }
+
+                // Create an Available ShowSeat for every physical seat
+                var showSeats = seats.Select(seat => new ShowSeat
+                {
+                    ShowId = show.ShowId,
+                    SeatId = seat.SeatId,
+                    Status = "Available"
+                }).ToList();
+
+                await _context.ShowSeats.AddRangeAsync(showSeats);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return show;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+
+        public async Task<bool> HasScheduleConflictAsync(
+            int screenId,
+            DateTime startTime,
+            DateTime endTime,
+            int? excludeShowId = null)
+        {
+            return await _context.Shows.AnyAsync(s =>
+                s.ScreenId == screenId &&
+                s.StartTime < endTime &&
+                s.EndTime > startTime &&
+                (!excludeShowId.HasValue ||
+                 s.ShowId != excludeShowId.Value));
+        }
+
+
     }
 }

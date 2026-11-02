@@ -69,5 +69,18 @@ namespace MovieTicketBooking.Repositories.Implementations
 
             return true;
         }
+
+        public async Task<bool> HasScheduleConflictAsync(
+    int screenId,
+    DateTime startTime,
+    DateTime endTime,
+    int? excludeShowId = null)
+        {
+            return await _context.Shows.AnyAsync(s =>
+                s.ScreenId == screenId &&
+                s.StartTime < endTime &&
+                s.EndTime > startTime &&
+                (!excludeShowId.HasValue || s.ShowId != excludeShowId.Value));
+        }
     }
 }
