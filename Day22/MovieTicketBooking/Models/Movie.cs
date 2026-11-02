@@ -15,5 +15,9 @@
         public string Language { get; set; } = string.Empty;
 
         public string Genre { get; set; } = string.Empty;
+
+        //Navigation property for related shows
+        public ICollection<Show> Shows { get; set; } = new List<Show>();
+
     }
 }

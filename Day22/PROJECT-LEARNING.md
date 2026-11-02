@@ -880,3 +880,39 @@ If Booking ID 101 contains seats 5, 6 and 7, three BookingSeat records are creat
 **Git commit:**
 
 `feat: add booking seat entity`
+
+### Operation 9: Add Navigation Property to Movie
+
+**File modified:** `Models/Movie.cs`
+
+**Purpose:**
+
+Added a navigation property to connect Movie with its related Shows.
+
+**Code added:**
+
+```csharp
+public ICollection<Show> Shows { get; set; } = new List<Show>();
+```
+
+**Important concepts learned:**
+
+- A navigation property represents a relationship between entities.
+- `ICollection<Show>` represents multiple related Show objects.
+- One Movie can have many Shows.
+- `new List<Show>()` initializes an empty collection.
+- Navigation properties help EF Core understand entity relationships.
+
+**Relationship:**
+
+Movie (One) → Shows (Many)
+
+**Verification:**
+
+- Added the Shows navigation property to Movie.cs.
+- Built the project successfully.
+- No compilation errors.
+
+**Git commit:**
+
+`feat: add movie shows navigation property`

@@ -747,3 +747,27 @@ The same physical seat can be booked for different shows at different times.
 It records the price charged for that particular seat.
 
 **Interview revision:** Explain how Booking and BookingSeat work together when a customer books multiple seats.
+
+## Movie Navigation Property – Revision Notes
+
+**1. What is a navigation property?**
+
+A navigation property allows us to access related entities through an entity object.
+
+**2. What does ICollection<Show> mean?**
+
+It represents a collection of multiple Show objects.
+
+**3. What is the relationship between Movie and Show?**
+
+One Movie can have multiple Shows. Each Show belongs to a Movie.
+
+**4. Why do we initialize the collection using new List<Show>()?**
+
+To ensure the collection is initialized and ready to store related Show objects.
+
+**5. Does a navigation property create a new database table?**
+
+No. It helps EF Core understand the relationship between entities.
+
+**Interview revision:** Explain the difference between a foreign key property and a navigation property.
