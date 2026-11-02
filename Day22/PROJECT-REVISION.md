@@ -332,3 +332,90 @@ Use this space for short explanations in your own words, diagrams, questions to 
 
 ### Last revision date
 - 
+
+## Phase 2 – Movie Entity Revision
+
+### 1. What is an entity?
+
+An entity is a C# class that EF Core maps to a database table.
+
+Example: The `Movie` class represents the `Movies` table.
+
+### 2. What is a property?
+
+A property represents data belonging to an object.
+
+Example:
+`public string Title { get; set; }`
+
+Here, `Title` stores the movie title.
+
+### 3. What does get; set; mean?
+
+- `get` retrieves the property value.
+- `set` assigns or changes the property value.
+
+### 4. What does string? mean?
+
+It indicates that a string property can contain null.
+
+Example:
+`public string? Description { get; set; }`
+
+A movie description is optional.
+
+### 5. What does string.Empty mean?
+
+It initializes a string property with an empty string.
+
+Example:
+`public string Title { get; set; } = string.Empty;`
+
+### 6. How does EF Core identify a primary key?
+
+EF Core identifies properties named `Id` or `<EntityName>Id` by convention.
+
+For the Movie entity:
+
+`public int MovieId { get; set; }`
+
+EF Core recognizes `MovieId` as the primary key.
+
+### 7. Why do we use DateTime?
+
+`DateTime` represents a date and time value.
+
+In our Movie entity, `ReleaseDate` stores the movie's release date.
+
+### Interview questions
+
+**Q1. What is an entity in EF Core?**
+
+An entity is a C# class that EF Core maps to a database table.
+
+**Q2. What is the difference between a class and an object?**
+
+A class is a blueprint. An object is an instance created from that class.
+
+**Q3. What is the difference between string and string?**
+
+`string` is a non-nullable reference type under nullable reference type checking, while `string?` explicitly allows null.
+
+**Q4. Why do we use primary keys?**
+
+A primary key uniquely identifies each record in a database table.
+
+**Q5. Does EF Core require us to explicitly configure MovieId as the primary key?**
+
+No. EF Core recognizes `MovieId` by convention.
+
+### Practical revision
+
+Try answering these without looking at the notes:
+
+1. What is an entity?
+2. What is a property?
+3. What is the purpose of `get; set;`?
+4. Why is Description nullable?
+5. Why does EF Core recognize MovieId as the primary key?
+6. What is the purpose of `string.Empty`?

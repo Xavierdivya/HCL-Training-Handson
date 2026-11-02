@@ -409,3 +409,102 @@ Update this table as work is completed. Do not assume a phase is complete merely
 - The server calculates booking totals; never trust a client-supplied total.
 - Use a consistent time-zone strategy for show schedules and persisted timestamps.
 - Version 1 endpoints are unauthenticated and intended only for a controlled learning environment.
+
+
+## Operation 1: Create Movie Entity
+
+**File:** `MovieTicketBooking/Models/Movie.cs`
+
+**Purpose:** Create the Movie entity to represent movie information stored in the database.
+
+### Properties implemented
+
+| Property | Purpose |
+|---|---|
+| MovieId | Primary key |
+| Title | Movie title |
+| Description | Optional movie description |
+| DurationMinutes | Movie duration |
+| ReleaseDate | Movie release date |
+| Language | Movie language |
+| Genre | Movie genre |
+
+### Concepts learned
+
+- A C# class represents an entity.
+- Properties use `get` and `set` accessors.
+- `string?` allows a nullable string.
+- `string.Empty` initializes a string with an empty value.
+- EF Core recognizes `MovieId` as the primary key by convention.
+
+### Verification
+
+- Created `Movie.cs` inside the Models folder.
+- Saved the file.
+- Visual Studio Build Solution succeeded.
+
+### Git commit
+
+`feat: add movie entity`
+
+
+## Phase 2 – Entities and EF Core Configuration
+
+### Operation 1: Create Movie Entity
+
+**File:** `MovieTicketBooking/Models/Movie.cs`
+
+**Objective:** Create a C# entity class to represent movie information that will eventually be stored in the `Movies` database table.
+
+### Properties implemented
+
+| Property | Data type | Purpose |
+|---|---|---|
+| MovieId | int | Unique identifier and primary key |
+| Title | string | Movie title |
+| Description | string? | Optional movie description |
+| DurationMinutes | int | Movie duration in minutes |
+| ReleaseDate | DateTime | Movie release date |
+| Language | string | Movie language |
+| Genre | string | Movie genre |
+
+### Code concepts learned
+
+1. **Class:** A class is a blueprint for creating objects. The `Movie` class represents a movie.
+2. **Property:** Properties store information belonging to an object.
+3. **get; set;:** `get` reads a property value, while `set` assigns or changes its value.
+4. **Nullable string (`string?`):** Allows the Description property to contain null.
+5. **string.Empty:** Initializes a string property with an empty string.
+6. **Primary key convention:** EF Core recognizes `MovieId` as the primary key because it follows the `<EntityName>Id` naming convention.
+7. **Entity:** An entity is a class that EF Core maps to a database table.
+
+### Why did we create this entity?
+
+The Movie entity is the starting point for movie management. Later, we will use it to implement:
+
+- Adding a movie.
+- Viewing all movies.
+- Finding a movie by ID.
+- Updating movie information.
+- Deleting a movie.
+- Searching movies by title.
+
+### Verification
+
+- Created `Models/Movie.cs` using Visual Studio.
+- Added all seven properties.
+- Saved the file.
+- Built the solution successfully.
+
+**Build Result:** Succeeded.
+
+### Git history
+
+**Commit type:** feat
+
+**Commit message:**
+`feat: add movie entity`
+
+### Next operation
+
+Create the Theatre entity with its properties and prepare it for the Theatre–Screen relationship.
