@@ -910,3 +910,31 @@ To prevent duplicate availability records for the same seat in the same show.
 - `Seat`
 
 **Interview revision:** Explain why seat availability belongs to ShowSeat rather than directly to Seat.
+
+## Booking Navigation Properties – Revision Notes
+
+**1. What is the relationship between Show and Booking?**
+
+One Show can have multiple Bookings.
+
+**2. What is the relationship between Booking and BookingSeat?**
+
+One Booking can contain multiple BookingSeat records.
+
+**3. What is Show in Booking.cs?**
+
+It is a reference navigation property representing the related Show.
+
+**4. What is BookingSeats?**
+
+It is a collection navigation property representing the seats included in a booking.
+
+**5. What is the foreign key in Booking?**
+
+`ShowId`.
+
+**6. Why use a separate BookingSeat entity?**
+
+To store each selected seat separately while allowing one booking to contain multiple seats.
+
+**Interview revision:** Explain how Booking, Show and BookingSeat work together when a customer books multiple seats.

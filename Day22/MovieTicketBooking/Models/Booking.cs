@@ -20,5 +20,10 @@ namespace MovieTicketBooking.Models
         public decimal TotalAmount { get; set; }
 
         public string Status { get; set; } = "Confirmed";
+
+        public Show Show { get; set; } = null!;
+
+        public ICollection<BookingSeat> BookingSeats { get; set; } = new List<BookingSeat>();
+
     }
 }

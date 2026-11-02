@@ -1091,3 +1091,44 @@ public Seat Seat { get; set; } = null!;
 **Git commit:**
 
 `feat: add show seat navigation properties`
+
+ ### Operation 15: Add Navigation Properties to Booking
+
+**File modified:** `Models/Booking.cs`
+
+**Purpose:**
+
+Added navigation properties connecting Booking with Show and BookingSeat.
+
+**Code added:**
+
+```csharp
+public Show Show { get; set; } = null!;
+
+public ICollection<BookingSeat> BookingSeats { get; set; } = new List<BookingSeat>();
+```
+
+**Important concepts learned:**
+
+- Each Booking belongs to one Show.
+- One Show can have multiple Bookings.
+- One Booking can contain multiple BookingSeat records.
+- `ShowId` is the foreign key connecting Booking to Show.
+- `Show` is a reference navigation property.
+- `BookingSeats` is a collection navigation property.
+- `null!` suppresses the nullable-reference warning for a required navigation property populated by EF Core.
+
+**Relationships:**
+
+- Show (One) → Bookings (Many)
+- Booking (One) → BookingSeats (Many)
+
+**Verification:**
+
+- Added Show and BookingSeats navigation properties to Booking.cs.
+- Built the project successfully.
+- No compilation errors.
+
+**Git commit:**
+
+`feat: add booking navigation properties`
