@@ -616,3 +616,66 @@ All three screens belong to TheatreId 1.
 ### Next operation
 
 Create the Seat entity, which represents individual physical seats inside a screen.
+
+### Operation 4: Create Seat Entity
+
+**File:** `MovieTicketBooking/Models/Seat.cs`
+
+**Objective:** Create an entity to represent individual physical seats inside a cinema screen.
+
+### Properties implemented
+
+| Property | Data type | Purpose |
+|---|---|---|
+| SeatId | int | Unique seat identifier and primary key |
+| ScreenId | int | Foreign key connecting Seat to Screen |
+| RowName | string | Identifies the seat row |
+| SeatNumber | int | Identifies the seat number within a row |
+| SeatType | string | Represents the seat category |
+
+### Concepts learned
+
+1. A Seat entity represents an individual physical seat.
+2. `SeatId` is recognized as the primary key by EF Core convention.
+3. `ScreenId` connects a seat to its screen through a foreign key.
+4. `RowName` identifies the row, such as A, B or C.
+5. `SeatNumber` identifies the position within a row.
+6. `SeatType` stores the category, such as Regular or Premium.
+7. A screen can contain multiple physical seats.
+
+### Example seating arrangement
+
+| ScreenId | RowName | SeatNumber | SeatType |
+|---|---|---|---|
+| 1 | A | 1 | Regular |
+| 1 | A | 2 | Regular |
+| 1 | A | 3 | Premium |
+| 1 | B | 1 | Regular |
+
+### Important database rule
+
+The combination of `ScreenId`, `RowName` and `SeatNumber` must be unique.
+
+This prevents duplicate physical seat positions within the same screen.
+
+We will configure this unique constraint later using EF Core.
+
+### Verification
+
+- Created `Models/Seat.cs` using Visual Studio.
+- Added all five properties.
+- Saved the file.
+- Visual Studio Build Solution succeeded.
+
+**Build Result:** Succeeded.
+
+### Git history
+
+**Commit type:** feat
+
+**Commit message:**
+`feat: add seat entity`
+
+### Next operation
+
+Create the Show entity to represent movie screening schedules.

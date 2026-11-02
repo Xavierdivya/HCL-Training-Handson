@@ -515,3 +515,63 @@ Yes. This is a one-to-many relationship.
 **Q4. Why do we need TheatreId in the Screen entity?**
 
 It identifies which theatre owns the screen.
+
+## Seat Entity – Revision Notes
+
+### 1. What is the Seat entity?
+
+The Seat entity represents a physical seat inside a cinema screen.
+
+### 2. What is ScreenId?
+
+`ScreenId` is a foreign key that connects a seat to its screen.
+
+### 3. What is RowName?
+
+`RowName` identifies the row in which a seat is located.
+
+Example: A, B, C.
+
+### 4. What is SeatNumber?
+
+`SeatNumber` identifies the seat's number within a row.
+
+Example: 1, 2, 3.
+
+### 5. What is SeatType?
+
+`SeatType` identifies the category of a seat.
+
+Examples: Regular, Premium.
+
+### 6. What is a composite unique constraint?
+
+A composite unique constraint ensures that a combination of multiple column values cannot be duplicated.
+
+In our project, the combination is:
+
+`ScreenId + RowName + SeatNumber`
+
+Example:
+
+ScreenId = 1, RowName = A, SeatNumber = 1
+
+This combination cannot be inserted twice.
+
+### Interview questions
+
+**Q1. What is the purpose of ScreenId in the Seat entity?**
+
+It identifies the screen to which the physical seat belongs.
+
+**Q2. Can two screens have a seat named A1?**
+
+Yes. Each screen has its own seating arrangement.
+
+**Q3. Why do we need a composite unique constraint?**
+
+To prevent duplicate seat positions within the same screen.
+
+**Q4. What is the difference between SeatId and SeatNumber?**
+
+SeatId uniquely identifies a database record. SeatNumber identifies the seat's position within its row.
