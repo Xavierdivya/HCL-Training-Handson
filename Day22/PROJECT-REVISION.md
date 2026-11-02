@@ -723,3 +723,27 @@ It identifies which movie show the customer booked.
 Keeping cancelled bookings preserves booking history.
 
 **Interview revision:** Explain how a Booking connects a customer to a particular Show and how its status changes during cancellation.
+
+## BookingSeat Entity – Revision Notes
+
+**1. What is the purpose of BookingSeat?**
+
+It connects a booking to the individual seats selected by the customer.
+
+**2. Why do we need a separate BookingSeat table?**
+
+One booking can contain multiple seats. Each selected seat is stored as a separate record.
+
+**3. What is the relationship between Booking and BookingSeat?**
+
+One Booking can have many BookingSeat records.
+
+**4. Why is SeatId not globally unique in BookingSeat?**
+
+The same physical seat can be booked for different shows at different times.
+
+**5. Why do we store Price in BookingSeat?**
+
+It records the price charged for that particular seat.
+
+**Interview revision:** Explain how Booking and BookingSeat work together when a customer books multiple seats.

@@ -839,3 +839,44 @@ Create the Booking entity to store customer booking information.
 **Verification:** Visual Studio Build Solution completed successfully.
 
 **Git commit:** `feat: add booking entity`
+
+
+### Operation 8: Create BookingSeat Entity
+
+**File created:** `Models/BookingSeat.cs`
+
+**Purpose:**
+
+The BookingSeat entity connects a booking with the individual seats selected by the customer.
+
+**Properties implemented:**
+
+| Property | Purpose |
+|---|---|
+| BookingSeatId | Primary key for the booking-seat record |
+| BookingId | Identifies the related booking |
+| SeatId | Identifies the selected physical seat |
+| Price | Stores the price charged for this seat |
+
+**Important concepts learned:**
+
+- One booking can contain multiple booking-seat records.
+- Each booking-seat record represents one selected seat.
+- `decimal` is used for the seat price.
+- `BookingId` connects the record to a booking.
+- `SeatId` identifies the physical seat.
+- `SeatId` must not be globally unique in this table because the same physical seat can be booked for different shows.
+
+**Example:**
+
+If Booking ID 101 contains seats 5, 6 and 7, three BookingSeat records are created.
+
+**Verification:**
+
+- Created `BookingSeat.cs` inside the Models folder.
+- Built the project successfully.
+- No compilation errors.
+
+**Git commit:**
+
+`feat: add booking seat entity`
