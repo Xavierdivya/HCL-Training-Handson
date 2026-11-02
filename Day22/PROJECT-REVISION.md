@@ -575,3 +575,59 @@ To prevent duplicate seat positions within the same screen.
 **Q4. What is the difference between SeatId and SeatNumber?**
 
 SeatId uniquely identifies a database record. SeatNumber identifies the seat's position within its row.
+
+## Show Entity – Revision Notes
+
+### 1. What is the Show entity?
+
+The Show entity represents a movie screening scheduled at a particular screen on a specific date and time.
+
+### 2. What is MovieId?
+
+`MovieId` is a foreign key connecting a show to a movie.
+
+### 3. What is ScreenId?
+
+`ScreenId` is a foreign key connecting a show to a cinema screen.
+
+### 4. What is DateTime?
+
+`DateTime` is a C# data type that stores date and time information.
+
+Example:
+
+`new DateTime(2026, 11, 5, 18, 0, 0)`
+
+This represents November 5, 2026, at 6:00 PM.
+
+### 5. Why do we use decimal for TicketPrice?
+
+`decimal` is suitable for monetary calculations because it provides decimal-based precision.
+
+### 6. What business rules apply to a show?
+
+- EndTime must be later than StartTime.
+- TicketPrice must not be negative.
+- Shows scheduled on the same screen must not overlap.
+
+### Interview questions
+
+**Q1. What is a foreign key in the Show entity?**
+
+MovieId and ScreenId are foreign keys.
+
+**Q2. Why do we use DateTime?**
+
+To store the date and time of a movie screening.
+
+**Q3. Why is decimal used for TicketPrice?**
+
+Because ticket prices represent monetary values.
+
+**Q4. Can two shows run at the same time on the same screen?**
+
+No. The application must validate screen scheduling to prevent overlapping shows.
+
+**Q5. Where should show validation logic be implemented?**
+
+Business validation should be implemented in the Service layer.

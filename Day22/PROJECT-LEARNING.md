@@ -679,3 +679,68 @@ We will configure this unique constraint later using EF Core.
 ### Next operation
 
 Create the Show entity to represent movie screening schedules.
+
+### Operation 5: Create Show Entity
+
+**File:** `MovieTicketBooking/Models/Show.cs`
+
+**Objective:** Create an entity to represent a movie screening scheduled on a particular screen at a specific date and time.
+
+### Properties implemented
+
+| Property | Data type | Purpose |
+|---|---|---|
+| ShowId | int | Unique show identifier and primary key |
+| MovieId | int | Foreign key connecting Show to Movie |
+| ScreenId | int | Foreign key connecting Show to Screen |
+| StartTime | DateTime | Movie screening start date and time |
+| EndTime | DateTime | Movie screening end date and time |
+| TicketPrice | decimal | Price of one ticket |
+
+### Concepts learned
+
+1. A Show entity represents a scheduled movie screening.
+2. `ShowId` is recognized as the primary key by EF Core convention.
+3. `MovieId` connects a show to a movie.
+4. `ScreenId` connects a show to a screen.
+5. `DateTime` stores both date and time.
+6. `decimal` is suitable for storing monetary values.
+
+### Example
+
+| Property | Example value |
+|---|---|
+| ShowId | 1 |
+| MovieId | 1 |
+| ScreenId | 1 |
+| StartTime | 2026-11-05 18:00 |
+| EndTime | 2026-11-05 20:45 |
+| TicketPrice | 200.00 |
+
+### Important business rules
+
+The following rules will be implemented during validation and service development:
+
+- EndTime must be later than StartTime.
+- TicketPrice cannot be negative.
+- Two shows must not overlap on the same screen.
+
+### Verification
+
+- Created `Models/Show.cs` using Visual Studio.
+- Added all six properties.
+- Saved the file.
+- Visual Studio Build Solution succeeded.
+
+**Build Result:** Succeeded.
+
+### Git history
+
+**Commit type:** feat
+
+**Commit message:**
+`feat: add show entity`
+
+### Next operation
+
+Create the ShowSeat entity to track the availability of physical seats for individual shows.
