@@ -1213,3 +1213,37 @@ Created the ApplicationDbContext class to connect the application's entity model
 **Git commit:**
 
 `feat: create application db context`
+
+
+### Operation 18: Register ApplicationDbContext with SQL Server
+
+**File modified:** `Program.cs`
+
+**Purpose:**
+
+Registered ApplicationDbContext with ASP.NET Core Dependency Injection and configured SQL Server as the database provider.
+
+**Implementation details:**
+
+- Added `Microsoft.EntityFrameworkCore` namespace.
+- Added `MovieTicketBooking.Data` namespace.
+- Used `builder.Services.AddDbContext<ApplicationDbContext>()`.
+- Configured SQL Server using `options.UseSqlServer()`.
+- Read the connection string using `builder.Configuration.GetConnectionString("DefaultConnection")`.
+
+**Concepts learned:**
+
+- Dependency Injection (DI).
+- DbContext registration.
+- SQL Server database provider.
+- Reading connection strings from appsettings.json.
+
+**Verification:**
+
+- Updated Program.cs.
+- Built the project successfully.
+- No build errors.
+
+**Git commit:**
+
+`feat: register sql server db context`

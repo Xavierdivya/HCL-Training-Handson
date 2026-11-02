@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using MovieTicketBooking.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
+// Configure SQL Server database connection
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

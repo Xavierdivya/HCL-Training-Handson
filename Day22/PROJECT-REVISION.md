@@ -990,3 +990,26 @@ It passes the received configuration options to the parent DbContext class.
 **5. Does creating DbSet properties automatically create database tables?**
 
 No. We need to create and apply EF Core migrations to create the tables in the database.
+
+
+## SQL Server DbContext Registration – Revision Notes
+
+**1. What is Dependency Injection?**
+
+Dependency Injection is a technique where ASP.NET Core provides required objects to classes instead of requiring them to create those objects manually.
+
+**2. What does AddDbContext() do?**
+
+It registers the ApplicationDbContext in the application's Dependency Injection container.
+
+**3. What does UseSqlServer() do?**
+
+It configures Entity Framework Core to communicate with SQL Server.
+
+**4. What does GetConnectionString() do?**
+
+It retrieves a named connection string from appsettings.json.
+
+**5. Does AddDbContext() create the database?**
+
+No. It configures the connection. We will create the database using EF Core migrations.
