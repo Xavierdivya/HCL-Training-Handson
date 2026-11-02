@@ -1373,3 +1373,77 @@ Result: **Build succeeded.**
 ```text
 feat: configure all entities using fluent api
 ```
+
+## Operation 21 – Create Initial EF Core Migration
+
+**Objective:** Generate the initial database migration using Entity Framework Core.
+
+### Command Executed
+
+```powershell
+dotnet ef migrations add InitialCreate
+```
+
+### Migration Files Generated
+
+EF Core generated the following files inside the `Migrations` folder:
+
+1. **InitialCreate.cs**
+   - Contains migration instructions to create the database tables.
+   - Contains table columns, primary keys, foreign keys, indexes, and constraints.
+
+2. **InitialCreate.Designer.cs**
+   - Contains migration metadata and migration information.
+
+3. **ApplicationDbContextModelSnapshot.cs**
+   - Stores a snapshot of the current EF Core model.
+   - EF Core uses it to identify model changes when generating future migrations.
+
+### Navigation Property Correction
+
+During migration creation, a build error occurred because the `Screen` entity did not contain the `Shows` navigation property.
+
+Added:
+
+```csharp
+public ICollection<Show> Shows { get; set; } = new List<Show>();
+```
+
+This represents the one-to-many relationship between Screen and Show.
+
+### Important Concepts Learned
+
+- **Migration:** A versioned set of database schema changes generated from the EF Core model.
+- **Add Migration:** Generates migration files based on entity and DbContext configuration.
+- **Model Snapshot:** Stores the current model structure for comparison with future changes.
+- **Migration Designer:** Stores metadata associated with the migration.
+
+### Build Verification
+
+Command:
+
+```powershell
+dotnet build
+```
+
+Result: **Build succeeded.**
+
+### Migration Verification
+
+Command:
+
+```powershell
+dotnet ef migrations add InitialCreate
+```
+
+Result: **Migration created successfully.**
+
+### Important Note
+
+Creating a migration does not create the database. The database will be created or updated in the next operation using `dotnet ef database update`.
+
+### Git Commit
+
+```text
+feat: create initial database migration
+```
