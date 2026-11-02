@@ -508,3 +508,57 @@ The Movie entity is the starting point for movie management. Later, we will use 
 ### Next operation
 
 Create the Theatre entity with its properties and prepare it for the Theatre–Screen relationship.
+
+### Operation 2: Create Theatre Entity
+
+**File:** `MovieTicketBooking/Models/Theatre.cs`
+
+**Objective:** Create an entity to represent theatres where movies are screened.
+
+### Properties implemented
+
+| Property | Data type | Purpose |
+|---|---|---|
+| TheatreId | int | Unique theatre identifier and primary key |
+| Name | string | Name of the theatre |
+| Location | string | Theatre location or address |
+
+### Concepts learned
+
+1. A Theatre entity represents a theatre in the movie booking system.
+2. `TheatreId` is recognized as the primary key by EF Core convention.
+3. `Name` stores the theatre name.
+4. `Location` stores the theatre's address or location.
+5. `string.Empty` initializes string properties with an empty value.
+
+### Why do we need the Theatre entity?
+
+A theatre contains one or more screens. Each screen belongs to a theatre.
+
+This entity will later be connected to the Screen entity through a one-to-many relationship.
+
+**Example:**
+
+- TheatreId: 1
+- Name: PVR Cinemas
+- Location: Thiruvananthapuram
+
+### Verification
+
+- Created `Models/Theatre.cs` using Visual Studio.
+- Added TheatreId, Name and Location properties.
+- Saved the file.
+- Visual Studio Build Solution succeeded.
+
+**Build Result:** Succeeded.
+
+### Git history
+
+**Commit type:** feat
+
+**Commit message:**
+`feat: add theatre entity`
+
+### Next operation
+
+Create the Screen entity, which will contain the TheatreId foreign key.

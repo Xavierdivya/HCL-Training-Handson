@@ -419,3 +419,51 @@ Try answering these without looking at the notes:
 4. Why is Description nullable?
 5. Why does EF Core recognize MovieId as the primary key?
 6. What is the purpose of `string.Empty`?
+
+## Theatre Entity – Revision Notes
+
+### 1. What is the Theatre entity?
+
+The Theatre entity is a C# class representing a theatre in our movie ticket booking system.
+
+### 2. What is TheatreId?
+
+`TheatreId` uniquely identifies each theatre.
+
+EF Core recognizes `TheatreId` as the primary key by convention.
+
+### 3. What is the purpose of Name?
+
+It stores the theatre's name.
+
+Example: PVR Cinemas.
+
+### 4. What is the purpose of Location?
+
+It stores the theatre's location or address.
+
+Example: Thiruvananthapuram.
+
+### 5. Why will Theatre be related to Screen?
+
+A theatre can contain multiple screens, but each screen belongs to one theatre.
+
+This is called a one-to-many relationship.
+
+### Interview questions
+
+**Q1. What is a primary key?**
+
+A primary key uniquely identifies each record in a database table.
+
+**Q2. Can one theatre have multiple screens?**
+
+Yes. One theatre can have multiple screens.
+
+**Q3. What is a one-to-many relationship?**
+
+It means one record in a parent table can be associated with multiple records in a child table.
+
+**Q4. Which property will connect Screen to Theatre?**
+
+`TheatreId` will act as the foreign key in the Screen entity.
