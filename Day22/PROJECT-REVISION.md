@@ -1397,3 +1397,52 @@ Example:
 ### 11. Build Verification
 
 `dotnet build` – **Succeeded.**
+
+
+## Operation 25 – Dependency Injection Revision
+
+### What is Dependency Injection?
+
+Dependency Injection is a design pattern where an object receives the dependencies it needs instead of creating them itself.
+
+### What is AddScoped?
+
+```csharp
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+```
+
+- `IMovieRepository`: Interface.
+- `MovieRepository`: Implementation class.
+- `AddScoped`: Creates one instance per HTTP request.
+
+### Three DI service lifetimes
+
+| Lifetime | Meaning |
+|---|---|
+| Transient | A new instance every time requested. |
+| Scoped | One instance per HTTP request. |
+| Singleton | One instance for the application's lifetime. |
+
+### Why use Dependency Injection?
+
+- Reduces tight coupling.
+- Makes code easier to maintain.
+- Makes unit testing easier.
+- Separates object creation from business logic.
+
+### Important flow
+
+Controller → Service → Repository → ApplicationDbContext → SQL Server
+
+### Important code
+
+```csharp
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
+builder.Services.AddScoped<IScreenRepository, ScreenRepository>();
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+builder.Services.AddScoped<IShowRepository, ShowRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+```
+
+**Remember:** Registering repositories makes them available through DI. It does not automatically create the service layer or API endpoints.

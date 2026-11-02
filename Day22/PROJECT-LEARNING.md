@@ -1761,3 +1761,61 @@ Result: **Build succeeded.**
 feat: implement repository layer
 ```
 
+
+## Operation 25 – Register Repositories Using Dependency Injection
+
+### Objective
+Register all six repository interfaces and their implementation classes in ASP.NET Core using Dependency Injection (DI).
+
+### Changes made
+
+Updated `Program.cs` with the following namespaces:
+
+- `MovieTicketBooking.Repositories.Interfaces`
+- `MovieTicketBooking.Repositories.Implementation`
+
+Registered six repositories using `AddScoped`:
+
+```csharp
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
+builder.Services.AddScoped<IScreenRepository, ScreenRepository>();
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+builder.Services.AddScoped<IShowRepository, ShowRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+```
+
+### Understanding AddScoped
+
+`AddScoped` creates one instance of a registered service per HTTP request. The same instance is reused within that request.
+
+### Dependency Injection flow
+
+1. A controller requests a repository interface.
+2. ASP.NET Core checks the registered services.
+3. DI creates the corresponding repository implementation.
+4. The repository receives `ApplicationDbContext` through constructor injection.
+5. The repository performs database operations using Entity Framework Core.
+
+### Repository registration mapping
+
+| Interface | Implementation |
+|---|---|
+| IMovieRepository | MovieRepository |
+| ITheatreRepository | TheatreRepository |
+| IScreenRepository | ScreenRepository |
+| ISeatRepository | SeatRepository |
+| IShowRepository | ShowRepository |
+| IBookingRepository | BookingRepository |
+
+### Verification
+
+- Added all six repository registrations.
+- Verified the project structure.
+- Executed `dotnet build`.
+- Build completed successfully.
+
+**Result:** All six repositories are registered and available for Dependency Injection. 
+
+**Next operation:** Implement the service layer.
+

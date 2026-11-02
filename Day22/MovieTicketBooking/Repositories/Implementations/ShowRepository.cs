@@ -4,7 +4,7 @@ using MovieTicketBooking.Data;
 using MovieTicketBooking.Models;
 using MovieTicketBooking.Repositories.Interfaces;
 
-namespace MovieTicketBooking.Repositories
+namespace MovieTicketBooking.Repositories.Implementations
 {
     public class ShowRepository : IShowRepository
     {
