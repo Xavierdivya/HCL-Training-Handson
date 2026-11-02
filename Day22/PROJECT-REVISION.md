@@ -968,3 +968,25 @@ The same physical seat can be booked for different shows at different times.
 - Seat
 
 **Interview revision:** Explain how BookingSeat connects the Booking and Seat entities.
+
+## ApplicationDbContext – Revision Notes
+
+**1. What is DbContext?**
+
+DbContext is the main class used by Entity Framework Core to communicate with the database.
+
+**2. What is DbSet?**
+
+DbSet represents a collection of entities that EF Core maps to a database table.
+
+**3. Why do we use DbContextOptions?**
+
+It provides configuration information to the DbContext, such as the database provider and connection settings.
+
+**4. What does base(options) mean?**
+
+It passes the received configuration options to the parent DbContext class.
+
+**5. Does creating DbSet properties automatically create database tables?**
+
+No. We need to create and apply EF Core migrations to create the tables in the database.

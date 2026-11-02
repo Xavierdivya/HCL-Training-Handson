@@ -1173,3 +1173,43 @@ public Seat Seat { get; set; } = null!;
 **Git commit:**
 
 `feat: add booking seat navigation properties`
+
+
+### Operation 17: Create ApplicationDbContext
+
+**File created:** `Data/ApplicationDbContext.cs`
+
+**Purpose:**
+
+Created the ApplicationDbContext class to connect the application's entity models with Entity Framework Core.
+
+**Implementation details:**
+
+- Inherited from `DbContext`.
+- Added a constructor accepting `DbContextOptions<ApplicationDbContext>`.
+- Used `base(options)` to pass configuration to the parent DbContext.
+- Added eight DbSet properties:
+  - Movies
+  - Theatres
+  - Screens
+  - Seats
+  - Shows
+  - ShowSeats
+  - Bookings
+  - BookingSeats
+
+**Concepts learned:**
+
+- DbContext acts as a bridge between the application and database.
+- DbSet represents a collection of entities that EF Core maps to database tables.
+- DbContext tracks changes and saves them to the database.
+
+**Verification:**
+
+- Installed the required EF Core packages.
+- Built the project successfully.
+- No build errors.
+
+**Git commit:**
+
+`feat: create application db context`
