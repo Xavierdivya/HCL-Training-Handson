@@ -1132,3 +1132,44 @@ public ICollection<BookingSeat> BookingSeats { get; set; } = new List<BookingSea
 **Git commit:**
 
 `feat: add booking navigation properties`
+
+### Operation 16: Add Navigation Properties to BookingSeat
+
+**File modified:** `Models/BookingSeat.cs`
+
+**Purpose:**
+
+Added navigation properties connecting BookingSeat with Booking and Seat.
+
+**Code added:**
+
+```csharp
+public Booking Booking { get; set; } = null!;
+
+public Seat Seat { get; set; } = null!;
+```
+
+**Important concepts learned:**
+
+- Each BookingSeat belongs to one Booking.
+- Each BookingSeat belongs to one physical Seat.
+- `BookingId` is the foreign key connecting BookingSeat to Booking.
+- `SeatId` is the foreign key connecting BookingSeat to Seat.
+- `Booking` and `Seat` are reference navigation properties.
+- Each BookingSeat record represents one selected seat in a booking.
+- SeatId must not be globally unique because the same physical seat can be booked in different shows.
+
+**Relationships:**
+
+- Booking (One) → BookingSeats (Many)
+- Seat (One) → BookingSeats (Many)
+
+**Verification:**
+
+- Added Booking and Seat navigation properties to BookingSeat.cs.
+- Built the project successfully.
+- No compilation errors.
+
+**Git commit:**
+
+`feat: add booking seat navigation properties`

@@ -938,3 +938,33 @@ It is a collection navigation property representing the seats included in a book
 To store each selected seat separately while allowing one booking to contain multiple seats.
 
 **Interview revision:** Explain how Booking, Show and BookingSeat work together when a customer books multiple seats.
+
+## BookingSeat Navigation Properties – Revision Notes
+
+**1. What is BookingSeat?**
+
+It connects a booking with an individual physical seat.
+
+**2. What is the relationship between Booking and BookingSeat?**
+
+One Booking can contain multiple BookingSeat records.
+
+**3. What is the relationship between Seat and BookingSeat?**
+
+One Seat can appear in multiple BookingSeat records across different bookings.
+
+**4. What are the foreign keys?**
+
+- BookingId
+- SeatId
+
+**5. Why should SeatId not be globally unique?**
+
+The same physical seat can be booked for different shows at different times.
+
+**6. What are the navigation properties?**
+
+- Booking
+- Seat
+
+**Interview revision:** Explain how BookingSeat connects the Booking and Seat entities.

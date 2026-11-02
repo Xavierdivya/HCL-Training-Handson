@@ -10,5 +10,10 @@ namespace MovieTicketBooking.Models
         public int SeatId { get; set; }
 
         public decimal Price { get; set; }
+
+        public Booking Booking { get; set; } = null!;
+
+        public Seat Seat { get; set; } = null!;
+
     }
 }
