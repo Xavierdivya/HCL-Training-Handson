@@ -467,3 +467,51 @@ It means one record in a parent table can be associated with multiple records in
 **Q4. Which property will connect Screen to Theatre?**
 
 `TheatreId` will act as the foreign key in the Screen entity.
+
+## Screen Entity – Revision Notes
+
+### 1. What is the Screen entity?
+
+The Screen entity represents an individual cinema screen inside a theatre.
+
+### 2. What is ScreenId?
+
+`ScreenId` uniquely identifies each screen.
+
+It is recognized as the primary key by EF Core convention.
+
+### 3. What is TheatreId in Screen?
+
+`TheatreId` is a foreign key that connects a screen to its theatre.
+
+### 4. What is a foreign key?
+
+A foreign key is a column that references a primary key in another table and establishes a relationship between the tables.
+
+### 5. What is a one-to-many relationship?
+
+One theatre can have multiple screens, but each screen belongs to one theatre.
+
+Example:
+
+- Theatre 1 → Screen 1
+- Theatre 1 → Screen 2
+- Theatre 1 → Screen 3
+
+### Interview questions
+
+**Q1. What is a foreign key?**
+
+A foreign key connects one table to another by referencing the primary key of the related table.
+
+**Q2. What is the difference between a primary key and a foreign key?**
+
+A primary key uniquely identifies a record in its own table. A foreign key establishes a relationship with another table.
+
+**Q3. Can one theatre have multiple screens?**
+
+Yes. This is a one-to-many relationship.
+
+**Q4. Why do we need TheatreId in the Screen entity?**
+
+It identifies which theatre owns the screen.

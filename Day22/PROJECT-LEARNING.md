@@ -562,3 +562,57 @@ This entity will later be connected to the Screen entity through a one-to-many r
 ### Next operation
 
 Create the Screen entity, which will contain the TheatreId foreign key.
+
+### Operation 3: Create Screen Entity
+
+**File:** `MovieTicketBooking/Models/Screen.cs`
+
+**Objective:** Create an entity to represent individual screens inside a theatre.
+
+### Properties implemented
+
+| Property | Data type | Purpose |
+|---|---|---|
+| ScreenId | int | Unique screen identifier and primary key |
+| TheatreId | int | Foreign key connecting Screen to Theatre |
+| ScreenName | string | Name or number of the screen |
+
+### Concepts learned
+
+1. A Screen entity represents an individual cinema screen.
+2. `ScreenId` is recognized as the primary key by EF Core convention.
+3. `TheatreId` identifies the theatre to which the screen belongs.
+4. `TheatreId` acts as a foreign key.
+5. One theatre can contain multiple screens.
+
+### Example
+
+Theatre: PVR Cinemas
+
+| ScreenId | TheatreId | ScreenName |
+|---|---|---|
+| 1 | 1 | Screen 1 |
+| 2 | 1 | Screen 2 |
+| 3 | 1 | Screen 3 |
+
+All three screens belong to TheatreId 1.
+
+### Verification
+
+- Created `Models/Screen.cs` using Visual Studio.
+- Added ScreenId, TheatreId and ScreenName properties.
+- Saved the file.
+- Visual Studio Build Solution succeeded.
+
+**Build Result:** Succeeded.
+
+### Git history
+
+**Commit type:** feat
+
+**Commit message:**
+`feat: add screen entity`
+
+### Next operation
+
+Create the Seat entity, which represents individual physical seats inside a screen.
