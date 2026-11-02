@@ -2033,3 +2033,171 @@ dotnet build
 Result: Build succeeded.
 
 **Next operation:** Improve API request models and error handling, then test the endpoints using Scalar.
+
+
+# Operation 30 – DTO Implementation
+
+## 1. What is a DTO?
+
+DTO stands for Data Transfer Object.
+
+A DTO transfers data between the client and the application without exposing database entities directly.
+
+Previously, controllers accepted and returned EF Core entities. Now they use separate request and response DTOs.
+
+## 2. DTO Folder Structure
+
+```text
+DTOs/
+├── Movies/
+│   ├── CreateMovieDto.cs
+│   ├── UpdateMovieDto.cs
+│   └── MovieResponseDto.cs
+├── Theatres/
+│   ├── CreateTheatreDto.cs
+│   ├── UpdateTheatreDto.cs
+│   └── TheatreResponseDto.cs
+├── Screens/
+│   ├── CreateScreenDto.cs
+│   ├── UpdateScreenDto.cs
+│   └── ScreenResponseDto.cs
+├── Seats/
+│   ├── CreateSeatDto.cs
+│   ├── BulkCreateSeatsDto.cs
+│   └── SeatResponseDto.cs
+├── Shows/
+│   ├── CreateShowDto.cs
+│   ├── UpdateShowDto.cs
+│   └── ShowResponseDto.cs
+└── Bookings/
+    ├── CreateBookingDto.cs
+    └── BookingResponseDto.cs
+```
+
+Total: 17 DTO classes.
+
+## 3. Request DTOs
+
+Request DTOs define the information accepted from API clients.
+
+Examples:
+- CreateMovieDto
+- UpdateMovieDto
+- CreateTheatreDto
+- CreateScreenDto
+- CreateSeatDto
+- CreateShowDto
+- CreateBookingDto
+
+Data Annotation attributes such as `[Required]`, `[StringLength]`, `[Range]`, `[EmailAddress]` and `[Phone]` provide request validation.
+
+## 4. Response DTOs
+
+Response DTOs define the information returned by the API.
+
+Examples:
+- MovieResponseDto
+- TheatreResponseDto
+- ScreenResponseDto
+- SeatResponseDto
+- ShowResponseDto
+- BookingResponseDto
+
+They prevent the API from directly exposing EF Core entities.
+
+## 5. Controller Integration
+
+Updated all six API controllers:
+
+1. MoviesController
+2. TheatresController
+3. ScreensController
+4. SeatsController
+5. ShowsController
+6. BookingsController
+
+Each controller converts incoming DTOs into entities before calling its service.
+
+The returned entities are mapped into response DTOs.
+
+## 6. Mapping Example
+
+```csharp
+var movie = new Movie
+{
+    Title = dto.Title,
+    Description = dto.Description,
+    DurationMinutes = dto.DurationMinutes,
+    ReleaseDate = dto.ReleaseDate,
+    Language = dto.Language,
+    Genre = dto.Genre
+};
+```
+
+Response mapping:
+
+```csharp
+private static MovieResponseDto MapToResponse(Movie movie)
+{
+    return new MovieResponseDto
+    {
+        MovieId = movie.MovieId,
+        Title = movie.Title,
+        Description = movie.Description,
+        DurationMinutes = movie.DurationMinutes,
+        ReleaseDate = movie.ReleaseDate,
+        Language = movie.Language,
+        Genre = movie.Genre
+    };
+}
+```
+
+## 7. Booking DTO Integration
+
+CreateBookingDto accepts:
+- ShowId
+- SeatIds
+- CustomerName
+- CustomerEmail
+- CustomerPhone
+
+BookingResponseDto returns booking information and the associated seat IDs.
+
+BookingRepository retrieval methods use Include and ThenInclude to load BookingSeats and their Seat navigation properties.
+
+## 8. Concepts Learned
+
+- Data Transfer Object (DTO)
+- Request DTO and Response DTO
+- Entity-to-DTO mapping
+- DTO-to-Entity mapping
+- Data Annotation validation
+- LINQ Select()
+- CreatedAtAction()
+- Separation between API contracts and database entities
+
+## 9. Build Verification
+
+Command:
+
+```powershell
+dotnet build
+```
+
+Result: Build succeeded.
+
+## 10. Architecture Flow
+
+API Client → Request DTO → Controller → Service → Repository → Database
+
+Database → Repository → Service → Controller → Response DTO → API Client
+
+## 11. Review Notes
+
+The existing show-update workflow requires additional review before allowing a screen change, because generated ShowSeat records must remain consistent with the show's screen.
+
+Booking retrieval was verified to include BookingSeats and their Seat navigation properties.
+
+---
+
+Progress: Operation 30 – DTO implementation completed and build verified.

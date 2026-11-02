@@ -1636,3 +1636,121 @@ Completed:
 - Six API controllers.
 
 Next: Improve request DTOs and error handling, then test API endpoints using Scalar.
+
+
+# Operation 30 – DTO Revision Notes
+
+## 1. DTO Meaning
+
+DTO = Data Transfer Object.
+
+Used to transfer data between API clients and application layers without directly exposing database entities.
+
+## 2. Request DTO vs Response DTO
+
+| Request DTO | Response DTO |
+|---|---|
+| Receives client data | Returns API data |
+| Used for POST and PUT | Used for GET and successful POST |
+| Example: CreateMovieDto | Example: MovieResponseDto |
+
+## 3. Data Annotation Attributes
+
+| Attribute | Purpose |
+|---|---|
+| [Required] | Field must have a value |
+| [StringLength] | Limits string length |
+| [Range] | Restricts numeric or comparable values |
+| [EmailAddress] | Validates email format |
+| [Phone] | Validates phone format |
+| [MinLength] | Enforces minimum collection or string length |
+
+## 4. Mapping
+
+DTO to Entity:
+
+```csharp
+var movie = new Movie
+{
+    Title = dto.Title,
+    DurationMinutes = dto.DurationMinutes
+};
+```
+
+Entity to DTO:
+
+```csharp
+var response = new MovieResponseDto
+{
+    MovieId = movie.MovieId,
+    Title = movie.Title,
+    DurationMinutes = movie.DurationMinutes
+};
+```
+
+## 5. LINQ Select
+
+```csharp
+var response = movies.Select(MapToResponse).ToList();
+```
+
+Converts each Movie entity into a MovieResponseDto.
+
+## 6. HTTP Responses
+
+| Method | Status | Meaning |
+|---|---|---|
+| POST | 201 Created | Resource created |
+| GET | 200 OK | Resource retrieved |
+| PUT | 204 No Content | Update completed |
+| DELETE | 204 No Content | Delete completed |
+| GET/PUT/DELETE | 404 Not Found | Resource not found |
+
+## 7. Important ASP.NET Core Concepts
+
+- [ApiController]: Enables API-specific behavior, including automatic validation responses for invalid model state.
+- [Route]: Defines the controller route.
+- CreatedAtAction(): Returns a Created response with a location for the new resource.
+- IActionResult: Allows controller actions to return different HTTP responses.
+- MapToResponse(): Reusable method for mapping entities to response DTOs.
+
+## 8. Booking Retrieval
+
+```csharp
+.Include(b => b.BookingSeats)
+    .ThenInclude(bs => bs.Seat)
+```
+
+Include loads the booking-seat collection.
+
+ThenInclude loads the related physical Seat entity.
+
+AsNoTracking() is used for read-only queries.
+
+## 9. Architecture
+
+Client → DTO → Controller → Service → Repository → Database
+
+Database → Repository → Service → Controller → DTO → Client
+
+## 10. Verification
+
+```powershell
+dotnet build
+```
+
+Result: Build succeeded.
+
+## 11. Operation 30 Checklist
+
+- [x] Created Movie DTOs
+- [x] Created Theatre DTOs
+- [x] Created Screen DTOs
+- [x] Created Seat DTOs
+- [x] Created Show DTOs
+- [x] Created Booking DTOs
+- [x] Integrated DTOs into six controllers
+- [x] Verified booking retrieval includes BookingSeats
+- [x] Build succeeded
+
+Next: Operation 31 – Authentication, Authorization and JWT.

@@ -1,75 +1,124 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
+using MovieTicketBooking.DTOs.Shows;
 using MovieTicketBooking.Models;
 using MovieTicketBooking.Services.Interfaces;
 
-namespace MovieTicketBooking.Controllers
+namespace MovieTicketBooking.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ShowsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ShowsController : ControllerBase
+    private readonly IShowService _showService;
+
+    public ShowsController(IShowService showService)
     {
-        private readonly IShowService _showService;
+        _showService = showService;
+    }
 
-        public ShowsController(IShowService showService)
+    // POST: api/Shows
+    [HttpPost]
+    public async Task<IActionResult> CreateShow(CreateShowDto dto)
+    {
+        var show = new Show
         {
-            _showService = showService;
-        }
+            MovieId = dto.MovieId,
+            ScreenId = dto.ScreenId,
+            StartTime = dto.StartTime,
+            EndTime = dto.EndTime,
+            TicketPrice = dto.TicketPrice
+        };
 
-        [HttpPost]
-        public async Task<IActionResult> Create(Show show)
+        var createdShow = await _showService.AddAsync(show);
+
+        var response = MapToResponse(createdShow);
+
+        return CreatedAtAction(
+            nameof(GetShowById),
+            new { id = response.ShowId },
+            response);
+    }
+
+    // GET: api/Shows
+    [HttpGet]
+    public async Task<IActionResult> GetAllShows()
+    {
+        var shows = await _showService.GetAllAsync();
+
+        return Ok(shows.Select(MapToResponse).ToList());
+    }
+
+    // GET: api/Shows/5
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetShowById(int id)
+    {
+        var show = await _showService.GetByIdAsync(id);
+
+        if (show == null)
+            return NotFound();
+
+        return Ok(MapToResponse(show));
+    }
+
+    // GET: api/Shows/movie/1
+    [HttpGet("movie/{movieId}")]
+    public async Task<IActionResult> GetShowsByMovie(int movieId)
+    {
+        var shows = await _showService.GetByMovieIdAsync(movieId);
+
+        return Ok(shows.Select(MapToResponse).ToList());
+    }
+
+    // GET: api/Shows/screen/1
+    [HttpGet("screen/{screenId}")]
+    public async Task<IActionResult> GetShowsByScreen(int screenId)
+    {
+        var shows = await _showService.GetByScreenIdAsync(screenId);
+
+        return Ok(shows.Select(MapToResponse).ToList());
+    }
+
+    // GET: api/Shows/date/2026-11-02
+    [HttpGet("date/{date}")]
+    public async Task<IActionResult> GetShowsByDate(DateTime date)
+    {
+        var shows = await _showService.GetByDateAsync(date);
+
+        return Ok(shows.Select(MapToResponse).ToList());
+    }
+
+    // PUT: api/Shows/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateShow(
+        int id, UpdateShowDto dto)
+    {
+        var existingShow = await _showService.GetByIdAsync(id);
+
+        if (existingShow == null)
+            return NotFound();
+
+        existingShow.MovieId = dto.MovieId;
+        existingShow.ScreenId = dto.ScreenId;
+        existingShow.StartTime = dto.StartTime;
+        existingShow.EndTime = dto.EndTime;
+        existingShow.TicketPrice = dto.TicketPrice;
+
+        await _showService.UpdateAsync(existingShow);
+
+        return NoContent();
+    }
+
+    private static ShowResponseDto MapToResponse(Show show)
+    {
+        return new ShowResponseDto
         {
-            var result = await _showService.AddAsync(show);
-
-            return CreatedAtAction(nameof(GetById),
-                new { id = result.ShowId }, result);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await _showService.GetAllAsync());
-        }
-
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var show = await _showService.GetByIdAsync(id);
-
-            if (show == null)
-                return NotFound();
-
-            return Ok(show);
-        }
-
-        [HttpGet("movie/{movieId:int}")]
-        public async Task<IActionResult> GetByMovieId(int movieId)
-        {
-            return Ok(await _showService.GetByMovieIdAsync(movieId));
-        }
-
-        [HttpGet("screen/{screenId:int}")]
-        public async Task<IActionResult> GetByScreenId(int screenId)
-        {
-            return Ok(await _showService.GetByScreenIdAsync(screenId));
-        }
-
-        [HttpGet("date")]
-        public async Task<IActionResult> GetByDate(DateTime date)
-        {
-            return Ok(await _showService.GetByDateAsync(date));
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, Show show)
-        {
-            if (id != show.ShowId)
-                return BadRequest("Show ID mismatch.");
-
-            if (await _showService.GetByIdAsync(id) == null)
-                return NotFound();
-
-            await _showService.UpdateAsync(show);
-            return NoContent();
-        }
+            ShowId = show.ShowId,
+            MovieId = show.MovieId,
+            ScreenId = show.ScreenId,
+            StartTime = show.StartTime,
+            EndTime = show.EndTime,
+            TicketPrice = show.TicketPrice
+        };
     }
 }
