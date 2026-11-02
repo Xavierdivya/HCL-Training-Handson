@@ -916,3 +916,5 @@ Movie (One) → Shows (Many)
 **Git commit:**
 
 `feat: add movie shows navigation property`
+
+public ICollection<Screen> Screens { get; set; } = new List<Screen>();

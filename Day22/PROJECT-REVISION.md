@@ -771,3 +771,27 @@ To ensure the collection is initialized and ready to store related Show objects.
 No. It helps EF Core understand the relationship between entities.
 
 **Interview revision:** Explain the difference between a foreign key property and a navigation property.
+
+## Theatre Navigation Property – Revision Notes
+
+**1. What is the relationship between Theatre and Screen?**
+
+One Theatre can have multiple Screens.
+
+**2. What is ICollection<Screen>?**
+
+It represents a collection of related Screen objects.
+
+**3. What is the foreign key in this relationship?**
+
+`TheatreId` in the Screen entity.
+
+**4. What is the navigation property?**
+
+`Screens` in the Theatre entity.
+
+**5. Why initialize Screens with new List<Screen>()?**
+
+To ensure the collection is initialized and ready to store related screens.
+
+**Interview revision:** Explain the difference between TheatreId and Screens in the Theatre–Screen relationship.
