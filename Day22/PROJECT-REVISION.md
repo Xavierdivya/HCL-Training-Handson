@@ -1223,3 +1223,62 @@ Applies the migration to SQL Server.
 ### 7. Verification
 
 `dotnet ef database update` – **Succeeded.**
+
+## Operation 23 – Database Verification Revision
+
+### 1. How to View All Tables?
+
+```sql
+SELECT TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE';
+```
+
+### 2. How to View Primary Keys?
+
+```sql
+SELECT *
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE CONSTRAINT_NAME LIKE 'PK_%';
+```
+
+### 3. How to View Foreign Keys?
+
+SQL Server system views:
+
+- `sys.foreign_keys`
+- `sys.foreign_key_columns`
+
+These help identify relationships between child and parent tables.
+
+### 4. How to View Unique Indexes?
+
+```sql
+SELECT
+    t.name AS TableName,
+    i.name AS IndexName,
+    i.is_unique AS IsUnique
+FROM sys.indexes i
+INNER JOIN sys.tables t
+    ON i.object_id = t.object_id
+WHERE i.is_unique = 1;
+```
+
+### 5. Important Concepts
+
+- Primary Key: Uniquely identifies a database record.
+- Foreign Key: Connects related tables.
+- Unique Index: Prevents duplicate values or combinations.
+- Child Table: Contains the foreign key.
+- Parent Table: Contains the referenced primary or unique key.
+- Migration History: Tracks migrations applied by EF Core.
+
+### 6. Verification
+
+Database table verification – **Succeeded.**
+
+Primary key verification – **Succeeded.**
+
+Foreign key verification – **Succeeded.**
+
+Unique index verification – **Succeeded.**

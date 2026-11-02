@@ -1508,3 +1508,100 @@ The initial migration was successfully applied to SQL Server.
 feat: apply initial migration to sql server
 ```
 
+
+## Operation 23 – Verify Database Tables and Relationships
+
+**Objective:** Verify that EF Core successfully created the database tables, primary keys, foreign keys, and unique indexes in SQL Server.
+
+### Database
+
+- Database Name: MovieTicketBookingDB
+- Server: localhost\SQLEXPRESS
+- Tool: SQL Server Management Studio (SSMS)
+
+### 1. Verify Database Tables
+
+Executed:
+
+```sql
+USE MovieTicketBookingDB;
+GO
+
+SELECT TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE'
+ORDER BY TABLE_NAME;
+```
+
+Verified the eight application tables:
+
+1. Movies
+2. Theatres
+3. Screens
+4. Seats
+5. Shows
+6. ShowSeats
+7. Bookings
+8. BookingSeats
+
+Also verified the EF Core migration history table: `__EFMigrationsHistory`.
+
+### 2. Verify Primary Keys
+
+Used `INFORMATION_SCHEMA.KEY_COLUMN_USAGE` to inspect primary key columns and their constraint names.
+
+Verified that each application table has its primary key.
+
+### 3. Verify Foreign Keys
+
+Used SQL Server system catalog views:
+
+- `sys.foreign_keys`
+- `sys.foreign_key_columns`
+
+Verified the following relationships:
+
+| Child table | Parent table |
+|---|---|
+| Screens | Theatres |
+| Seats | Screens |
+| Shows | Movies |
+| Shows | Screens |
+| ShowSeats | Shows |
+| ShowSeats | Seats |
+| Bookings | Shows |
+| BookingSeats | Bookings |
+| BookingSeats | Seats |
+
+### 4. Verify Unique Indexes
+
+Used `sys.indexes` and `sys.tables` to inspect unique indexes.
+
+Verified these unique constraints:
+
+- Screens: TheatreId + ScreenName
+- Seats: ScreenId + RowName + SeatNumber
+- ShowSeats: ShowId + SeatId
+- Bookings: BookingReference
+
+### Verification Result
+
+**Succeeded.**
+
+The database tables, primary keys, foreign keys, and unique indexes were successfully verified using SQL Server Management Studio.
+
+### Concepts Learned
+
+- `INFORMATION_SCHEMA.TABLES` – Retrieves database table information.
+- `INFORMATION_SCHEMA.KEY_COLUMN_USAGE` – Retrieves key column information.
+- `sys.foreign_keys` – Provides foreign key information.
+- `sys.foreign_key_columns` – Provides foreign key column mappings.
+- `sys.indexes` – Provides index information.
+- `is_unique` – Indicates whether an index enforces uniqueness.
+
+### Git Commit
+
+```text
+docs: document database schema verification
+```
+
