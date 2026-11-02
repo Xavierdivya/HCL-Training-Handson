@@ -1447,3 +1447,64 @@ Creating a migration does not create the database. The database will be created 
 ```text
 feat: create initial database migration
 ```
+
+
+## Operation 22 – Apply Migration to SQL Server
+
+**Objective:** Apply the initial EF Core migration to SQL Server and create the MovieTicketBookingDB database.
+
+### Command Executed
+
+```powershell
+dotnet ef database update
+```
+
+### What Happened?
+
+1. EF Core read the configured connection string from `appsettings.json`.
+2. Connected to SQL Server Express.
+3. Created the `MovieTicketBookingDB` database if it did not exist.
+4. Applied the `InitialCreate` migration.
+5. Created the database tables, primary keys, foreign keys, indexes, and check constraints.
+6. Recorded the applied migration in the `__EFMigrationsHistory` table.
+
+### Database Configuration
+
+- Server: `localhost\SQLEXPRESS`
+- Database: `MovieTicketBookingDB`
+- Authentication: Windows Integrated Security
+- Provider: SQL Server
+
+### Important Concepts Learned
+
+- **Database Update:** Applies pending EF Core migrations to the database.
+- **Migration History:** EF Core tracks applied migrations in `__EFMigrationsHistory`.
+- **Connection String:** Defines how the application connects to SQL Server.
+- **Database Schema:** Contains tables, columns, relationships, indexes, and constraints.
+
+### Verification
+
+Command:
+
+```powershell
+dotnet ef database update
+```
+
+Result: **Succeeded.**
+
+The initial migration was successfully applied to SQL Server.
+
+### Difference Between Migration Commands
+
+| Command | Purpose |
+|---|---|
+| `dotnet ef migrations add InitialCreate` | Generates migration files |
+| `dotnet ef database update` | Applies migrations to SQL Server |
+| `dotnet ef migrations list` | Lists available migrations |
+
+### Git Commit
+
+```text
+feat: apply initial migration to sql server
+```
+
