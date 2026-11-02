@@ -1247,3 +1247,38 @@ Registered ApplicationDbContext with ASP.NET Core Dependency Injection and confi
 **Git commit:**
 
 `feat: register sql server db context`
+
+
+### Operation 19: Create OnModelCreating Method
+
+**File modified:** `Data/ApplicationDbContext.cs`
+
+**Purpose:**
+
+Created the OnModelCreating method to configure database entities, properties, relationships, and constraints using EF Core Fluent API.
+
+**Implementation:**
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    base.OnModelCreating(modelBuilder);
+}
+```
+
+**Concepts learned:**
+
+- `OnModelCreating()` is an override method provided by EF Core's DbContext.
+- `ModelBuilder` is used to configure entity models.
+- `base.OnModelCreating(modelBuilder)` calls the base DbContext implementation.
+- Fluent API provides control over database table and column configuration.
+
+**Verification:**
+
+- Updated ApplicationDbContext.cs.
+- Built the project successfully.
+- No build errors.
+
+**Git commit:**
+
+`feat: add entity model configuration method`

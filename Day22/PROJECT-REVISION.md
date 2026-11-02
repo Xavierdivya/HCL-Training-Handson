@@ -1013,3 +1013,26 @@ It retrieves a named connection string from appsettings.json.
 **5. Does AddDbContext() create the database?**
 
 No. It configures the connection. We will create the database using EF Core migrations.
+
+
+## OnModelCreating – Revision Notes
+
+**1. What is Fluent API?**
+
+Fluent API is a way to configure entity properties, relationships, and database constraints using C# code.
+
+**2. What is OnModelCreating()?**
+
+It is an EF Core method used to configure the database model.
+
+**3. What is ModelBuilder?**
+
+ModelBuilder provides methods to configure entities and their database mappings.
+
+**4. Why do we use base.OnModelCreating(modelBuilder)?**
+
+It calls the base DbContext implementation.
+
+**5. What is the difference between Data Annotations and Fluent API?**
+
+Data Annotations use attributes on model properties. Fluent API uses configuration code, usually inside OnModelCreating().
