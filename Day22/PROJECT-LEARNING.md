@@ -918,3 +918,44 @@ Movie (One) → Shows (Many)
 `feat: add movie shows navigation property`
 
 public ICollection<Screen> Screens { get; set; } = new List<Screen>();
+
+### Operation 11: Add Navigation Properties to Screen
+
+**File modified:** `Models/Screen.cs`
+
+**Purpose:**
+
+Added navigation properties to connect Screen with its related Theatre and Seats.
+
+**Code added:**
+
+```csharp
+public Theatre Theatre { get; set; } = null!;
+
+public ICollection<Seat> Seats { get; set; } = new List<Seat>();
+```
+
+**Important concepts learned:**
+
+- A Screen belongs to one Theatre.
+- A Screen can contain multiple Seats.
+- `TheatreId` is the foreign key connecting Screen to Theatre.
+- `Theatre` is a reference navigation property.
+- `Seats` is a collection navigation property.
+- `null!` suppresses the nullable-reference warning for a required navigation property that EF Core will populate.
+- `new List<Seat>()` initializes the Seats collection.
+
+**Relationships:**
+
+- Theatre (One) → Screens (Many)
+- Screen (One) → Seats (Many)
+
+**Verification:**
+
+- Added Theatre and Seats navigation properties to Screen.cs.
+- Built the project successfully.
+- No compilation errors.
+
+**Git commit:**
+
+`feat: add screen navigation properties`

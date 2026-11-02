@@ -795,3 +795,31 @@ It represents a collection of related Screen objects.
 To ensure the collection is initialized and ready to store related screens.
 
 **Interview revision:** Explain the difference between TheatreId and Screens in the Theatre–Screen relationship.
+
+## Screen Navigation Properties – Revision Notes
+
+**1. What is the relationship between Theatre and Screen?**
+
+One Theatre can have multiple Screens.
+
+**2. What is the relationship between Screen and Seat?**
+
+One Screen can contain multiple Seats.
+
+**3. What is Theatre in Screen.cs?**
+
+It is a reference navigation property that represents the related Theatre.
+
+**4. What is Seats in Screen.cs?**
+
+It is a collection navigation property representing multiple related Seat objects.
+
+**5. What does null! mean?**
+
+It suppresses the nullable-reference warning. It does not create or load an object.
+
+**6. What is the foreign key connecting Screen and Theatre?**
+
+`TheatreId`.
+
+**Interview revision:** Explain reference navigation properties versus collection navigation properties.
