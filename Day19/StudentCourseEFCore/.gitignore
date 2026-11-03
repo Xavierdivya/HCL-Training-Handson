@@ -1,0 +1,15 @@
+﻿# .NET build output
+bin/
+obj/
+
+# Visual Studio
+.vs/
+
+# Temporary and backup files
+*.tmp
+*.bak
+*.Backup.tmp
+
+# User-specific settings
+*.user
+*.suo
