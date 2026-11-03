@@ -1,4 +1,4 @@
-﻿
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieTicketBooking.DTOs.Movies;
 using MovieTicketBooking.Models;
@@ -17,6 +17,7 @@ public class MoviesController : ControllerBase
         _movieService = movieService;
     }
 
+    [Authorize(Roles = "Admin")]
     // POST: api/Movies
     [HttpPost]
     public async Task<IActionResult> CreateMovie(CreateMovieDto dto)
@@ -68,6 +69,8 @@ public class MoviesController : ControllerBase
         return Ok(MapToResponse(movie));
     }
 
+
+    [Authorize(Roles = "Admin")]
     // PUT: api/Movies/5
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMovie(
@@ -90,6 +93,8 @@ public class MoviesController : ControllerBase
         return NoContent();
     }
 
+
+    [Authorize(Roles = "Admin")]
     // DELETE: api/Movies/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMovie(int id)

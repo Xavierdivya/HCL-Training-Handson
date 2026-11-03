@@ -1,0 +1,31 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Auth/login"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"customer1@example.com\",\r
+
+    \  \"password\": \"Customer@2026Secure\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "const response = pm.response.json();\r
+
+      \r
+
+      if (response.accessToken) {\r
+
+      \    pm.environment.set(\"accessToken\", response.accessToken);\r
+
+      \    console.log(\"JWT token saved successfully\");\r
+
+      } else {\r
+
+      \    console.log(\"Access token not found\");\r
+
+      }"
+    language: text/javascript
+order: 2000

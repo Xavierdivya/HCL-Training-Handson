@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Theatres"
+method: GET
+body:
+  type: json
+  content: ""
+order: 1000

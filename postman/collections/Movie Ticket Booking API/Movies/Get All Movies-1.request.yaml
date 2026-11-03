@@ -1,0 +1,5 @@
+$kind: http-request
+name: Get All Movies
+url: "{{baseUrl}}/api/Movies"
+method: GET
+order: 3000

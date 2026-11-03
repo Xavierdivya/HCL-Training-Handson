@@ -1,4 +1,4 @@
-﻿
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieTicketBooking.DTOs.Seats;
 using MovieTicketBooking.Models;
@@ -17,6 +17,8 @@ public class SeatsController : ControllerBase
         _seatService = seatService;
     }
 
+
+    [Authorize(Roles = "Admin")]
     // POST: api/Seats
     [HttpPost]
     public async Task<IActionResult> CreateSeat(CreateSeatDto dto)
@@ -37,6 +39,8 @@ public class SeatsController : ControllerBase
             MapToResponse(createdSeat));
     }
 
+
+    [Authorize(Roles = "Admin")]
     // POST: api/Seats/bulk
     [HttpPost("bulk")]
     public async Task<IActionResult> CreateSeatsBulk(
@@ -87,6 +91,8 @@ public class SeatsController : ControllerBase
         return Ok(seats.Select(MapToResponse).ToList());
     }
 
+
+    [Authorize(Roles = "Admin")]
     // PUT: api/Seats/5
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSeat(
@@ -107,6 +113,7 @@ public class SeatsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     // DELETE: api/Seats/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSeat(int id)

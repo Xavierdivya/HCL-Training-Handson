@@ -1,4 +1,4 @@
-﻿
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieTicketBooking.DTOs.Screens;
 using MovieTicketBooking.Models;
@@ -17,6 +17,8 @@ public class ScreensController : ControllerBase
         _screenService = screenService;
     }
 
+
+    [Authorize(Roles = "Admin")]
     // POST: api/Screens
     [HttpPost]
     public async Task<IActionResult> CreateScreen(CreateScreenDto dto)
@@ -71,6 +73,8 @@ public class ScreensController : ControllerBase
         return Ok(response);
     }
 
+
+    [Authorize(Roles = "Admin")]
     // PUT: api/Screens/5
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateScreen(
@@ -89,6 +93,8 @@ public class ScreensController : ControllerBase
         return NoContent();
     }
 
+
+    [Authorize(Roles = "Admin")]
     // DELETE: api/Screens/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteScreen(int id)
