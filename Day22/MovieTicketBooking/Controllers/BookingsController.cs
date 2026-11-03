@@ -1,4 +1,4 @@
-﻿
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieTicketBooking.DTOs.Bookings;
 using MovieTicketBooking.Models;
@@ -8,6 +8,8 @@ namespace MovieTicketBooking.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+
 public class BookingsController : ControllerBase
 {
     private readonly IBookingService _bookingService;

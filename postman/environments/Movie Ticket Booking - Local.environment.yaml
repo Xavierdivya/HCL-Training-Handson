@@ -1,0 +1,7 @@
+name: Movie Ticket Booking - Local
+values:
+  - key: baseUrl
+    value: ''
+  - key: accessToken
+    value: ''
+color: 180

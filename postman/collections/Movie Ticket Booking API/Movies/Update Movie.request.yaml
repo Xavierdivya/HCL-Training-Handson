@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/api/Movies/1"
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Interstellar - Updated\",\r
+
+    \  \"description\": \"An updated description for the science fiction movie.\",\r
+
+    \  \"durationMinutes\": 170,\r
+
+    \  \"releaseDate\": \"2014-11-07T00:00:00\",\r
+
+    \  \"language\": \"English\",\r
+
+    \  \"genre\": \"Science Fiction\"\r
+
+    }"
+order: 5000
