@@ -2552,3 +2552,32 @@ Core Movie Ticket Booking APIs, DTOs, Identity authentication, JWT setup and boo
 Remaining verification: booking retrieval by ID, retrieval by reference and cancellation, if not yet completed.
 
 GitHub documentation and final branch merge are to be completed after API verification.
+
+
+
+## Resource-Based Authorization
+
+### Implementation
+- Created BookingAuthorizationHandler.
+- Created BookingOperations with Access requirement.
+- Used IAuthorizationService in BookingsController.
+- Retrieved the booking before authorization.
+- Checked booking ownership using the logged-in customer's email.
+- Allowed Admin users to access all bookings.
+- Cancelled bookings only after authorization succeeded.
+
+### Postman Testing
+
+| Scenario | Expected | Actual |
+|---|---|---|
+| Customer 1 cancels own booking | 204 | Passed |
+| Customer 2 cancels Customer 1 booking | 403 | Passed |
+| Unauthenticated cancellation | 401 | Passed |
+
+### Learning
+- Authentication vs Authorization
+- Resource-based authorization
+- AuthorizationHandler
+- OperationAuthorizationRequirement
+- IAuthorizationService
+- Forbid() and Unauthorized responses
