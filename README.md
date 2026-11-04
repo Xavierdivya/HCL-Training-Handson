@@ -42,6 +42,10 @@ Throughout the training, I work with different programming languages, frameworks
 | Day 20 | Hands-on Practice | [View](Day20/) |
 | Day 21 | Web API Practice | [View](Day21/WebApiPractice/) |
 | Day 22 | Hands-on Practice | [View](Day22/) |
+| Day 23 | Resource Based Authorization | [View](Day23/) |
+| Day 24 | Middleware Practice | [View](Day24/) |
+
+
 
 > **Note:** This repository is continuously updated. New days and projects will be added as the training progresses.
 
