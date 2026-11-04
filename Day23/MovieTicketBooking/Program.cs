@@ -1,3 +1,8 @@
+
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using MovieTicketBooking.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +38,10 @@ builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 builder.Services.AddScoped<IShowRepository, ShowRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
+builder.Services.AddScoped<
+    IAuthorizationHandler,
+    BookingAuthorizationHandler>();
+
 // Register application services
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ITheatreService, TheatreService>();
@@ -41,6 +50,25 @@ builder.Services.AddScoped<ISeatService, SeatService>();
 builder.Services.AddScoped<IShowService, ShowService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+
+// Configure authorization policies and handlers
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("BookingAccess", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+
+        policy.AddRequirements(
+            new OperationAuthorizationRequirement
+            {
+                Name = BookingOperations.Access
+            });
+    });
+});
+
+builder.Services.AddScoped<
+    IAuthorizationHandler,
+    BookingAuthorizationHandler>();
 
 // Configure JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"]
@@ -61,24 +89,29 @@ builder.Services
         options.DefaultChallengeScheme =
             JwtBearerDefaults.AuthenticationScheme;
     })
-    .AddJwtBearer(options =>
+
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
 
-            ValidIssuer = jwtIssuer,
-            ValidAudience = jwtAudience,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
 
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtKey)),
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtKey)),
 
-            ClockSkew = TimeSpan.Zero
-        };
-    });
+        NameClaimType = ClaimTypes.Name,
+        RoleClaimType = ClaimTypes.Role,
+
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -86,6 +119,45 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider
+        .GetRequiredService<RoleManager<IdentityRole>>();
+
+    var userManager = scope.ServiceProvider
+        .GetRequiredService<UserManager<ApplicationUser>>();
+
+    // Create Admin role if it does not exist
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(
+            new IdentityRole("Admin"));
+    }
+
+    // Find existing Admin account
+    var adminUser = await userManager.FindByEmailAsync(
+        "Admin@gmail.com");
+
+    if (adminUser == null)
+    {
+        throw new Exception("Admin user not found.");
+    }
+
+    // Remove Customer role
+    if (await userManager.IsInRoleAsync(adminUser, "Customer"))
+    {
+        await userManager.RemoveFromRoleAsync(
+            adminUser, "Customer");
+    }
+
+    // Assign Admin role
+    if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+    {
+        await userManager.AddToRoleAsync(
+            adminUser, "Admin");
+    }
+}
 
 // Create Admin and Customer roles and provision Admin account.
 await IdentitySeeder.SeedAsync(app.Services);
@@ -97,6 +169,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

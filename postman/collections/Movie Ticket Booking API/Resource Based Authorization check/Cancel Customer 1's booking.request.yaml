@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:5156/api/Bookings/5/cancel
+method: PUT
+order: 13000

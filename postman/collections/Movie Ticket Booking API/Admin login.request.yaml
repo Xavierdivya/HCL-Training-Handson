@@ -1,4 +1,13 @@
 $kind: http-request
-url: ""
-method: GET
-order: 17000
+url: http://localhost:5156/api/Auth/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"email\": \"Admin@gmail.com\",\r
+
+    \    \"password\" : \"Admin@123\"\r
+
+    }"
+order: 15000

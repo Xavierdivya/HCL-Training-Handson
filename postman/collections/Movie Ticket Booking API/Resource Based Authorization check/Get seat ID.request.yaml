@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:5156/api/Seats/screen/2
+method: GET
+order: 11000

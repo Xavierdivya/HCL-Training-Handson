@@ -1,0 +1,8 @@
+$kind: http-request
+url: http://localhost:5156/api/bookings/7/cancel
+method: PUT
+auth:
+  type: inherit
+  credentials:
+    id: 9193ca07-7170-448b-8a4f-d140abbe16e6
+order: 9000
