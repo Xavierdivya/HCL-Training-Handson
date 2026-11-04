@@ -1,0 +1,21 @@
+$kind: http-request
+url: http://localhost:5156/api/movies
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Interstellar\",\r
+
+    \  \"description\": \"A science fiction adventure through space and time.\",\r
+
+    \  \"durationMinutes\": 169,\r
+
+    \  \"releaseDate\": \"2014-11-07\",\r
+
+    \  \"language\": \"English\",\r
+
+    \  \"genre\": \"Science Fiction\"\r
+
+    }"
+order: 15000

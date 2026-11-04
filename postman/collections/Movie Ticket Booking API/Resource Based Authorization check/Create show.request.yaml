@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:5156/api/Shows
+method: POST
+body:
+  type: json
+  content: '{"movieId":4,"screenId":2,"startTime":"2026-11-06T10:00:00","endTime":"2026-11-06T12:49:00","ticketPrice":300}'
+order: 10000

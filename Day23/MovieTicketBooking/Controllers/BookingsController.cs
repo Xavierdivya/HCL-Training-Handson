@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieTicketBooking.DTOs.Bookings;
 using MovieTicketBooking.Models;
 using MovieTicketBooking.Services.Interfaces;
+using MovieTicketBooking.Authorization;
+
 
 namespace MovieTicketBooking.Controllers;
 
@@ -14,9 +17,14 @@ public class BookingsController : ControllerBase
 {
     private readonly IBookingService _bookingService;
 
-    public BookingsController(IBookingService bookingService)
+    private readonly IAuthorizationService _authorizationService;
+
+    public BookingsController(
+     IBookingService bookingService,
+     IAuthorizationService authorizationService)
     {
         _bookingService = bookingService;
+        _authorizationService = authorizationService;
     }
 
     // POST: api/Bookings
@@ -68,10 +76,32 @@ public class BookingsController : ControllerBase
             booking.BookingSeats.Select(bs => bs.SeatId).ToList()));
     }
 
-    // PUT: api/Bookings/5/cancel
     [HttpPut("{id}/cancel")]
     public async Task<IActionResult> CancelBooking(int id)
     {
+        // Get booking
+        var booking = await _bookingService.GetByIdAsync(id);
+
+        if (booking == null)
+            return NotFound();
+
+        // Create authorization requirement
+        var requirement = new OperationAuthorizationRequirement
+        {
+            Name = BookingOperations.Access
+        };
+
+        // Check booking ownership
+        var authorizationResult =
+            await _authorizationService.AuthorizeAsync(
+                User,
+                booking,
+                requirement);
+
+        if (!authorizationResult.Succeeded)
+            return Forbid();
+
+        // Cancel booking
         await _bookingService.CancelBookingAsync(id);
 
         return NoContent();

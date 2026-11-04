@@ -1,0 +1,19 @@
+$kind: http-request
+url: http://localhost:5156/api/bookings
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"showId\": 4,\r
+
+    \  \"seatIds\": [2],\r
+
+    \  \"customerName\": \"Customer1\",\r
+
+    \  \"customerEmail\": \"customer1@gmail.com\",\r
+
+    \  \"customerPhone\": \"9876543210\"\r
+
+    }"
+order: 8000

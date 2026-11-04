@@ -1,0 +1,4 @@
+$kind: http-request
+url: https://localhost:5156/openapi/v1.json
+method: GET
+order: 2000

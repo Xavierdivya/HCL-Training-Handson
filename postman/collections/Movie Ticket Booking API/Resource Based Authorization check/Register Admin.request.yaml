@@ -1,0 +1,19 @@
+$kind: http-request
+url: http://localhost:5156/api/Auth/register
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"fullName\" : \"Admin\",\r
+
+    \    \"email\" : \"Admin@gmail.com\",\r
+
+    \    \"password\" : \"Admin@123\",\r
+
+    \    \"confirmPassword\" : \"Admin@123\"\r
+
+    \r
+
+    }"
+order: 6000

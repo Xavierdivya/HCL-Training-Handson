@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:5156/api/Bookings/reference/ACCCC2CE70A24BC783F617D59A7FF180
+method: GET
+order: 12000
