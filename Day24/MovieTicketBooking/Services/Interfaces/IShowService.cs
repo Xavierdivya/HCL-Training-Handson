@@ -1,0 +1,18 @@
+﻿
+using MovieTicketBooking.Models;
+
+namespace MovieTicketBooking.Services.Interfaces
+{
+    public interface IShowService
+    {
+        Task<Show> AddAsync(Show show);
+        Task<List<Show>> GetAllAsync();
+        Task<Show?> GetByIdAsync(int id);
+        Task<List<Show>> GetByMovieIdAsync(int movieId);
+        Task<List<Show>> GetByScreenIdAsync(int screenId);
+        Task<List<Show>> GetByDateAsync(DateTime date);
+        Task UpdateAsync(Show show);
+
+        Task DeleteAsync(int id);
+    }
+}
