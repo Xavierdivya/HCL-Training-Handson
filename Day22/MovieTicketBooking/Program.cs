@@ -82,6 +82,21 @@ builder.Services
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// Configure CORS to allow Angular frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+// Add services to the container.
+builder.Services.AddControllers();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -98,6 +113,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Allow requests from Angular frontend
+app.UseCors("AngularFrontend");
+
+// Authenticate users using JWT
+app.UseAuthentication();
+
+// Check user permissions and roles
 app.UseAuthorization();
 
 app.MapControllers();
