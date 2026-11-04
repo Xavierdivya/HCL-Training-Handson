@@ -1,4 +1,4 @@
-
+using MovieTicketBooking.Middleware;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -163,17 +163,48 @@ using (var scope = app.Services.CreateScope())
 await IdentitySeeder.SeedAsync(app.Services);
 
 // Configure the HTTP request pipeline.
+
+// OpenAPI configuration
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
+// 1. HTTPS Redirection
 app.UseHttpsRedirection();
 
+// 2. Routing
+// Explicit routing middleware is optional with WebApplication,
+// because routing is automatically added.
+
+// 3. Endpoint Metadata Diagnostics
+if (app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<EndpointMetadataMiddleware>();
+}
+
+// 4. Authentication
+// Validates JWT and populates HttpContext.User
 app.UseAuthentication();
 
+// 5. Authentication Diagnostics
+if (app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<AuthenticationDiagnosticsMiddleware>();
+}
+
+// 6. Authorization Diagnostics
+if (app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<AuthorizationDiagnosticsMiddleware>();
+}
+
+// 7. Authorization
+// Checks endpoint access permissions
 app.UseAuthorization();
 
+// 8. Map Controllers
 app.MapControllers();
 
+// 9. Run Application
 app.Run();
