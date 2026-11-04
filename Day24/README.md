@@ -1,22 +1,23 @@
-# Day22 – Movie Ticket Booking System (Angular + ASP.NET Core)
+# Movie Ticket Booking System – Angular + ASP.NET Core
 
 ## Project Overview
 
-The Movie Ticket Booking System is a full-stack web application designed to allow customers to browse movies, view theatres and shows, select seats, and book movie tickets.
+The Movie Ticket Booking System is a full-stack web application that allows customers to browse movies, view theatres and shows, select seats, and book movie tickets.
 
-The backend is developed using **ASP.NET Core Web API (.NET 10)** with **Entity Framework Core**, **SQL Server**, **ASP.NET Core Identity**, and **JWT Authentication**.
+The backend is developed using **ASP.NET Core Web API (.NET 10)** with Entity Framework Core, SQL Server, ASP.NET Core Identity, and JWT Authentication.
 
-The frontend will be developed using **Angular**, **TypeScript**, HTML, and CSS.
+The frontend is developed using **Angular**, TypeScript, HTML, and CSS.
 
-The application supports role-based authorization with two roles:
+The application supports two roles:
 
 - **Admin** – Manages movies, theatres, screens, seats, and shows.
 - **Customer** – Views movies, selects shows and seats, and manages bookings.
 
+The application also implements authentication and authorization diagnostic middleware to monitor request authentication, endpoint metadata, and authorization responses during development.
+
 ## Technologies Used
 
 ### Backend
-
 - C#
 - ASP.NET Core Web API (.NET 10)
 - Entity Framework Core
@@ -24,17 +25,17 @@ The application supports role-based authorization with two roles:
 - ASP.NET Core Identity
 - JWT Authentication
 - Role-Based Authorization
+- Resource-Based Authorization
 - Repository Pattern
 - Service Layer Architecture
 - DTOs
+- Custom ASP.NET Core Middleware
 
 ### Frontend
-
 - Angular
 - TypeScript
 - HTML5
 - CSS3
-- Bootstrap (optional)
 - Angular Router
 - Angular HttpClient
 - RxJS
@@ -43,8 +44,8 @@ The application supports role-based authorization with two roles:
 - HTTP Interceptors
 
 ### Development Tools
-
-- Visual Studio / Visual Studio Code
+- Visual Studio
+- Visual Studio Code
 - SQL Server Management Studio
 - Postman
 - Git and GitHub
@@ -61,14 +62,22 @@ MovieTicketBooking/
 ├── Backend/
 │   └── MovieTicketBooking/
 │       ├── Controllers/
+│       ├── Authorization/
 │       ├── DTOs/
 │       ├── Models/
+│       ├── Middleware/
+│       │   ├── AuthenticationDiagnosticsMiddleware.cs
+│       │   ├── AuthorizationDiagnosticsMiddleware.cs
+│       │   └── EndpointMetadataMiddleware.cs
 │       ├── Services/
 │       │   ├── Interfaces/
 │       │   └── Implementations/
 │       ├── Repositories/
+│       │   ├── Interfaces/
+│       │   └── Implementations/
 │       ├── Data/
-│       └── Program.cs
+│       ├── Program.cs
+│       └── appsettings.json
 │
 └── Frontend/
     └── movie-ticket-frontend/
@@ -81,17 +90,16 @@ MovieTicketBooking/
                 └── app.routes.ts
 ```
 
-*Note: The frontend structure represents the planned Angular application. The existing backend remains in the MovieTicketBooking project.*
+*Note: The actual folder names and locations may differ slightly from this logical architecture.*
 
 ## Main Features
 
 ### 1. Authentication
-
-- Customer registration
-- User login
-- JWT token generation
-- Password validation
-- Secure API access
+- Customer registration.
+- User login.
+- JWT token generation.
+- Password validation.
+- Secure API access.
 
 ### 2. Role-Based Authorization
 
@@ -109,8 +117,34 @@ MovieTicketBooking/
 - View booking details.
 - Cancel bookings.
 
-### 3. Movie Management
+### 3. Resource-Based Authorization
+- Verify whether a customer owns a particular booking.
+- Allow Admin users to access authorized booking resources.
+- Prevent customers from accessing or cancelling other customers' bookings.
+- Return `403 Forbidden` when a user is authenticated but does not have permission.
 
+### 4. Middleware Diagnostics
+
+Three custom middleware classes are implemented to understand and monitor the ASP.NET Core request pipeline.
+
+**AuthenticationDiagnosticsMiddleware**
+- Logs whether the user is authenticated.
+- Logs the authentication type.
+- Displays the claims associated with the authenticated user.
+
+**AuthorizationDiagnosticsMiddleware**
+- Logs the authorization process.
+- Records the final HTTP response status code.
+
+**EndpointMetadataMiddleware**
+- Logs the HTTP request method and path.
+- Displays the selected endpoint.
+- Checks whether the endpoint allows anonymous access.
+- Displays the authorization metadata count.
+
+These diagnostic middleware components are registered only in the Development environment.
+
+### 5. Movie Management
 - Display all movies.
 - View movie details.
 - Search movies.
@@ -118,15 +152,13 @@ MovieTicketBooking/
 - Update movie details (Admin).
 - Delete movies (Admin).
 
-### 4. Theatre and Show Management
-
+### 6. Theatre and Show Management
 - View theatres.
 - View screens.
 - View available shows.
 - Manage show schedules (Admin).
 
-### 5. Seat Selection and Booking
-
+### 7. Seat Selection and Booking
 - Display available seats.
 - Select seats for a particular show.
 - Calculate booking amount.
@@ -136,7 +168,7 @@ MovieTicketBooking/
 
 ## Angular Frontend Structure
 
-The Angular application will contain the following modules and features:
+The Angular application contains the following major areas:
 
 | Folder | Responsibility |
 |---|---|
@@ -155,9 +187,9 @@ The Angular application will contain the following modules and features:
 
 ## Backend API Integration
 
-The Angular frontend will communicate with the ASP.NET Core backend through HTTP requests.
+The Angular frontend communicates with the ASP.NET Core backend using HTTP requests.
 
-**Backend Base URL:**
+**Backend Base URL**
 
 ```text
 http://localhost:5156
@@ -167,17 +199,17 @@ http://localhost:5156
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| POST | /api/Auth/register | Register customer |
-| POST | /api/Auth/login | Login |
-| GET | /api/Movies | Get all movies |
-| GET | /api/Movies/{id} | Get movie by ID |
-| POST | /api/Movies | Add movie (Admin) |
-| PUT | /api/Movies/{id} | Update movie (Admin) |
-| DELETE | /api/Movies/{id} | Delete movie (Admin) |
-| GET | /api/Shows | Get shows |
-| POST | /api/Bookings | Create booking |
-| GET | /api/Bookings/{id} | Get booking details |
-| PUT | /api/Bookings/{id}/cancel | Cancel booking |
+| POST | `/api/Auth/register` | Register customer |
+| POST | `/api/Auth/login` | Login |
+| GET | `/api/Movies` | Get all movies |
+| GET | `/api/Movies/{id}` | Get movie by ID |
+| POST | `/api/Movies` | Add movie (Admin) |
+| PUT | `/api/Movies/{id}` | Update movie (Admin) |
+| DELETE | `/api/Movies/{id}` | Delete movie (Admin) |
+| GET | `/api/Shows` | Get shows |
+| POST | `/api/Bookings` | Create booking |
+| GET | `/api/Bookings/{id}` | Get booking details |
+| PUT | `/api/Bookings/{id}/cancel` | Cancel booking |
 
 *The endpoint list is illustrative. Refer to the actual backend controllers for the complete API contract.*
 
@@ -190,7 +222,9 @@ http://localhost:5156
 5. Angular receives and stores the token.
 6. Angular HTTP Interceptor attaches the token to protected API requests.
 7. ASP.NET Core validates the JWT.
-8. Role-based authorization checks whether the user has permission to access the requested endpoint.
+8. Authentication middleware populates `HttpContext.User`.
+9. Authorization middleware checks the user's permissions.
+10. Resource-based authorization verifies access to the requested booking when required.
 
 Example authorization header:
 
@@ -199,6 +233,30 @@ Authorization: Bearer <JWT_TOKEN>
 ```
 
 **Important:** Angular route guards improve frontend navigation and user experience. Actual security must always be enforced by backend authorization.
+
+## Middleware Request Pipeline
+
+The backend uses the following middleware execution order:
+
+1. HTTPS Redirection
+2. Endpoint Metadata Diagnostics Middleware (Development only)
+3. Authentication Middleware
+4. Authentication Diagnostics Middleware (Development only)
+5. Authorization Diagnostics Middleware (Development only)
+6. Authorization Middleware
+7. Controller Endpoint Execution
+
+### Middleware Execution Responsibilities
+
+| Middleware | Responsibility |
+|---|---|
+| UseHttpsRedirection | Redirects HTTP requests to HTTPS |
+| EndpointMetadataMiddleware | Logs endpoint and authorization metadata |
+| UseAuthentication | Validates JWT and populates user identity |
+| AuthenticationDiagnosticsMiddleware | Logs authentication status and claims |
+| AuthorizationDiagnosticsMiddleware | Logs the final response status |
+| UseAuthorization | Enforces authorization rules |
+| MapControllers | Maps API controller endpoints |
 
 ## Development Setup
 
@@ -212,13 +270,13 @@ Authorization: Bearer <JWT_TOKEN>
 
 Build command:
 
-```powershell
+```bash
 dotnet build -p:UseAppHost=false
 ```
 
 Run command:
 
-```powershell
+```bash
 dotnet run -p:UseAppHost=false
 ```
 
@@ -234,7 +292,7 @@ Install Node.js (LTS) and Angular CLI.
 
 Check installation:
 
-```powershell
+```bash
 node -v
 npm -v
 ng version
@@ -242,26 +300,25 @@ ng version
 
 Install Angular CLI if required:
 
-```powershell
+```bash
 npm install -g @angular/cli
 ```
 
-Create the Angular application:
+Navigate to the frontend project:
 
-```powershell
-cd /d D:\HCL\Day22
-ng new movie-ticket-frontend
+```bash
+cd movie-ticket-frontend
 ```
 
-Navigate to the frontend:
+Install dependencies:
 
-```powershell
-cd movie-ticket-frontend
+```bash
+npm install
 ```
 
 Run the Angular application:
 
-```powershell
+```bash
 ng serve
 ```
 
@@ -275,41 +332,53 @@ http://localhost:4200
 
 The ASP.NET Core backend must allow requests from the Angular development server.
 
-Configure a CORS policy in `Program.cs` for:
+Configure a CORS policy for:
 
 ```text
 http://localhost:4200
 ```
 
-Allow the required HTTP methods and headers. For JWT authentication, allow the `Authorization` header.
+Allow the required HTTP methods and headers, including the `Authorization` header.
 
-Use an appropriate restricted origin configuration rather than allowing every origin in production.
+Use an appropriately restricted origin configuration rather than allowing every origin in production.
 
 ## Testing
 
-### Backend Testing
+### Backend Testing – Postman
 
-Use Postman to test:
+Test the following operations:
 
 - Customer registration and login.
 - Admin login.
 - Movie CRUD operations.
 - JWT authentication.
 - Role-based authorization.
-- Booking operations.
+- Resource-based booking authorization.
+- Booking creation and cancellation.
+- Accessing another customer's booking.
+- Authentication and authorization diagnostic logs.
 
-### Frontend Testing
+### Authorization Test Cases
 
-Test:
+| Test Case | Expected Result |
+|---|---|
+| Customer accesses their own booking | Allowed |
+| Customer cancels their own booking | Allowed |
+| Customer attempts to cancel another customer's booking | 403 Forbidden |
+| Request without a valid JWT | 401 Unauthorized |
+| Admin accesses an authorized booking | Allowed |
 
-- Customer registration and login.
-- Movie listing and details.
-- Show selection.
-- Seat selection.
-- Booking creation.
-- Booking cancellation.
-- Admin dashboard access.
-- Customer and Admin route permissions.
+### Middleware Testing
+
+Verify the console logs for:
+
+- Authentication status.
+- Authentication type.
+- User claims.
+- Endpoint display name.
+- AllowAnonymous metadata.
+- Authorization metadata count.
+- Final HTTP response status.
 
 ## Development Roadmap
 
@@ -319,19 +388,22 @@ Test:
 | 2 | Implement Entity Framework Core and SQL Server | Completed |
 | 3 | Implement DTOs and service/repository architecture | Completed |
 | 4 | Implement Identity and JWT authentication | Completed |
-| 5 | Implement role-based authorization | Implemented; integration testing ongoing |
-| 6 | Install Node.js and Angular CLI | Pending |
-| 7 | Create Angular frontend | Pending |
-| 8 | Configure Angular API integration | Pending |
-| 9 | Implement login and registration | Pending |
-| 10 | Implement movie and show pages | Pending |
-| 11 | Implement seat selection and booking | Pending |
-| 12 | Implement Admin dashboard | Pending |
-| 13 | Complete full-stack integration testing | Pending |
+| 5 | Implement role-based authorization | Implemented |
+| 6 | Implement resource-based authorization | Implemented and tested |
+| 7 | Implement authentication diagnostics middleware | Completed |
+| 8 | Implement authorization diagnostics middleware | Completed |
+| 9 | Implement endpoint metadata middleware | Completed |
+| 10 | Develop Angular frontend | In progress |
+| 11 | Configure Angular API integration | Pending |
+| 12 | Implement login and registration | Pending |
+| 13 | Implement movie and show pages | Pending |
+| 14 | Implement seat selection and booking | Pending |
+| 15 | Implement Admin dashboard | Pending |
+| 16 | Complete full-stack integration testing | Pending |
 
 ## Learning Outcomes
 
-Through this project, the following concepts will be practised:
+Through this project, the following concepts are practised:
 
 - ASP.NET Core Web API development.
 - Layered architecture and separation of concerns.
@@ -342,6 +414,10 @@ Through this project, the following concepts will be practised:
 - ASP.NET Core Identity.
 - JWT authentication.
 - Role-based authorization.
+- Resource-based authorization.
+- Custom ASP.NET Core middleware.
+- HTTP request pipeline and middleware execution order.
+- Endpoint metadata.
 - Angular components and services.
 - Angular routing and route guards.
 - HTTP communication between Angular and ASP.NET Core.
@@ -350,6 +426,8 @@ Through this project, the following concepts will be practised:
 
 ## Conclusion
 
-This project demonstrates how to develop a full-stack Movie Ticket Booking application using Angular and ASP.NET Core Web API.
+The Movie Ticket Booking System demonstrates full-stack application development using Angular and ASP.NET Core Web API.
 
-The backend manages business logic, authentication, authorization, and database operations, while Angular provides the user interface and communicates with the backend through REST API endpoints.
+The backend handles business logic, database operations, authentication, authorization, and middleware diagnostics, while Angular provides the user interface and communicates with the backend through REST API endpoints.
+
+This project provides practical experience in building secure, maintainable, and scalable web applications using modern .NET and Angular technologies.
