@@ -1,29 +1,34 @@
-﻿
+﻿using CampusPlacementManagement.Data;
 using CampusPlacementManagement.DTOs.Colleges;
 using CampusPlacementManagement.Models;
 using CampusPlacementManagement.Models.Enums;
 using CampusPlacementManagement.Repositories.Interfaces;
 using CampusPlacementManagement.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CampusPlacementManagement.Services.Implementations
 {
     public class CollegeService : ICollegeService
     {
         private readonly ICollegeRepository _collegeRepository;
+        private readonly ApplicationDbContext _context;
 
-        public CollegeService(ICollegeRepository collegeRepository)
+        public CollegeService(
+            ICollegeRepository collegeRepository,
+            ApplicationDbContext context)
         {
             _collegeRepository = collegeRepository;
+            _context = context;
         }
 
-        // Register a new college
+        // Register a college.
+        // This endpoint will be restricted to SuperAdmin.
         public async Task<CollegeResponseDto> RegisterAsync(
             CollegeRegistrationDto registrationDto)
         {
             var collegeCode = registrationDto.CollegeCode.Trim()
                 .ToUpperInvariant();
 
-            // Check for duplicate college code
             var existingCollege = await _collegeRepository
                 .GetByCodeAsync(collegeCode);
 
@@ -52,7 +57,6 @@ namespace CampusPlacementManagement.Services.Implementations
             return MapToResponseDto(college);
         }
 
-        // Get all colleges
         public async Task<IEnumerable<CollegeResponseDto>> GetAllAsync()
         {
             var colleges = await _collegeRepository.GetAllAsync();
@@ -60,7 +64,6 @@ namespace CampusPlacementManagement.Services.Implementations
             return colleges.Select(MapToResponseDto);
         }
 
-        // Get a college by ID
         public async Task<CollegeResponseDto?> GetByIdAsync(int collegeId)
         {
             var college = await _collegeRepository.GetByIdAsync(collegeId);
@@ -70,7 +73,6 @@ namespace CampusPlacementManagement.Services.Implementations
                 : MapToResponseDto(college);
         }
 
-        // Get colleges awaiting approval
         public async Task<IEnumerable<CollegeResponseDto>> GetPendingAsync()
         {
             var colleges = await _collegeRepository.GetPendingAsync();
@@ -78,7 +80,7 @@ namespace CampusPlacementManagement.Services.Implementations
             return colleges.Select(MapToResponseDto);
         }
 
-        // Approve a pending college
+        // Approve college and its representatives together.
         public async Task<CollegeResponseDto?> ApproveAsync(int collegeId)
         {
             var college = await _collegeRepository
@@ -97,12 +99,16 @@ namespace CampusPlacementManagement.Services.Implementations
 
             college.Status = CollegeStatus.Approved;
 
+            await UpdateRepresentativeStatusesAsync(
+                collegeId,
+                AccountStatus.Approved);
+
             await _collegeRepository.SaveChangesAsync();
 
             return MapToResponseDto(college);
         }
 
-        // Reject a pending college
+        // Reject college and its representatives together.
         public async Task<CollegeResponseDto?> RejectAsync(int collegeId)
         {
             var college = await _collegeRepository
@@ -121,12 +127,16 @@ namespace CampusPlacementManagement.Services.Implementations
 
             college.Status = CollegeStatus.Rejected;
 
+            await UpdateRepresentativeStatusesAsync(
+                collegeId,
+                AccountStatus.Rejected);
+
             await _collegeRepository.SaveChangesAsync();
 
             return MapToResponseDto(college);
         }
 
-        // Suspend an approved college
+        // Suspend college and its representatives together.
         public async Task<CollegeResponseDto?> SuspendAsync(int collegeId)
         {
             var college = await _collegeRepository
@@ -145,13 +155,33 @@ namespace CampusPlacementManagement.Services.Implementations
 
             college.Status = CollegeStatus.Suspended;
 
+            await UpdateRepresentativeStatusesAsync(
+                collegeId,
+                AccountStatus.Suspended);
+
             await _collegeRepository.SaveChangesAsync();
 
             return MapToResponseDto(college);
         }
 
-        // Convert College entity to response DTO
-        private static CollegeResponseDto MapToResponseDto(College college)
+        // Update all representative accounts belonging to a college.
+        private async Task UpdateRepresentativeStatusesAsync(
+            int collegeId,
+            AccountStatus accountStatus)
+        {
+            var representatives = await _context.Users
+                .Where(u => u.CollegeId == collegeId)
+                .ToListAsync();
+
+            foreach (var representative in representatives)
+            {
+                representative.AccountStatus = accountStatus;
+                representative.UpdatedAt = DateTime.UtcNow;
+            }
+        }
+
+        private static CollegeResponseDto MapToResponseDto(
+            College college)
         {
             return new CollegeResponseDto
             {

@@ -18,11 +18,11 @@ namespace CampusPlacementManagement.Controllers
             _collegeService = collegeService;
         }
 
-        // Register a new college
+        // Register a new college (SuperAdmin only)
         [HttpPost("register")]
-        [AllowAnonymous]
+        [Authorize(Roles = AppRoles.SuperAdmin)]
         public async Task<IActionResult> Register(
-            CollegeRegistrationDto registrationDto)
+            [FromBody] CollegeRegistrationDto registrationDto)
         {
             try
             {
