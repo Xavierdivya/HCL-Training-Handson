@@ -2,8 +2,6 @@
 {
     using Microsoft.AspNetCore.Authorization;
 
-
-
     public class EndpointMetadataMiddleware
     {
         private readonly RequestDelegate _next;
