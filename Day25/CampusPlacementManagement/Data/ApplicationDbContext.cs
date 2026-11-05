@@ -1,8 +1,8 @@
-﻿using CampusPlacementManagement.Models;
+﻿
+using CampusPlacementManagement.Models;
 using CampusPlacementManagement.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace CampusPlacementManagement.Data
 {
@@ -15,7 +15,6 @@ namespace CampusPlacementManagement.Data
             : base(options)
         {
         }
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -31,6 +30,8 @@ namespace CampusPlacementManagement.Data
                 entity.Property(u => u.AccountStatus)
                     .HasConversion<string>()
                     .HasMaxLength(20);
+
+                entity.HasIndex(u => u.CollegeId);
             });
 
             // College configuration
@@ -74,6 +75,13 @@ namespace CampusPlacementManagement.Data
 
                 entity.Property(c => c.CreatedAt)
                     .IsRequired();
+
+                // One College can have multiple representative accounts.
+                // Existing users and SuperAdmin can have a null CollegeId.
+                entity.HasMany(c => c.Representatives)
+                    .WithOne(u => u.College)
+                    .HasForeignKey(u => u.CollegeId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

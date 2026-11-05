@@ -18,7 +18,7 @@ namespace CampusPlacementManagement.Controllers
             _collegeService = collegeService;
         }
 
-        // Public college registration
+        // Register a new college
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(
@@ -26,8 +26,8 @@ namespace CampusPlacementManagement.Controllers
         {
             try
             {
-                var college = await _collegeService.RegisterAsync(
-                    registrationDto);
+                var college = await _collegeService
+                    .RegisterAsync(registrationDto);
 
                 return CreatedAtAction(
                     nameof(GetById),
@@ -40,7 +40,7 @@ namespace CampusPlacementManagement.Controllers
             }
         }
 
-        // SuperAdmin: Get all colleges
+        // Get all colleges
         [HttpGet]
         [Authorize(Roles = AppRoles.SuperAdmin)]
         public async Task<IActionResult> GetAll()
@@ -50,7 +50,7 @@ namespace CampusPlacementManagement.Controllers
             return Ok(colleges);
         }
 
-        // SuperAdmin: Get college by ID
+        // Get college by ID
         [HttpGet("{id:int}")]
         [Authorize(Roles = AppRoles.SuperAdmin)]
         public async Task<IActionResult> GetById(int id)
@@ -66,6 +66,103 @@ namespace CampusPlacementManagement.Controllers
             }
 
             return Ok(college);
+        }
+
+        // Get colleges awaiting approval
+        [HttpGet("pending")]
+        [Authorize(Roles = AppRoles.SuperAdmin)]
+        public async Task<IActionResult> GetPending()
+        {
+            var colleges = await _collegeService.GetPendingAsync();
+
+            return Ok(colleges);
+        }
+
+        // Approve a college
+        [HttpPut("{id:int}/approve")]
+        [Authorize(Roles = AppRoles.SuperAdmin)]
+        public async Task<IActionResult> Approve(int id)
+        {
+            try
+            {
+                var college = await _collegeService.ApproveAsync(id);
+
+                if (college == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "College not found."
+                    });
+                }
+
+                return Ok(new
+                {
+                    message = "College approved successfully.",
+                    college
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+        }
+
+        // Reject a college
+        [HttpPut("{id:int}/reject")]
+        [Authorize(Roles = AppRoles.SuperAdmin)]
+        public async Task<IActionResult> Reject(int id)
+        {
+            try
+            {
+                var college = await _collegeService.RejectAsync(id);
+
+                if (college == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "College not found."
+                    });
+                }
+
+                return Ok(new
+                {
+                    message = "College rejected successfully.",
+                    college
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+        }
+
+        // Suspend an approved college
+        [HttpPut("{id:int}/suspend")]
+        [Authorize(Roles = AppRoles.SuperAdmin)]
+        public async Task<IActionResult> Suspend(int id)
+        {
+            try
+            {
+                var college = await _collegeService.SuspendAsync(id);
+
+                if (college == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "College not found."
+                    });
+                }
+
+                return Ok(new
+                {
+                    message = "College suspended successfully.",
+                    college
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
         }
     }
 }

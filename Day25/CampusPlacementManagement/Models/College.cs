@@ -1,5 +1,6 @@
 ﻿
 using CampusPlacementManagement.Models.Enums;
+using CampusPlacementManagement.Models.Identity;
 
 namespace CampusPlacementManagement.Models
 {
@@ -24,5 +25,9 @@ namespace CampusPlacementManagement.Models
         public CollegeStatus Status { get; set; } = CollegeStatus.Pending;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation property: One college can have multiple representatives.
+        public ICollection<ApplicationUser> Representatives { get; set; }
+            = new List<ApplicationUser>();
     }
 }

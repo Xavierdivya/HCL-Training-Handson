@@ -1,6 +1,7 @@
 ﻿
 using CampusPlacementManagement.Data;
 using CampusPlacementManagement.Models;
+using CampusPlacementManagement.Models.Enums;
 using CampusPlacementManagement.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,10 +23,24 @@ namespace CampusPlacementManagement.Repositories.Implementations
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<College>> GetPendingAsync()
+        {
+            return await _context.Colleges
+                .AsNoTracking()
+                .Where(c => c.Status == CollegeStatus.Pending)
+                .ToListAsync();
+        }
+
         public async Task<College?> GetByIdAsync(int collegeId)
         {
             return await _context.Colleges
                 .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.CollegeId == collegeId);
+        }
+
+        public async Task<College?> GetByIdForUpdateAsync(int collegeId)
+        {
+            return await _context.Colleges
                 .FirstOrDefaultAsync(c => c.CollegeId == collegeId);
         }
 
