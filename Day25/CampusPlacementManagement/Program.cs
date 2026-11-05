@@ -1,3 +1,4 @@
+
 using System.Text;
 using CampusPlacementManagement.Authorization;
 using CampusPlacementManagement.Data;
@@ -13,6 +14,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<
+    IPlacementOfficerRepository,
+    PlacementOfficerRepository>();
+
+builder.Services.AddScoped<
+    IPlacementOfficerService,
+    PlacementOfficerService>();
 
 // Add controllers.
 builder.Services.AddControllers();

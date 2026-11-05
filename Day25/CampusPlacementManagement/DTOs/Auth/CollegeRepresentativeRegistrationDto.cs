@@ -47,5 +47,10 @@ namespace CampusPlacementManagement.DTOs.Auth
 
         [Url]
         public string? Website { get; set; }
+
+        [StringLength(100)]
+        public string Designation { get; set; } = "Placement Officer";
+
     }
+
 }

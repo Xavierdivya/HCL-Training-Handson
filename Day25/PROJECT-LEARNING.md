@@ -613,3 +613,334 @@ Actual result:
 Passed.
 
 The API returned the registered
+
+
+
+
+# Unit 1 – College Representative Authentication and Approval
+
+## 1. Objective
+
+Implemented authentication and the college representative registration and approval workflow using ASP.NET Core Identity, JWT authentication, Entity Framework Core, and SQL Server.
+
+The workflow ensures that a college representative cannot access protected resources until the SuperAdmin approves the associated college and representative account.
+
+## 2. Authentication Configuration
+
+Implemented JWT Bearer authentication.
+
+Configuration is stored securely using .NET User Secrets rather than committing signing keys to `appsettings.json`.
+
+Configuration keys:
+
+- `Jwt:Issuer`
+- `Jwt:Audience`
+- `Jwt:ExpiryMinutes`
+- `Jwt:Key`
+
+The JWT contains the following claims:
+
+- User ID
+- Full name
+- Email
+- Role
+- College ID (for college representatives)
+
+JWT validation checks the signing key, issuer, audience, and token lifetime.
+
+## 3. College Representative Registration
+
+Implemented:
+
+`POST /api/auth/register/college-representative`
+
+The registration process:
+
+1. Receives representative and college details.
+2. Checks whether the college code already exists.
+3. Checks whether the email is already registered.
+4. Creates the college with Pending status.
+5. Creates the representative Identity account with Pending status.
+6. Associates the representative with the newly created college.
+7. Assigns the `PlacementOfficer` role.
+8. Saves the registration within a database transaction.
+
+Successful registration returns **201 Created**.
+
+### Registration verification
+
+Test account:
+
+- Email: `representative@testcollege.com`
+- College: Test Engineering College
+- College code: `TEST001`
+- College ID: `3`
+
+The database initially showed:
+
+- College status: Pending
+- Representative account status: Pending
+
+## 4. SuperAdmin Approval Workflow
+
+Only users with the `SuperAdmin` role can access college management endpoints.
+
+Implemented operations:
+
+- Approve college
+- Reject college
+- Suspend college
+- View all colleges
+- View college details
+- View pending colleges
+
+When a college is approved, its representative accounts are also updated to Approved.
+
+When a college is rejected, its representative accounts are updated to Rejected.
+
+When a college is suspended, its representative accounts are updated to Suspended.
+
+These changes are persisted together through the shared Entity Framework Core DbContext.
+
+## 5. Login and Current User
+
+Implemented:
+
+- `POST /api/auth/login`
+- `GET /api/auth/me`
+
+Login verifies the user's credentials and account status.
+
+For college representatives, login also verifies that the associated college is Approved.
+
+A JWT is generated only when the account and associated college satisfy the required status checks.
+
+The current-user endpoint returns the authenticated user's profile, role, account status, and college information where applicable.
+
+## 6. Authorization
+
+Configured JWT authentication and role-based authorization.
+
+Important middleware order:
+
+1. `UseAuthentication()`
+2. `UseAuthorization()`
+
+College management endpoints are protected using:
+
+`[Authorize(Roles = AppRoles.SuperAdmin)]`
+
+A representative attempting to access a SuperAdmin-only endpoint receives **403 Forbidden** when authenticated but lacking the required role.
+
+An unauthenticated or invalid login request receives **401 Unauthorized**.
+
+## 7. Testing Results
+
+| Test | Expected result | Actual result |
+|---|---|---|
+| Representative registration | 201 Created | Passed |
+| SuperAdmin login | 200 OK | Passed |
+| College approval | Successful approval | Passed |
+| Representative login after approval | 200 OK | Passed |
+| Get current user | 200 OK | Passed |
+| Representative accesses SuperAdmin college endpoint | 403 Forbidden | Passed |
+| College rejection | Successful rejection | Passed |
+| Rejected representative login | 401 Unauthorized | Passed |
+| College suspension | Successful suspension | Passed |
+| Suspended representative login | 401 Unauthorized | Passed |
+
+## 8. Important Learning Outcomes
+
+- Integrated ASP.NET Core Identity with a custom ApplicationUser.
+- Implemented JWT token generation and validation.
+- Used User Secrets for sensitive JWT configuration.
+- Implemented role-based authorization.
+- Connected a representative account to a college through a foreign key.
+- Used database transactions during representative registration.
+- Synchronized college and representative account statuses.
+- Understood the difference between 401 Unauthorized and 403 Forbidden.
+- Tested authentication and authorization scenarios using Postman.
+
+## 9. Notes and Future Improvements
+
+- Email confirmation is not implemented yet. The current representative registration flow sets `EmailConfirmed` to true as an interim implementation.
+- Student and CompanyHR registration workflows will be implemented in their respective modules.
+- Additional authorization policies and resource-based access checks will be introduced as the application modules are developed.
+- College ID 3 was suspended during testing. It should not be reused for active-college workflow testing.
+
+
+# Unit 2 – College and Placement Officer Management
+
+## 1. Overview
+
+This unit extends the College module and introduces Placement Officer profile management.
+
+A Placement Officer is associated with one College and an Identity user account. The Placement Officer role is reused for college representatives; a separate CollegeRepresentative role is not required.
+
+## 2. PlacementOfficer Entity
+
+Created:
+
+`Models/PlacementOfficer.cs`
+
+The entity contains:
+
+- `PlacementOfficerId` – Primary key.
+- `UserId` – Identity user foreign key.
+- `CollegeId` – Associated college foreign key.
+- `Designation` – Placement Officer's designation.
+- `CreatedAt` – Profile creation timestamp.
+- `UpdatedAt` – Optional last-update timestamp.
+- `User` – Navigation property to ApplicationUser.
+- `College` – Navigation property to College.
+
+## 3. Database Configuration
+
+Updated:
+
+`Data/ApplicationDbContext.cs`
+
+Added the `PlacementOfficers` DbSet and configured:
+
+- `PlacementOfficerId` as the primary key.
+- `UserId` as required and uniquely indexed.
+- `Designation` as required with a maximum length of 100.
+- One-to-one relationship between PlacementOfficer and ApplicationUser.
+- Many-to-one relationship between PlacementOfficer and College.
+- Restrict delete behavior for both relationships.
+
+Created and applied the `AddPlacementOfficer` EF Core migration.
+
+The `PlacementOfficers` table is now available in `CampusPlacementDB`.
+
+## 4. Placement Officer DTO
+
+Created:
+
+`DTOs/PlacementOfficers/PlacementOfficerResponseDto.cs`
+
+The response DTO exposes:
+
+- Placement Officer ID.
+- Identity User ID.
+- Full name.
+- Email.
+- Phone number.
+- College ID and college name.
+- Designation.
+- Profile creation date.
+
+DTOs prevent controllers from directly exposing database entities.
+
+## 5. Repository Layer
+
+Created:
+
+- `Repositories/Interfaces/IPlacementOfficerRepository.cs`
+- `Repositories/Implementations/PlacementOfficerRepository.cs`
+
+Implemented operations:
+
+- Retrieve all Placement Officer profiles.
+- Retrieve a profile by Placement Officer ID.
+- Retrieve a profile by Identity User ID.
+- Add a Placement Officer profile.
+- Save database changes.
+
+Related User and College navigation properties are loaded when retrieving profiles.
+
+Read queries use `AsNoTracking()`.
+
+## 6. Service Layer
+
+Created:
+
+- `Services/Interfaces/IPlacementOfficerService.cs`
+- `Services/Implementations/PlacementOfficerService.cs`
+
+The service retrieves Placement Officer profiles and maps entity data to `PlacementOfficerResponseDto`.
+
+It keeps business logic and DTO mapping outside the controller.
+
+## 7. Controller Layer
+
+Created:
+
+`Controllers/PlacementOfficersController.cs`
+
+Implemented endpoints:
+
+| HTTP method | Endpoint | Authorization |
+|---|---|---|
+| GET | `/api/placementofficers` | SuperAdmin |
+| GET | `/api/placementofficers/{id}` | SuperAdmin |
+| GET | `/api/placementofficers/me` | PlacementOfficer |
+
+The `/me` endpoint obtains the authenticated user's ID from the JWT NameIdentifier claim and retrieves that user's Placement Officer profile.
+
+## 8. Registration Integration
+
+Updated:
+
+- `DTOs/Auth/CollegeRepresentativeRegistrationDto.cs`
+- `Services/Implementations/AuthService.cs`
+
+Added the `Designation` property to the college representative registration DTO.
+
+During registration, the authentication service now:
+
+1. Creates a Pending College.
+2. Creates the associated Pending Identity user.
+3. Assigns the `PlacementOfficer` role.
+4. Creates the PlacementOfficer profile using the new Identity user ID and College ID.
+5. Saves the profile within the existing database transaction.
+6. Commits the transaction after all registration operations succeed.
+
+If registration fails, the transaction is rolled back.
+
+This ensures that every newly registered college representative has a corresponding Placement Officer profile.
+
+## 9. Dependency Injection
+
+Updated `Program.cs` to register:
+
+- `IPlacementOfficerRepository` with `PlacementOfficerRepository`.
+- `IPlacementOfficerService` with `PlacementOfficerService`.
+
+## 10. Build Verification
+
+The following implementation changes were completed:
+
+- PlacementOfficer model.
+- EF Core database configuration and migration.
+- Placement Officer DTO.
+- Repository interface and implementation.
+- Service interface and implementation.
+- Placement Officers controller.
+- Dependency injection registrations.
+- College representative registration integration.
+
+**Build result:** Succeeded.
+
+API/Postman testing is intentionally deferred until the complete project implementation is finished.
+
+## 11. Key Learning Points
+
+- How to model a one-to-one relationship with ASP.NET Core Identity.
+- How to associate a business profile with both an Identity user and an organization.
+- How to configure EF Core relationships and unique indexes.
+- How to use repository and service layers for profile retrieval.
+- How to map database entities to response DTOs.
+- How to obtain the current authenticated user's ID from JWT claims.
+- How to create related records inside a database transaction.
+- How to register repository and service dependencies in ASP.NET Core.
+
+## 12. Unit 2 Completion
+
+**Unit:** College and Placement Officer Management
+
+**Status:** Implementation completed; build succeeded.
+
+**Testing:** Deferred until all project units are implemented.
+
+**Next unit:** Company and Company HR Management.

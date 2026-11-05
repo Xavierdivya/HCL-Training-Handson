@@ -126,6 +126,21 @@ namespace CampusPlacementManagement.Services.Implementations
                     throw new InvalidOperationException(errors);
                 }
 
+                // Create the PlacementOfficer profile.
+                var placementOfficer = new PlacementOfficer
+                {
+                    UserId = representative.Id,
+                    CollegeId = college.CollegeId,
+                    Designation = string.IsNullOrWhiteSpace(registrationDto.Designation)
+                        ? "Placement Officer"
+                        : registrationDto.Designation.Trim(),
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.PlacementOfficers.Add(placementOfficer);
+
+                await _context.SaveChangesAsync();
+
                 await transaction.CommitAsync();
 
                 return await MapToUserResponseAsync(representative);

@@ -10,6 +10,8 @@ namespace CampusPlacementManagement.Data
     {
         public DbSet<College> Colleges { get; set; }
 
+        public DbSet<PlacementOfficer> PlacementOfficers { get; set; }
+
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -76,11 +78,41 @@ namespace CampusPlacementManagement.Data
                 entity.Property(c => c.CreatedAt)
                     .IsRequired();
 
-                // One College can have multiple representative accounts.
-                // Existing users and SuperAdmin can have a null CollegeId.
+                // One college can have multiple representative accounts.
                 entity.HasMany(c => c.Representatives)
                     .WithOne(u => u.College)
                     .HasForeignKey(u => u.CollegeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // PlacementOfficer configuration
+            builder.Entity<PlacementOfficer>(entity =>
+            {
+                entity.HasKey(p => p.PlacementOfficerId);
+
+                entity.Property(p => p.UserId)
+                    .IsRequired();
+
+                entity.HasIndex(p => p.UserId)
+                    .IsUnique();
+
+                entity.Property(p => p.Designation)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(p => p.CreatedAt)
+                    .IsRequired();
+
+                // One Identity user can have one PlacementOfficer profile.
+                entity.HasOne(p => p.User)
+                    .WithOne()
+                    .HasForeignKey<PlacementOfficer>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // One college can have multiple PlacementOfficer profiles.
+                entity.HasOne(p => p.College)
+                    .WithMany()
+                    .HasForeignKey(p => p.CollegeId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
         }
