@@ -1,0 +1,19 @@
+﻿# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build output
+bin/
+obj/
+
+# Visual Studio build folders
+Debug/
+Release/
+
+# User-specific files
+*.userosscache
+*.sln.docstates
+
+# Sensitive development configuration
+appsettings.Development.json
