@@ -551,3 +551,228 @@ After completing the College module, proceed to the Placement Officer module.
 **Remember the implementation sequence:**
 
 Model → DTO → Repository Interface → Repository Implementation → Service Interface → Service Implementation → Controller → Program.cs → Migration → Postman Testing → Documentation → Git Commit and Push.
+
+
+
+
+# Unit 1 – Authentication and College Approval Revision Notes
+
+## 1. Important Endpoints
+
+| Method | Endpoint | Purpose | Access |
+|---|---|---|---|
+| POST | `/api/auth/register/college-representative` | Register a college and representative | Anonymous |
+| POST | `/api/auth/login` | Authenticate and receive JWT | Anonymous |
+| GET | `/api/auth/me` | Get current user details | Authenticated |
+| GET | `/api/colleges` | Get all colleges | SuperAdmin |
+| GET | `/api/colleges/{id}` | Get college details | SuperAdmin |
+| GET | `/api/colleges/pending` | Get pending colleges | SuperAdmin |
+| PUT | `/api/colleges/{id}/approve` | Approve a college | SuperAdmin |
+| PUT | `/api/colleges/{id}/reject` | Reject a college | SuperAdmin |
+| PUT | `/api/colleges/{id}/suspend` | Suspend a college | SuperAdmin |
+
+## 2. Application Roles
+
+The application currently defines four roles:
+
+- `SuperAdmin`
+- `PlacementOfficer`
+- `CompanyHR`
+- `Student`
+
+A college representative uses the `PlacementOfficer` role. College is an organizational entity, not a separate application role.
+
+## 3. Account and College Statuses
+
+### AccountStatus
+
+- `Pending`
+- `Approved`
+- `Rejected`
+- `Suspended`
+- `Inactive`
+
+### CollegeStatus
+
+- `Pending`
+- `Approved`
+- `Rejected`
+- `Suspended`
+
+A representative's account status is synchronized when the SuperAdmin changes the associated college's status.
+
+## 4. Authentication Flow
+
+1. A college representative submits registration details.
+2. The application creates a Pending college.
+3. The application creates a Pending representative account.
+4. The representative receives the `PlacementOfficer` role.
+5. The SuperAdmin logs in and approves the college.
+6. The college and its representative account become Approved.
+7. The representative can log in and receive a JWT.
+8. The representative sends the JWT as a Bearer token to access authenticated endpoints.
+
+## 5. JWT Configuration
+
+JWT settings are stored in .NET User Secrets:
+
+- `Jwt:Issuer`
+- `Jwt:Audience`
+- `Jwt:ExpiryMinutes`
+- `Jwt:Key`
+
+Do not commit the JWT signing key or other credentials to source control.
+
+JWT validation should include:
+
+- Signing key validation
+- Issuer validation
+- Audience validation
+- Token lifetime validation
+
+## 6. HTTP Status Codes
+
+| Status code | Meaning | Example |
+|---|---|---|
+| 201 | Created | College representative registration |
+| 200 | OK | Successful login, profile retrieval, or approval |
+| 401 | Unauthorized | Invalid credentials or unapproved/rejected/suspended account |
+| 403 | Forbidden | Authenticated representative tries to access a SuperAdmin-only endpoint |
+| 409 | Conflict | Duplicate college code or email registration |
+
+## 7. Authorization Reminder
+
+Authentication identifies the user. Authorization determines whether the authenticated user has permission to perform an operation.
+
+- **401:** The request does not have valid authentication.
+- **403:** The user is authenticated but does not have the required permission.
+
+Register authentication middleware before authorization middleware:
+
+```csharp
+app.UseAuthentication();
+app.UseAuthorization();
+```
+
+## 8. Testing Checklist
+
+- [x] Register a college representative.
+- [x] Verify the college and representative initially have Pending status.
+- [x] Log in as SuperAdmin.
+- [x] Approve the college.
+- [x] Verify the representative can log in after approval.
+- [x] Retrieve the current user's profile.
+- [x] Verify the representative cannot access SuperAdmin-only college endpoints.
+- [x] Reject a separate test college.
+- [x] Verify the rejected representative cannot log in.
+- [x] Suspend the approved test college.
+- [x] Verify the suspended representative cannot log in.
+
+## 9. Important Testing Data
+
+The approved test college used for the suspension test was College ID `3` (`TEST001`). It is now Suspended.
+
+Do not use this college for later tests that require an approved college. Create a separate test college for those workflows.
+
+## 10. Next Development Focus
+
+Proceed with the next planned module only after committing and pushing the completed authentication unit.
+
+Future work includes the remaining organizational, student, job, application, recruitment, interview, and reporting modules.
+
+
+
+# Unit 2 – College and Placement Officer Management
+
+## 1. PlacementOfficer Entity
+
+**Location:** `Models/PlacementOfficer.cs`
+
+Important properties:
+
+- `PlacementOfficerId` – Primary key.
+- `UserId` – Identity user foreign key.
+- `CollegeId` – College foreign key.
+- `Designation` – Officer designation.
+- `CreatedAt`, `UpdatedAt` – Audit timestamps.
+
+## 2. Database Relationships
+
+**Location:** `Data/ApplicationDbContext.cs`
+
+- One-to-one: PlacementOfficer → ApplicationUser.
+- Many-to-one: PlacementOfficer → College.
+- Unique index on `UserId`.
+- Restrict delete behavior on both relationships.
+
+**Migration:** `AddPlacementOfficer`
+
+Commands:
+
+```powershell
+Add-Migration AddPlacementOfficer
+Update-Database
+```
+
+## 3. Architecture
+
+| Layer | Files |
+|---|---|
+| DTO | `DTOs/PlacementOfficers/PlacementOfficerResponseDto.cs` |
+| Repository interface | `IPlacementOfficerRepository.cs` |
+| Repository | `PlacementOfficerRepository.cs` |
+| Service interface | `IPlacementOfficerService.cs` |
+| Service | `PlacementOfficerService.cs` |
+| Controller | `PlacementOfficersController.cs` |
+
+## 4. API Endpoints
+
+| Method | Endpoint | Access |
+|---|---|---|
+| GET | `/api/placementofficers` | SuperAdmin |
+| GET | `/api/placementofficers/{id}` | SuperAdmin |
+| GET | `/api/placementofficers/me` | PlacementOfficer |
+
+The `/me` endpoint uses the JWT `NameIdentifier` claim to identify the current user.
+
+## 5. Registration Workflow
+
+College representative registration now creates:
+
+1. College record with Pending status.
+2. Identity user with Pending status.
+3. PlacementOfficer role assignment.
+4. PlacementOfficer profile linked to the user and college.
+
+All registration operations are performed within a database transaction.
+
+The designation is supplied through the registration DTO, with `Placement Officer` as the default.
+
+## 6. Important Concepts
+
+- **Identity relationship:** Connect business profiles to authenticated users.
+- **Repository pattern:** Separate database access from business logic.
+- **Service layer:** Map entities to DTOs and coordinate operations.
+- **JWT NameIdentifier:** Retrieve the authenticated user's ID.
+- **Database transaction:** Keep related registration records consistent.
+- **DTO mapping:** Return only required profile information.
+
+## 7. Verification Status
+
+- EF Core migration: Applied.
+- Database update: Succeeded.
+- Project build: Succeeded.
+- API/Postman testing: Deferred until project completion.
+
+## 8. Next Unit
+
+**Unit 3 – Company and Company HR Management**
+
+Planned implementation:
+
+- Company entity and status management.
+- Company HR profile and Identity association.
+- Company and Company HR repositories.
+- Company and Company HR services.
+- Controllers and authorization.
+- Company HR registration and approval workflow.

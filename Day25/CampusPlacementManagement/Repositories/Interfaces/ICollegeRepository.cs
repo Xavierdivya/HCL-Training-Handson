@@ -7,7 +7,11 @@ namespace CampusPlacementManagement.Repositories.Interfaces
     {
         Task<IEnumerable<College>> GetAllAsync();
 
+        Task<IEnumerable<College>> GetPendingAsync();
+
         Task<College?> GetByIdAsync(int collegeId);
+
+        Task<College?> GetByIdForUpdateAsync(int collegeId);
 
         Task<College?> GetByCodeAsync(string collegeCode);
 
