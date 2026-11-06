@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using CampusPlacementManagement.Models.Enums;
 
 namespace CampusPlacementManagement.Models.Identity
@@ -16,11 +15,16 @@ namespace CampusPlacementManagement.Models.Identity
 
         public DateTime? UpdatedAt { get; set; }
 
-        // Foreign key: College associated with this representative.
-        // Nullable because SuperAdmin does not belong to a college.
+        // College association for Placement Officers.
+        // Nullable because SuperAdmin and Company HR do not belong to a college.
         public int? CollegeId { get; set; }
 
-        // Navigation property.
         public College? College { get; set; }
+
+        // Company association for Company HR accounts.
+        // Nullable because SuperAdmin and Placement Officers do not belong to a company.
+        public int? CompanyId { get; set; }
+
+        public Company? Company { get; set; }
     }
 }

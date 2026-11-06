@@ -1,6 +1,6 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using CampusPlacementManagement.Authorization;
 using CampusPlacementManagement.Data;
 using CampusPlacementManagement.DTOs.Auth;
@@ -96,7 +96,6 @@ namespace CampusPlacementManagement.Services.Implementations
                     CreatedAt = DateTime.UtcNow,
 
                     // No email-confirmation workflow is implemented yet.
-                    // This will need revisiting when email verification is added.
                     EmailConfirmed = true
                 };
 
@@ -131,9 +130,10 @@ namespace CampusPlacementManagement.Services.Implementations
                 {
                     UserId = representative.Id,
                     CollegeId = college.CollegeId,
-                    Designation = string.IsNullOrWhiteSpace(registrationDto.Designation)
-                        ? "Placement Officer"
-                        : registrationDto.Designation.Trim(),
+                    Designation =
+                        string.IsNullOrWhiteSpace(registrationDto.Designation)
+                            ? "Placement Officer"
+                            : registrationDto.Designation.Trim(),
                     CreatedAt = DateTime.UtcNow
                 };
 
@@ -198,6 +198,22 @@ namespace CampusPlacementManagement.Services.Implementations
                 }
             }
 
+            // Company HR accounts must belong to an approved company.
+            if (user.CompanyId.HasValue)
+            {
+                var company = await _context.Companies
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(
+                        c => c.CompanyId == user.CompanyId.Value);
+
+                if (company == null ||
+                    company.Status != CompanyStatus.Approved)
+                {
+                    throw new UnauthorizedAccessException(
+                        "Your company is not approved.");
+                }
+            }
+
             var roles = await _userManager.GetRolesAsync(user);
 
             var expiresAt = DateTime.UtcNow.AddMinutes(
@@ -223,12 +239,22 @@ namespace CampusPlacementManagement.Services.Implementations
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
+            // Add CollegeId claim for College representatives.
             if (user.CollegeId.HasValue)
             {
                 claims.Add(
                     new Claim(
                         "CollegeId",
                         user.CollegeId.Value.ToString()));
+            }
+
+            // Add CompanyId claim for Company HR accounts.
+            if (user.CompanyId.HasValue)
+            {
+                claims.Add(
+                    new Claim(
+                        "CompanyId",
+                        user.CompanyId.Value.ToString()));
             }
 
             var key = GetJwtSigningKey();
@@ -261,6 +287,7 @@ namespace CampusPlacementManagement.Services.Implementations
         {
             var user = await _context.Users
                 .Include(u => u.College)
+                .Include(u => u.Company)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -278,12 +305,18 @@ namespace CampusPlacementManagement.Services.Implementations
                 Email = user.Email ?? string.Empty,
                 PhoneNumber = user.PhoneNumber,
                 AccountStatus = user.AccountStatus.ToString(),
+
                 CollegeId = user.CollegeId,
                 CollegeName = user.College?.CollegeName,
+
+                CompanyId = user.CompanyId,
+                CompanyName = user.Company?.CompanyName,
+
                 Roles = roles.ToList()
             };
         }
 
+        // Map ApplicationUser to UserResponseDto.
         private async Task<UserResponseDto> MapToUserResponseAsync(
             ApplicationUser user)
         {
@@ -296,6 +329,13 @@ namespace CampusPlacementManagement.Services.Implementations
                     .FirstOrDefaultAsync()
                 : null;
 
+            var companyName = user.CompanyId.HasValue
+                ? await _context.Companies
+                    .Where(c => c.CompanyId == user.CompanyId.Value)
+                    .Select(c => c.CompanyName)
+                    .FirstOrDefaultAsync()
+                : null;
+
             return new UserResponseDto
             {
                 UserId = user.Id,
@@ -303,8 +343,13 @@ namespace CampusPlacementManagement.Services.Implementations
                 Email = user.Email ?? string.Empty,
                 PhoneNumber = user.PhoneNumber,
                 AccountStatus = user.AccountStatus.ToString(),
+
                 CollegeId = user.CollegeId,
                 CollegeName = collegeName,
+
+                CompanyId = user.CompanyId,
+                CompanyName = companyName,
+
                 Roles = roles.ToList()
             };
         }

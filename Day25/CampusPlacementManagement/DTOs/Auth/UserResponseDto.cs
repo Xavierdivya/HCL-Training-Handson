@@ -1,4 +1,5 @@
-﻿namespace CampusPlacementManagement.DTOs.Auth
+﻿
+namespace CampusPlacementManagement.DTOs.Auth
 {
     public class UserResponseDto
     {
@@ -15,6 +16,10 @@
         public int? CollegeId { get; set; }
 
         public string? CollegeName { get; set; }
+
+        public int? CompanyId { get; set; }
+
+        public string? CompanyName { get; set; }
 
         public List<string> Roles { get; set; } = new();
     }
