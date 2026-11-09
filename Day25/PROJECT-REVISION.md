@@ -776,3 +776,804 @@ Planned implementation:
 - Company and Company HR services.
 - Controllers and authorization.
 - Company HR registration and approval workflow.
+
+
+
+## Unit 4 – Student Management
+
+- A Student belongs to one College and one PlacementOfficer.
+- Student identity accounts are created by Placement Officers.
+- Register numbers must be unique within a College.
+- Students can view their own profile.
+- Placement Officers can manage students belonging to their College.
+
+## Unit 5 – Job Management
+
+- Every Job belongs to a Company.
+- Only approved Company HR accounts can create jobs.
+- Company HR users can access only their own company's jobs.
+- SuperAdmin can view and manage all jobs.
+- Students and visitors can view open jobs.
+- Job eligibility includes CGPA, backlogs, departments, degrees, and graduation years.
+- Job statuses: Draft, Open, Closed, Cancelled.
+
+# Day25 – Campus Placement Management System
+# Units 6–9 Revision Notes
+
+## 1. Job Application Management
+
+### Purpose
+
+Job Application Management allows students to apply for jobs and enables Company HR representatives to review applications.
+
+### Main Entity
+
+`JobApplication`
+
+Important properties:
+
+- JobApplicationId
+- JobId
+- StudentId
+- ApplicationDate
+- Status
+- CoverLetter
+- Remarks
+- CreatedAt
+- UpdatedAt
+
+### Application Status
+
+| Status | Meaning |
+|---|---|
+| Submitted | Application submitted by student |
+| UnderReview | Application being reviewed |
+| Shortlisted | Student shortlisted |
+| Rejected | Application rejected |
+| Selected | Student selected |
+| Withdrawn | Student withdrew application |
+
+### Important Business Rules
+
+1. Only approved and active students can apply.
+2. The job must be open.
+3. The application deadline must not have passed.
+4. The company must be approved.
+5. The student must satisfy job eligibility requirements.
+6. A student cannot apply twice for the same job.
+7. Withdrawn applications cannot be updated.
+8. Company HR can manage applications belonging to its own company.
+9. Placement Officers can view applications belonging to their college.
+
+### Important EF Core Concept: Composite Unique Index
+
+A composite unique index prevents duplicate applications for the same student and job.
+
+```csharp
+entity.HasIndex(a => new
+{
+    a.JobId,
+    a.StudentId
+})
+.IsUnique();
+```
+
+This means the same combination of JobId and StudentId cannot be inserted twice.
+
+### Important LINQ Concepts
+
+```csharp
+// Filter applications
+var applications = await _context.JobApplications
+    .Where(a => a.JobId == jobId)
+    .ToListAsync();
+
+// Count applications
+var total = await _context.JobApplications
+    .CountAsync();
+
+// Count shortlisted applications
+var shortlisted = await _context.JobApplications
+    .CountAsync(a =>
+        a.Status == ApplicationStatus.Shortlisted);
+```
+
+### Revision Questions
+
+1. What is a JobApplication entity?
+2. Why does JobApplication have both JobId and StudentId?
+3. What is a composite unique index?
+4. Why should a student not be allowed to apply twice for the same job?
+5. What is the difference between Submitted and UnderReview?
+6. Why should a withdrawn application not be updated?
+7. Why should job eligibility be checked in the service layer?
+8. How can Company HR access only its company's applications?
+
+---
+
+## 2. Placement Drive Management
+
+### Purpose
+
+Placement Drive Management allows Placement Officers to organize recruitment activities for their colleges.
+
+A placement drive connects:
+
+- College
+- Company
+- Placement Officer
+
+### Main Entity
+
+`PlacementDrive`
+
+Important properties:
+
+| Property | Purpose |
+|---|---|
+| PlacementDriveId | Primary key |
+| CollegeId | Associated college |
+| CompanyId | Recruiting company |
+| PlacementOfficerId | Responsible officer |
+| DriveName | Drive name |
+| Description | Drive details |
+| Venue | Drive location |
+| StartDate | Drive starting date |
+| EndDate | Drive ending date |
+| RegistrationDeadline | Registration closing date |
+| MinimumCGPA | Minimum academic eligibility |
+| MaximumActiveBacklogs | Maximum allowed backlogs |
+| EligibleDepartments | Eligible departments |
+| EligibleDegrees | Eligible degree programmes |
+| GraduationYearFrom | Starting graduation year |
+| GraduationYearTo | Ending graduation year |
+| Status | Drive status |
+
+### Placement Drive Status
+
+- Draft
+- Upcoming
+- RegistrationOpen
+- InProgress
+- Completed
+- Cancelled
+
+### Important Business Rules
+
+1. Only an approved Placement Officer can create a drive.
+2. The associated college must be approved.
+3. The selected company must be approved.
+4. Start date must be before end date.
+5. Registration deadline must be consistent with the drive schedule.
+6. CGPA must be within the supported range.
+7. Maximum active backlogs cannot be negative.
+8. Graduation-year range must be valid.
+9. A Placement Officer can update only their own drives.
+
+### Important Concepts
+
+**Foreign key:** Connects a placement drive to another entity.
+
+**Navigation property:** Allows EF Core to access related entity information.
+
+**Restrict delete:** Prevents deletion of a related record when dependent records exist.
+
+**Enum:** Represents a fixed set of allowed status values.
+
+### Revision Questions
+
+1. What is a placement drive?
+2. Why does a placement drive require CollegeId and CompanyId?
+3. What is the difference between a job and a placement drive?
+4. Why is RegistrationDeadline required?
+5. Why validate StartDate and EndDate?
+6. What is a navigation property?
+7. Why use an enum for PlacementDriveStatus?
+8. How does the service ensure a Placement Officer updates only their own drive?
+
+---
+
+## 3. Interview Scheduling
+
+### Purpose
+
+Interview Scheduling manages interviews for students who have applied for jobs.
+
+Company HR representatives schedule interviews and students can retrieve their own interview details.
+
+### Main Entity
+
+`InterviewSchedule`
+
+Important properties:
+
+- InterviewScheduleId
+- JobApplicationId
+- CompanyId
+- CompanyHRId
+- ScheduledAt
+- DurationMinutes
+- Mode
+- MeetingDetails
+- Notes
+- Status
+- Feedback
+- CreatedAt
+- UpdatedAt
+
+### Interview Mode
+
+The InterviewMode enum represents the configured interview methods.
+
+Examples of interview modes include:
+
+- Online
+- Offline
+
+Check the actual enum in the project for the complete list of supported values.
+
+### Interview Status
+
+The InterviewStatus enum represents the interview workflow.
+
+The reporting implementation uses these values:
+
+- Scheduled
+- Rescheduled
+- Completed
+
+Other supported values should be checked in the project's enum definition.
+
+### Important Relationships
+
+```text
+JobApplication
+      |
+      | 1-to-many
+      |
+InterviewSchedule
+
+Company
+   |
+   | 1-to-many
+   |
+InterviewSchedule
+
+CompanyHR
+   |
+   | 1-to-many
+   |
+InterviewSchedule
+```
+
+The exact cardinality depends on the configured foreign keys and navigation properties.
+
+### Important Business Rules
+
+1. Company HR manages interviews associated with its company.
+2. Students can view their own interviews.
+3. SuperAdmin can view interview records across the platform.
+4. Interview records are associated with the relevant job application.
+5. Interview updates must respect ownership and authorization rules.
+
+### Revision Questions
+
+1. What is an InterviewSchedule?
+2. Why does an interview reference JobApplicationId?
+3. Why store CompanyId and CompanyHRId?
+4. What is the difference between InterviewMode and InterviewStatus?
+5. Why should a student only access their own interview records?
+6. How does role-based authorization protect interview endpoints?
+7. Why is feedback stored separately from the original application?
+
+---
+
+## 4. Placement Reports
+
+### Purpose
+
+Placement Reports provide statistics about recruitment and placement activities.
+
+Reports are calculated using existing database records instead of storing duplicate report data.
+
+### Report DTOs
+
+| DTO | Purpose |
+|---|---|
+| PlacementSummaryDto | Overall placement statistics |
+| CollegePlacementReportDto | College-wise placement statistics |
+| CompanyRecruitmentReportDto | Company-wise recruitment statistics |
+| JobApplicationReportDto | Job-wise application statistics |
+
+### Important Reporting Concepts
+
+#### CountAsync()
+
+Counts matching database records asynchronously.
+
+```csharp
+var totalStudents =
+    await _context.Students.CountAsync();
+```
+
+#### Distinct()
+
+Removes duplicate values from a query.
+
+```csharp
+var placedStudents = await _context.JobApplications
+    .Where(a => a.Status == ApplicationStatus.Selected)
+    .Select(a => a.StudentId)
+    .Distinct()
+    .CountAsync();
+```
+
+Why use `Distinct()`?
+
+A student may be selected for more than one job. Without `Distinct()`, the same student could be counted multiple times.
+
+#### Placement Percentage
+
+Formula:
+
+```text
+Placement Percentage =
+    (Placed Students / Active Students) * 100
+```
+
+C# implementation:
+
+```csharp
+var percentage = activeStudents == 0
+    ? 0
+    : Math.Round(
+        (decimal)placedStudents / activeStudents * 100,
+        2);
+```
+
+The zero check prevents division by zero.
+
+### Report Access
+
+| Report | Role |
+|---|---|
+| Overall summary | SuperAdmin |
+| All college reports | SuperAdmin |
+| Individual college report | SuperAdmin |
+| Own college report | PlacementOfficer |
+| All company reports | SuperAdmin |
+| Individual company report | SuperAdmin |
+| Own company report | CompanyHR |
+| Job-wise application reports | SuperAdmin |
+
+### Reporting Endpoints
+
+| Method | Endpoint | Role |
+|---|---|---|
+| GET | `/api/placementreports/summary` | SuperAdmin |
+| GET | `/api/placementreports/colleges` | SuperAdmin |
+| GET | `/api/placementreports/colleges/{collegeId}` | SuperAdmin |
+| GET | `/api/placementreports/my-college` | PlacementOfficer |
+| GET | `/api/placementreports/companies` | SuperAdmin |
+| GET | `/api/placementreports/companies/{companyId}` | SuperAdmin |
+| GET | `/api/placementreports/my-company` | CompanyHR |
+| GET | `/api/placementreports/jobs` | SuperAdmin |
+
+### Revision Questions
+
+1. What is an aggregate report?
+2. Why use DTOs for reports?
+3. What does CountAsync() do?
+4. What does Distinct() do?
+5. Why calculate placement percentage using decimal?
+6. Why check whether ActiveStudents is zero?
+7. Why can reports be generated without creating separate report tables?
+8. How can Company HR be restricted to its own company's report?
+
+---
+
+# 5. Core Architecture Revision
+
+The project uses layered architecture.
+
+```text
+                 CLIENT
+                   |
+                   v
+              CONTROLLER
+                   |
+                   v
+                SERVICE
+                   |
+                   v
+              REPOSITORY
+                   |
+                   v
+             APPLICATION DB
+                CONTEXT
+                   |
+                   v
+               SQL SERVER
+```
+
+### Controller Layer
+
+Responsibilities:
+
+- Accept HTTP requests.
+- Read route and request parameters.
+- Apply authorization attributes.
+- Call the service layer.
+- Return HTTP responses.
+
+### Service Layer
+
+Responsibilities:
+
+- Business rules.
+- Validation.
+- Workflow coordination.
+- Ownership checks.
+- Calculations.
+- Calling repository operations.
+
+### Repository Layer
+
+Responsibilities:
+
+- Database queries.
+- Adding entities.
+- Updating entities.
+- Retrieving related data.
+- Saving database changes.
+
+### DTO Layer
+
+Responsibilities:
+
+- Define request models.
+- Define response models.
+- Prevent direct exposure of database entities.
+- Control which information is returned by an endpoint.
+
+### DbContext
+
+Responsibilities:
+
+- Manage entity sets.
+- Configure relationships.
+- Track changes.
+- Execute database operations.
+- Persist changes using SaveChangesAsync().
+
+---
+
+# 6. Authentication and Authorization Revision
+
+## Application Roles
+
+| Role | Responsibility |
+|---|---|
+| SuperAdmin | Platform-wide management |
+| PlacementOfficer | College placement management |
+| CompanyHR | Company recruitment management |
+| Student | Student job and application activities |
+
+College and Company are organizational entities, not authentication roles.
+
+## Authentication vs Authorization
+
+**Authentication:** Identifies who the user is.
+
+**Authorization:** Determines what the authenticated user is allowed to do.
+
+### HTTP Status Codes
+
+| Code | Meaning |
+|---|---|
+| 200 | OK |
+| 201 | Created |
+| 204 | No Content |
+| 400 | Bad Request |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Not Found |
+| 409 | Conflict |
+| 500 | Internal Server Error |
+
+Remember:
+
+- 401 means valid authentication is missing.
+- 403 means the user is authenticated but lacks permission.
+
+### Middleware Order
+
+```csharp
+app.UseAuthentication();
+
+app.UseAuthorization();
+```
+
+Authentication must execute before authorization.
+
+---
+
+# 7. Entity Framework Core Revision
+
+## DbSet
+
+Represents an entity collection managed by the DbContext.
+
+```csharp
+public DbSet<Student> Students { get; set; }
+```
+
+## AsNoTracking()
+
+Used for read-only queries to avoid unnecessary change tracking.
+
+```csharp
+var students = await _context.Students
+    .AsNoTracking()
+    .ToListAsync();
+```
+
+## FirstOrDefaultAsync()
+
+Returns the first matching record or null.
+
+## ToListAsync()
+
+Retrieves matching records asynchronously.
+
+## CountAsync()
+
+Counts matching records.
+
+## Include()
+
+Loads related entities.
+
+```csharp
+var application = await _context.JobApplications
+    .Include(a => a.Student)
+    .Include(a => a.Job)
+    .FirstOrDefaultAsync(a =>
+        a.JobApplicationId == id);
+```
+
+## HasIndex().IsUnique()
+
+Creates a unique index to prevent duplicate values.
+
+## HasConversion<string>()
+
+Stores enum values as strings.
+
+## OnDelete(DeleteBehavior.Restrict)
+
+Prevents deleting a principal record when dependent records exist.
+
+## Migrations
+
+Common commands:
+
+```powershell
+# Create migration
+Add-Migration MigrationName
+
+# Apply migration
+Update-Database
+
+# List migrations
+Get-Migration
+```
+
+CLI equivalents:
+
+```bash
+dotnet ef migrations add MigrationName
+dotnet ef database update
+dotnet ef migrations list
+```
+
+A migration records the database schema changes associated with modifications to the EF Core model.
+
+---
+
+# 8. Security and Ownership Revision
+
+Important ownership rules:
+
+| User | Data access |
+|---|---|
+| SuperAdmin | Platform-wide data |
+| PlacementOfficer | Own college data |
+| CompanyHR | Own company data |
+| Student | Own student-related data |
+
+Important concepts:
+
+- Role-based authorization.
+- JWT Bearer authentication.
+- Claims.
+- User ID retrieval.
+- Organization ownership.
+- Account approval status.
+- Company approval status.
+- College approval status.
+
+Example:
+
+```csharp
+[Authorize(Roles = AppRoles.SuperAdmin)]
+```
+
+This restricts an endpoint to authenticated users with the SuperAdmin role.
+
+---
+
+# 9. Build and Database Commands
+
+Run from the project directory:
+
+```powershell
+cd D:\HCL\Day25\CampusPlacementManagement
+
+# Build
+dotnet build
+
+# Run
+dotnet run
+
+# List packages
+dotnet list package
+
+# Check migrations
+dotnet ef migrations list
+
+# Apply pending migrations
+dotnet ef database update
+```
+
+Do not create a new migration unless the EF Core model has a corresponding schema change.
+
+---
+
+# 10. Git Revision
+
+Useful commands:
+
+```powershell
+git status
+
+git branch
+
+git log --oneline
+
+git diff
+
+git add Day25/
+
+git commit -m "feat: complete placement management reports"
+
+git push
+```
+
+Before committing:
+
+1. Verify the correct branch.
+2. Check the staged files.
+3. Avoid committing secrets.
+4. Avoid committing `bin/`, `obj/`, or `.vs/`.
+5. Confirm the build succeeds.
+6. Use a conventional commit message.
+
+---
+
+# 11. Interview Practice Questions
+
+## Architecture and ASP.NET Core
+
+1. What is ASP.NET Core Web API?
+2. Why use layered architecture?
+3. What is dependency injection?
+4. What is the repository pattern?
+5. What is the difference between a controller and a service?
+6. What is a DTO?
+7. What is the purpose of ApplicationDbContext?
+8. What is the difference between an entity and a DTO?
+
+## Authentication and Authorization
+
+9. What is ASP.NET Core Identity?
+10. What is JWT authentication?
+11. What is the difference between authentication and authorization?
+12. What is the difference between 401 and 403?
+13. What are claims in JWT?
+14. How does role-based authorization work?
+15. Why should account approval be checked during login?
+
+## EF Core and SQL Server
+
+16. What is a DbSet?
+17. What is a migration?
+18. What is a foreign key?
+19. What is a composite unique index?
+20. What is the purpose of AsNoTracking()?
+21. What is the difference between FirstOrDefaultAsync() and SingleOrDefaultAsync()?
+22. What does Include() do?
+23. What is DeleteBehavior.Restrict?
+24. Why use asynchronous database methods?
+
+## Job Applications
+
+25. How is a JobApplication related to Student and Job?
+26. How do you prevent duplicate applications?
+27. How do you validate a student's job eligibility?
+28. Why use an enum for application status?
+29. Why should business rules be implemented in the service layer?
+
+## Placement Drives and Interviews
+
+30. What is the purpose of PlacementDrive?
+31. How do you enforce Placement Officer ownership?
+32. What is the difference between a Job and a Placement Drive?
+33. How is an InterviewSchedule associated with a JobApplication?
+34. How do you restrict Company HR access to its own company data?
+
+## Reporting
+
+35. What is an aggregate query?
+36. What is the purpose of Distinct()?
+37. How do you calculate placement percentage?
+38. Why should placed students be counted distinctly?
+39. Why can reports be generated without separate report tables?
+40. How do you protect organization-specific reports?
+
+---
+
+# 12. Project Completion Tracker
+
+| Unit | Module | Implementation | Build |
+|---|---|---|---|
+| 1 | Authentication and College Approval | Completed | Succeeded |
+| 2 | College and Placement Officer Management | Completed | Succeeded |
+| 3 | Company and Company HR Management | Completed | Succeeded |
+| 4 | Student Management | Completed | Succeeded |
+| 5 | Job Management | Completed | Succeeded |
+| 6 | Job Application Management | Completed | Succeeded |
+| 7 | Placement Drive Management | Completed | Succeeded |
+| 8 | Interview Scheduling | Completed | Succeeded |
+| 9 | Placement Reports | Completed | Succeeded |
+
+## Remaining Work
+
+- [ ] Complete Postman testing for all modules.
+- [ ] Test successful and unsuccessful scenarios.
+- [ ] Test role-based authorization.
+- [ ] Test college and company ownership restrictions.
+- [ ] Test validation and duplicate prevention.
+- [ ] Verify report calculations against database records.
+- [ ] Review security and configuration.
+- [ ] Perform final build.
+- [ ] Review Git status.
+- [ ] Commit and push the completed Day25 project.
+
+## Personal Revision Notes
+
+### Topics I understand well
+
+- 
+
+### Topics I need to practise again
+
+- 
+
+### Questions to revisit
+
+- 
+
+### Last revision date
+
+- 

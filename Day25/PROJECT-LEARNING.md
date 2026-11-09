@@ -944,3 +944,708 @@ API/Postman testing is intentionally deferred until the complete project impleme
 **Testing:** Deferred until all project units are implemented.
 
 **Next unit:** Company and Company HR Management.
+
+
+
+## Unit 4 – Student Management
+
+- Created Student entity and StudentStatus enum.
+- Configured Student relationships with ApplicationUser, College, and PlacementOfficer.
+- Added Student registration and response DTOs.
+- Implemented Student repository and service.
+- Added StudentsController with role-based access.
+- Created and applied AddStudent migration.
+- Verified successful build and database table creation.
+
+## Unit 5 – Job Management
+
+- Created Job entity and JobStatus enum.
+- Configured Job relationship with Company in ApplicationDbContext.
+- Added JobCreateDto, JobUpdateDto, and JobResponseDto.
+- Implemented Job repository and service.
+- Registered Job repository and service in Program.cs.
+- Created JobsController with role-based access and company ownership checks.
+- Created and applied AddJob migration.
+- Verified successful build and database table creation.
+
+# Unit 6 – Job Application Management
+
+## 1. Overview
+
+This unit introduces the job application workflow. Students can apply for eligible job opportunities, track their application status, and withdraw applications when permitted.
+
+Company HR representatives review applications belonging to their company. Placement Officers can view applications associated with their college. SuperAdmin can access application information across the platform.
+
+## 2. JobApplication Entity
+
+Created:
+
+`Models/JobApplication.cs`
+
+The entity connects a Student with a Job.
+
+Important data includes:
+
+- JobApplicationId – Primary key.
+- JobId – Related job foreign key.
+- StudentId – Applicant student foreign key.
+- ApplicationDate – Application submission date.
+- Status – Current application status.
+- CoverLetter – Student's application message, where supplied.
+- Remarks – Review remarks, where supplied.
+- CreatedAt and UpdatedAt – Audit timestamps.
+
+## 3. Application Status
+
+Created:
+
+`Models/Enums/ApplicationStatus.cs`
+
+The application workflow supports:
+
+1. Submitted
+2. UnderReview
+3. Shortlisted
+4. Rejected
+5. Selected
+6. Withdrawn
+
+The status represents the current stage of an application.
+
+## 4. Database Configuration
+
+Updated:
+
+`Data/ApplicationDbContext.cs`
+
+Configured:
+
+- JobApplication DbSet.
+- Relationship with Job.
+- Relationship with Student.
+- Restrict delete behavior for dependent application records.
+- Unique composite index on JobId and StudentId.
+- Status enum conversion to string.
+- Application-related property constraints.
+
+The unique composite index prevents the same student from submitting duplicate applications for the same job.
+
+Created and applied the `AddJobApplication` migration.
+
+Verified that the `JobApplications` table was created.
+
+## 5. DTOs
+
+Created DTOs under:
+
+`DTOs/JobApplications/`
+
+The DTO layer separates incoming application requests and outgoing application responses from database entities.
+
+## 6. Repository Layer
+
+Created:
+
+- `Repositories/Interfaces/IJobApplicationRepository.cs`
+- `Repositories/Implementations/JobApplicationRepository.cs`
+
+The repository handles application data retrieval, filtering, insertion, updates, and persistence.
+
+## 7. Service Layer
+
+Created:
+
+- `Services/Interfaces/IJobApplicationService.cs`
+- `Services/Implementations/JobApplicationService.cs`
+
+The service contains application business rules, including:
+
+- Checking that the student account is approved and active.
+- Checking that the job is open and its deadline has not passed.
+- Checking that the company is approved.
+- Checking student eligibility requirements such as CGPA, active backlogs, department, and degree.
+- Preventing duplicate applications.
+- Controlling permitted application status transitions.
+- Enforcing ownership and organization-level access.
+
+## 8. Controller and Authorization
+
+Created:
+
+`Controllers/JobApplicationsController.cs`
+
+The controller exposes application operations according to the authenticated user's role.
+
+- Students manage their own applications.
+- Company HR manages applications for jobs belonging to their company.
+- Placement Officers view applications belonging to their college.
+- SuperAdmin can access application information across the platform.
+
+Company ownership and college ownership are checked in the application workflow.
+
+## 9. Dependency Injection
+
+Registered the JobApplication repository and service in `Program.cs`.
+
+## 10. Build and Database Verification
+
+Completed:
+
+- JobApplication entity.
+- ApplicationStatus enum.
+- EF Core configuration.
+- Migration creation and database update.
+- DTOs.
+- Repository interface and implementation.
+- Service interface and implementation.
+- Controller.
+- Dependency injection.
+
+**Build result:** Succeeded.
+
+**Migration result:** `AddJobApplication` applied successfully.
+
+**API/Postman testing:** Deferred until the complete project implementation is finished.
+
+## 11. Key Learning Points
+
+- How to model a many-to-one relationship between JobApplication and Job.
+- How to associate an application with a Student.
+- How to prevent duplicate records using a composite unique index.
+- How to validate business eligibility before accepting an application.
+- How to manage workflow statuses using enums.
+- How to enforce organization ownership.
+- Why business rules belong in the service layer.
+
+---
+
+# Unit 7 – Placement Drive Management
+
+## 1. Overview
+
+This unit introduces placement drive management.
+
+A Placement Officer can organize recruitment drives for their college by selecting an approved company, specifying drive details, defining eligibility criteria, and managing the drive status.
+
+SuperAdmin can view placement drives across the platform. Students can view drives that are open for registration and satisfy the configured availability conditions.
+
+## 2. PlacementDrive Entity
+
+Created:
+
+`Models/PlacementDrive.cs`
+
+Important properties include:
+
+- PlacementDriveId – Primary key.
+- CollegeId – Associated college.
+- CompanyId – Recruiting company.
+- PlacementOfficerId – Officer responsible for the drive.
+- DriveName – Name of the placement drive.
+- Description – Drive description.
+- Venue – Drive location.
+- StartDate and EndDate – Drive schedule.
+- RegistrationDeadline – Last date for registration.
+- MinimumCGPA – Minimum academic requirement.
+- MaximumActiveBacklogs – Maximum allowed active backlogs.
+- EligibleDepartments – Eligible departments.
+- EligibleDegrees – Eligible degree programmes.
+- GraduationYearFrom and GraduationYearTo – Eligible graduation-year range.
+- Status – Current drive status.
+- CreatedAt and UpdatedAt – Audit timestamps.
+
+## 3. Placement Drive Status
+
+Created:
+
+`Models/Enums/PlacementDriveStatus.cs`
+
+Supported values:
+
+1. Draft
+2. Upcoming
+3. RegistrationOpen
+4. InProgress
+5. Completed
+6. Cancelled
+
+The status describes the current stage of the placement drive.
+
+## 4. DTOs
+
+Created placement drive DTOs under:
+
+`DTOs/PlacementOfficers/`
+
+Files:
+
+- `PlacementDriveCreateDto.cs`
+- `PlacementDriveUpdateDto.cs`
+- `PlacementDriveResponseDto.cs`
+
+The DTOs define the request and response contracts for placement drive operations.
+
+The DTO namespace used by these files is:
+
+`CampusPlacementManagement.DTOs.PlacementDrives`
+
+## 5. Database Configuration
+
+Updated:
+
+`Data/ApplicationDbContext.cs`
+
+Configured:
+
+- PlacementDrives DbSet.
+- Primary key.
+- Relationships with College, Company, and PlacementOfficer.
+- Restrict delete behavior.
+- Foreign-key indexes.
+- Required fields and maximum lengths.
+- CGPA precision.
+- String conversion for PlacementDriveStatus.
+
+The placement drive database migration was applied successfully.
+
+## 6. Repository Layer
+
+Created:
+
+- `Repositories/Interfaces/IPlacementDriveRepository.cs`
+- `Repositories/Implementations/PlacementDriveRepository.cs`
+
+The repository retrieves drives by ID, college, and Placement Officer and handles persistence operations.
+
+## 7. Service Layer
+
+Created:
+
+- `Services/Interfaces/IPlacementDriveService.cs`
+- `Services/Implementations/PlacementDriveService.cs`
+
+The service validates:
+
+- Placement Officer profile and account approval.
+- College approval.
+- Company existence and approval.
+- Drive date consistency.
+- Registration deadline.
+- Minimum CGPA range.
+- Maximum active backlogs.
+- Graduation-year range.
+- Ownership of the drive during updates.
+
+The service also provides open-drive retrieval with relevant availability and organization approval checks.
+
+## 8. Controller and Authorization
+
+Created:
+
+`Controllers/PlacementDrivesController.cs`
+
+The controller provides operations for:
+
+- Placement Officer drive creation and management.
+- SuperAdmin drive listing.
+- Placement Officer college-specific drive retrieval.
+- Public retrieval of open placement drives.
+- Authorized retrieval of individual drives.
+
+Placement Officer operations are restricted to the officer's own college and drives.
+
+## 9. Dependency Injection
+
+Registered the PlacementDrive repository and service in `Program.cs`.
+
+## 10. Build and Database Verification
+
+Completed:
+
+- PlacementDrive entity.
+- PlacementDriveStatus enum.
+- DTOs.
+- EF Core configuration.
+- Repository interface and implementation.
+- Service interface and implementation.
+- Controller.
+- Dependency injection.
+- Database migration and update.
+
+**Build result:** Succeeded.
+
+**Migration result:** Applied successfully.
+
+**API/Postman testing:** Deferred until the complete project implementation is finished.
+
+## 11. Key Learning Points
+
+- How to associate a recruitment drive with a college, company, and Placement Officer.
+- How to validate date ranges and registration deadlines.
+- How to represent a business workflow with enum statuses.
+- How to implement college ownership checks.
+- How to expose public read-only information while protecting management operations.
+- How to apply EF Core relationship configuration.
+
+---
+
+# Unit 8 – Interview Scheduling
+
+## 1. Overview
+
+This unit introduces interview scheduling for job applications.
+
+Company HR representatives can schedule interviews for applicants associated with their company's recruitment process.
+
+Students can view their own interview schedules. SuperAdmin can view interview records across the platform.
+
+## 2. InterviewSchedule Entity
+
+Created:
+
+`Models/InterviewSchedule.cs`
+
+The interview schedule connects an interview with the relevant job application, company, and Company HR representative.
+
+Important properties include:
+
+- InterviewScheduleId – Primary key.
+- JobApplicationId – Related job application.
+- CompanyId – Recruiting company.
+- CompanyHRId – HR representative responsible for the interview.
+- ScheduledAt – Interview date and time.
+- DurationMinutes – Planned interview duration.
+- Mode – Interview method.
+- MeetingDetails – Meeting link or location details.
+- Notes – Additional interview notes.
+- Status – Interview status.
+- Feedback – Interview feedback.
+- CreatedAt and UpdatedAt – Audit timestamps.
+
+## 3. Interview Enums
+
+The interview module uses:
+
+- `InterviewMode` – Represents the interview method.
+- `InterviewStatus` – Represents the interview workflow status.
+
+The status supports scheduling, rescheduling, completion, and other configured interview outcomes.
+
+## 4. DTOs
+
+Created interview request and response DTOs for:
+
+- Interview creation.
+- Interview updates.
+- Interview response data.
+
+DTOs prevent direct exposure of database entities through the API.
+
+## 5. Database Configuration
+
+Updated:
+
+`Data/ApplicationDbContext.cs`
+
+Configured:
+
+- InterviewSchedules DbSet.
+- Relationship with JobApplication.
+- Relationship with Company.
+- Relationship with CompanyHR.
+- Restrict delete behavior.
+- Foreign-key indexes.
+- ScheduledAt index.
+- Maximum lengths and required constraints.
+- String conversion for interview enums.
+
+Created and applied the `AddInterviewSchedule` migration.
+
+## 6. Repository Layer
+
+Created:
+
+- `Repositories/Interfaces/IInterviewRepository.cs`
+- `Repositories/Implementations/InterviewRepository.cs`
+
+The repository retrieves interview schedules by company HR, student, and interview ID, and supports persistence operations.
+
+## 7. Service Layer
+
+Created:
+
+- `Services/Interfaces/IInterviewService.cs`
+- `Services/Implementations/InterviewService.cs`
+
+The service coordinates interview scheduling and retrieval operations.
+
+It uses the related job application, company, and Company HR information to associate interviews with the correct recruitment process.
+
+Ownership checks ensure that Company HR representatives manage interviews belonging to their company and students access their own interview information.
+
+## 8. Controller and Authorization
+
+Created:
+
+`Controllers/InterviewsController.cs`
+
+The controller provides these operations:
+
+- Company HR creates interviews.
+- SuperAdmin views all interviews.
+- Company HR views interviews for their company.
+- Students view their own interviews.
+- Authorized users retrieve individual interview details.
+- Company HR updates interview information.
+
+## 9. Dependency Injection
+
+Registered the Interview repository and service in `Program.cs`.
+
+## 10. Build and Database Verification
+
+Completed:
+
+- InterviewSchedule entity.
+- Interview enums.
+- Interview DTOs.
+- EF Core configuration.
+- Repository interface and implementation.
+- Service interface and implementation.
+- Controller.
+- Dependency injection.
+- `AddInterviewSchedule` migration and database update.
+
+**Build result:** Succeeded.
+
+**Migration result:** Applied successfully.
+
+**API/Postman testing:** Deferred until the complete project implementation is finished.
+
+## 11. Key Learning Points
+
+- How to model interview scheduling as a separate entity.
+- How to connect interviews to job applications.
+- How to track interview modes and statuses.
+- How to retrieve data based on the authenticated user's organization or profile.
+- How to apply role-based authorization to interview operations.
+
+---
+
+# Unit 9 – Placement Reports
+
+## 1. Overview
+
+This unit introduces reporting functionality for the Campus Placement Management System.
+
+Reports are generated from existing database records. No separate report entity or database migration is required.
+
+The reporting module provides information about:
+
+- Overall placement statistics.
+- College-wise placement performance.
+- Company-wise recruitment activity.
+- Job-wise application statistics.
+
+## 2. Report DTOs
+
+Created DTOs under:
+
+`DTOs/Reports/`
+
+Files:
+
+- `PlacementSummaryDto.cs`
+- `CollegePlacementReportDto.cs`
+- `CompanyRecruitmentReportDto.cs`
+- `JobApplicationReportDto.cs`
+
+These DTOs define the report response structure.
+
+### PlacementSummaryDto
+
+Contains overall counts and statistics, including:
+
+- Total colleges.
+- Total companies.
+- Total students.
+- Active students.
+- Total jobs.
+- Open jobs.
+- Total applications.
+- Application counts by status.
+- Total placement drives.
+- Total interviews.
+- Scheduled interviews.
+- Completed interviews.
+- Placed students.
+- Placement percentage.
+
+### CollegePlacementReportDto
+
+Contains:
+
+- College ID and name.
+- Total students.
+- Active students.
+- Students who applied.
+- Total applications.
+- Shortlisted applications.
+- Selected applications.
+- Rejected applications.
+- Total placement drives.
+- Placed students.
+- Placement percentage.
+
+### CompanyRecruitmentReportDto
+
+Contains:
+
+- Company ID and name.
+- Total jobs.
+- Open jobs.
+- Total applications.
+- Submitted applications.
+- Under-review applications.
+- Shortlisted applications.
+- Rejected applications.
+- Selected applications.
+- Total interviews.
+- Completed interviews.
+
+### JobApplicationReportDto
+
+Contains:
+
+- Job ID and title.
+- Company ID and name.
+- Total applications.
+- Submitted applications.
+- Under-review applications.
+- Shortlisted applications.
+- Rejected applications.
+- Selected applications.
+- Withdrawn applications.
+
+## 3. Repository Layer
+
+Created:
+
+- `Repositories/Interfaces/IPlacementReportRepository.cs`
+- `Repositories/Implementations/PlacementReportRepository.cs`
+
+The repository uses Entity Framework Core queries and aggregate calculations to generate report data.
+
+The reports are calculated from existing entities such as:
+
+- Colleges.
+- Companies.
+- Students.
+- Jobs.
+- JobApplications.
+- PlacementDrives.
+- InterviewSchedules.
+
+The repository does not create separate report records.
+
+## 4. Service Layer
+
+Created:
+
+- `Services/Interfaces/IPlacementReportService.cs`
+- `Services/Implementations/PlacementReportService.cs`
+
+The service provides report operations and validates the associated Placement Officer or Company HR account and organization status before returning organization-specific reports.
+
+## 5. Controller and Authorization
+
+Created:
+
+`Controllers/PlacementReportsController.cs`
+
+Implemented endpoints:
+
+| HTTP method | Endpoint | Authorization |
+|---|---|---|
+| GET | `/api/placementreports/summary` | SuperAdmin |
+| GET | `/api/placementreports/colleges` | SuperAdmin |
+| GET | `/api/placementreports/colleges/{collegeId}` | SuperAdmin |
+| GET | `/api/placementreports/my-college` | PlacementOfficer |
+| GET | `/api/placementreports/companies` | SuperAdmin |
+| GET | `/api/placementreports/companies/{companyId}` | SuperAdmin |
+| GET | `/api/placementreports/my-company` | CompanyHR |
+| GET | `/api/placementreports/jobs` | SuperAdmin |
+
+## 6. Report Calculation
+
+The placement reporting logic uses the `Selected` application status to identify placed students.
+
+Distinct Student IDs are counted so that a student selected for more than one job is not counted multiple times in the placed-student count.
+
+Placement percentage is calculated as:
+
+`Placement Percentage = (Placed Students / Active Students) × 100`
+
+If there are no active students, the percentage is returned as zero.
+
+## 7. Dependency Injection
+
+Registered the PlacementReport repository and service in `Program.cs`.
+
+## 8. Database and Build Verification
+
+Completed:
+
+- Report DTOs.
+- Repository interface and implementation.
+- Service interface and implementation.
+- Controller.
+- Dependency injection.
+- Report aggregation queries.
+
+No separate report table or migration was required.
+
+**Build result:** Succeeded.
+
+**API/Postman testing:** Deferred until the complete project implementation is finished.
+
+## 9. Key Learning Points
+
+- How to create aggregate reports using LINQ and EF Core.
+- How to calculate counts using `CountAsync()`.
+- How to count distinct students using `Distinct()`.
+- How to calculate percentages using decimal arithmetic.
+- How to separate report response models from database entities.
+- How to enforce role-based access to sensitive reports.
+- How to generate reports from existing data without creating duplicate report tables.
+
+---
+
+# Overall Implementation Progress
+
+| Unit | Module | Implementation | Build |
+|---|---|---|---|
+| 1 | Authentication and College Approval | Completed | Succeeded |
+| 2 | College and Placement Officer Management | Completed | Succeeded |
+| 3 | Company and Company HR Management | Completed | Succeeded |
+| 4 | Student Management | Completed | Succeeded |
+| 5 | Job Management | Completed | Succeeded |
+| 6 | Job Application Management | Completed | Succeeded |
+| 7 | Placement Drive Management | Completed | Succeeded |
+| 8 | Interview Scheduling | Completed | Succeeded |
+| 9 | Placement Reports | Completed | Succeeded |
+
+## Overall Project Status
+
+**Implementation:** All nine planned units have been implemented.
+
+**Build verification:** Successful after completing Unit 9.
+
+**Database migrations:** Applied for the units that required schema changes.
+
+**Postman testing:** Pending.
+
+**Documentation:** Updated through Unit 9.
+
+**Next phase:** Comprehensive API testing, authorization testing, validation testing, and final project review.
+

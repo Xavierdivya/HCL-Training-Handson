@@ -1,6 +1,5 @@
-
-using System.Text;
 using CampusPlacementManagement.Authorization;
+using CampusPlacementManagement.Authorization.Handlers;
 using CampusPlacementManagement.Data;
 using CampusPlacementManagement.Data.Seed;
 using CampusPlacementManagement.Models.Identity;
@@ -9,21 +8,22 @@ using CampusPlacementManagement.Repositories.Implementations;
 using CampusPlacementManagement.Services.Interfaces;
 using CampusPlacementManagement.Services.Implementations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register controllers.
+// Controllers
 builder.Services.AddControllers();
 
-// Configure SQL Server.
+// Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configure ASP.NET Core Identity.
+// Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 8;
@@ -35,7 +35,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// Configure JWT authentication.
+// JWT configuration
 var jwtKeyValue = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 var jwtAudience = builder.Configuration["Jwt:Audience"];
@@ -66,6 +66,7 @@ if (jwtKeyBytes.Length < 32)
         "JWT signing key must contain at least 256 bits.");
 }
 
+// Authentication
 builder.Services
     .AddAuthentication(options =>
     {
@@ -104,51 +105,49 @@ builder.Services
             };
     });
 
-// Configure authorization.
+// Authorization
 builder.Services.AddAuthorization();
 
-// Register repositories.
+builder.Services.AddScoped<
+    IAuthorizationHandler,
+    CompanyAccessHandler>();
+
+// Repository registrations
 builder.Services.AddScoped<ICollegeRepository, CollegeRepository>();
+builder.Services.AddScoped<IPlacementOfficerRepository, PlacementOfficerRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICompanyHRRepository, CompanyHRRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
+builder.Services.AddScoped<IPlacementDriveRepository, PlacementDriveRepository>();
+builder.Services.AddScoped<IInterviewRepository, InterviewRepository>();
+builder.Services.AddScoped<IPlacementReportRepository, PlacementReportRepository>();
 
-builder.Services.AddScoped<
-    IPlacementOfficerRepository,
-    PlacementOfficerRepository>();
-
-builder.Services.AddScoped<
-    ICompanyRepository,
-    CompanyRepository>();
-
-builder.Services.AddScoped<
-    ICompanyHRRepository,
-    CompanyHRRepository>();
-
-// Register services.
+// Service registrations
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICollegeService, CollegeService>();
+builder.Services.AddScoped<IPlacementOfficerService, PlacementOfficerService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<ICompanyHRService, CompanyHRService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IJobService, JobService>();
+builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
+builder.Services.AddScoped<IPlacementDriveService, PlacementDriveService>();
+builder.Services.AddScoped<IInterviewService, InterviewService>();
+builder.Services.AddScoped<IPlacementReportService, PlacementReportService>();
 
-builder.Services.AddScoped<
-    IPlacementOfficerService,
-    PlacementOfficerService>();
-
-builder.Services.AddScoped<
-    ICompanyService,
-    CompanyService>();
-
-builder.Services.AddScoped<
-    ICompanyHRService,
-    CompanyHRService>();
-
-// Configure OpenAPI.
+// OpenAPI
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Seed Identity roles and SuperAdmin.
+// Seed Identity roles and SuperAdmin
 await IdentitySeeder.SeedAsync(
     app.Services,
     app.Configuration);
 
-// Configure HTTP request pipeline.
+// HTTP pipeline
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
