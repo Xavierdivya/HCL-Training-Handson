@@ -1,0 +1,12 @@
+<section class="page-heading"><div><p class="eyebrow">TASK MANAGEMENT</p><h1>My tasks</h1><p>{{completedCount}} of {{tasks.length}} tasks completed</p></div></section>
+<form class="add-form" (ngSubmit)="addTask()">
+<input type="text" name="taskTitle" [(ngModel)]="newTitle" placeholder="Enter a task..." required>
+<select name="category" [(ngModel)]="newCategory"><option>Learning</option><option>Practice</option><option>Personal</option></select>
+<button type="submit">Add task</button></form>
+<section class="task-list">
+@if(tasks.length>0){@for(task of tasks;track task.id){
+<article class="task-row" [class.completed]="task.completed"><div class="task-info"><h3>{{task.title}}</h3><span>{{task.category}}</span></div>
+<div class="actions"><button type="button" class="complete" (click)="toggleTask(task.id)">{{task.completed?'Undo':'Complete'}}</button>
+<button type="button" class="delete" (click)="deleteTask(task.id)">Delete</button></div></article>
+}}@else{<p class="empty">No tasks yet. Add your first task above.</p>}
+</section>
