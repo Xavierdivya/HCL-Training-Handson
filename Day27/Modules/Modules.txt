@@ -1,0 +1,11 @@
+Module 1 - C# fundamentals
+Module 2 - Modern C# & DOTNET //delegates,Extension methods
+Module 3 - Version Control //git & github
+Module 4 - Build tools,IDE, and Debugging //commands,step into,step out,step over
+Module 5 - Sql & Database 
+Module 6 - ASP.NET core & RESTAPI Developments
+Module 7 - ASP.NET core Security
+
+
+Module 11 - HTML & CSS fundamentals
+Module 12 - Javascript fundamentals
