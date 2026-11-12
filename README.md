@@ -44,6 +44,11 @@ Throughout the training, I work with different programming languages, frameworks
 | Day 22 | Hands-on Practice | [View](Day22/) |
 | Day 23 | Resource Based Authorization | [View](Day23/) |
 | Day 24 | Middleware Practice | [View](Day24/) |
+| Day 25 | Combined Backend Practice | [View](Day25/) |
+| Day 26 | MVC learning | [View](Day26/) |
+| Day 27 | Revision | [View](Day27/) |
+| Day 28 | TypeScript learning | [View](Day28/) |
+| Day 29 | Angular learning | [View](Day29/) |
 
 
 
