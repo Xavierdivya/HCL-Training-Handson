@@ -49,6 +49,7 @@ Throughout the training, I work with different programming languages, frameworks
 | Day 27 | Revision | [View](Day27/) |
 | Day 28 | TypeScript learning | [View](Day28/) |
 | Day 29 | Angular learning | [View](Day29/) |
+| Day 30 | Pipes & Directive learning | [View](Day30/) |
 
 
 
