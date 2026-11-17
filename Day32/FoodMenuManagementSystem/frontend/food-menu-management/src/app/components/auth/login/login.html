@@ -1,0 +1,71 @@
+
+<div class="auth-container">
+  <div class="auth-card">
+
+    <h2>Welcome Back</h2>
+    <p>Login to your Food Menu account</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        />
+
+        <small
+          *ngIf="loginForm.controls.email.touched &&
+                 loginForm.controls.email.invalid">
+          Enter a valid email address.
+        </small>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+        />
+
+        <small
+          *ngIf="loginForm.controls.password.touched &&
+                 loginForm.controls.password.invalid">
+          Password is required.
+        </small>
+      </div>
+
+      <!-- API Error Message -->
+      <p
+        class="error-message"
+        *ngIf="errorMessage()">
+        {{ errorMessage() }}
+      </p>
+
+      <!-- Login Button -->
+      <button
+        type="submit"
+        [disabled]="isSubmitting()">
+
+        {{ isSubmitting() ? 'Logging in...' : 'Login' }}
+
+      </button>
+
+    </form>
+
+    <!-- Register Link -->
+    <p>
+      Don't have an account?
+      <a routerLink="/register">Register here</a>
+    </p>
+
+  </div>
+</div>

@@ -1,5 +1,5 @@
-﻿
-using FoodMenuManagement.Api.DTOs.Auth;
+﻿using FoodMenuManagement.Api.DTOs.Auth;
+using System.Threading.Tasks;
 
 namespace FoodMenuManagement.Api.Services.Interfaces
 {

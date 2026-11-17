@@ -12,8 +12,7 @@ export class FoodItemService {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:5186/api/FoodItem';
-
+private apiUrl = 'http://localhost:5000/api/FoodItem';
   // POST: Create food item
   createFoodItem(
     foodItem: CreateFoodItem

@@ -2,6 +2,7 @@
 using FoodMenuManagement.Api.DTOs.Auth;
 using FoodMenuManagement.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace FoodMenuManagement.Api.Controllers
 {
@@ -29,7 +30,6 @@ namespace FoodMenuManagement.Api.Controllers
             });
         }
 
-        // POST: api/Auth/login
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
