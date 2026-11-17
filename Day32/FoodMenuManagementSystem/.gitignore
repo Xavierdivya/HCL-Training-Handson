@@ -31,3 +31,14 @@ Thumbs.db
 # IDE
 .idea/
 .vscode/
+
+# Angular / Node.js
+**/node_modules/
+**/dist/
+**/.angular/
+**/coverage/
+
+# Environment and local configuration
+**/.env
+**/.env.*
+!**/.env.example

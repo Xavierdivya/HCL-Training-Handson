@@ -1,180 +1,99 @@
 ﻿
-using FoodMenuManagement.Api.Data;
 using FoodMenuManagement.Api.DTOs.FoodItems;
-using FoodMenuManagement.Api.Entities;
+using FoodMenuManagement.Api.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FoodMenuManagement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FoodItemController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IFoodItemService _service;
 
-        public FoodItemController(ApplicationDbContext context)
+        public FoodItemController(IFoodItemService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/FoodItem
+        // Admin, Staff and Customer
         [HttpGet]
-        public async Task<IActionResult> GetAllFoodItems()
+        [Authorize(Roles = "Admin,Staff,Customer")]
+        public async Task<IActionResult> GetAll()
         {
-            var foodItems = await _context.FoodItems
-                .Select(foodItem => new FoodItemResponseDto
-                {
-                    FoodItemId = foodItem.FoodItemId,
-                    FoodName = foodItem.FoodName,
-                    Description = foodItem.Description,
-                    Price = foodItem.Price,
-                    ImageUrl = foodItem.ImageUrl,
-                    IsAvailable = foodItem.IsAvailable,
-                    CategoryId = foodItem.CategoryId
-                })
-                .ToListAsync();
-
+            var foodItems = await _service.GetAllAsync();
             return Ok(foodItems);
         }
 
-        // GET: api/FoodItem/5
+        // GET: api/FoodItem/1
+        // Admin, Staff and Customer
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetFoodItemById(int id)
+        [Authorize(Roles = "Admin,Staff,Customer")]
+        public async Task<IActionResult> GetById(int id)
         {
-            var foodItem = await _context.FoodItems
-                .Where(item => item.FoodItemId == id)
-                .Select(item => new FoodItemResponseDto
-                {
-                    FoodItemId = item.FoodItemId,
-                    FoodName = item.FoodName,
-                    Description = item.Description,
-                    Price = item.Price,
-                    ImageUrl = item.ImageUrl,
-                    IsAvailable = item.IsAvailable,
-                    CategoryId = item.CategoryId
-                })
-                .FirstOrDefaultAsync();
+            var foodItem = await _service.GetByIdAsync(id);
 
             if (foodItem == null)
             {
-                return NotFound("Food item not found.");
+                return NotFound(new
+                {
+                    message = "Food item not found."
+                });
             }
 
             return Ok(foodItem);
         }
 
         // POST: api/FoodItem
+        // Admin and Staff
         [HttpPost]
-        public async Task<IActionResult> CreateFoodItem(
-            CreateFoodItemDto foodItemDto)
+        [Authorize(Roles = "Admin,Staff")]
+        public async Task<IActionResult> Create(CreateFoodItemDto dto)
         {
-            // Check whether the category exists
-            var category = await _context.Categories
-                .FindAsync(foodItemDto.CategoryId);
+            var foodItem = await _service.CreateAsync(dto);
 
-            if (category == null)
-            {
-                return BadRequest("Invalid CategoryId. Category does not exist.");
-            }
-
-            // Convert DTO into Entity
-            var foodItem = new FoodItem
-            {
-                FoodName = foodItemDto.FoodName,
-                Description = foodItemDto.Description,
-                Price = foodItemDto.Price,
-                ImageUrl = foodItemDto.ImageUrl,
-                IsAvailable = foodItemDto.IsAvailable,
-                CategoryId = foodItemDto.CategoryId
-            };
-
-            // Add food item
-            _context.FoodItems.Add(foodItem);
-
-            // Save into SQL Server
-            await _context.SaveChangesAsync();
-
-            var response = new FoodItemResponseDto
-            {
-                FoodItemId = foodItem.FoodItemId,
-                FoodName = foodItem.FoodName,
-                Description = foodItem.Description,
-                Price = foodItem.Price,
-                ImageUrl = foodItem.ImageUrl,
-                IsAvailable = foodItem.IsAvailable,
-                CategoryId = foodItem.CategoryId
-            };
-
-            return StatusCode(201, new
-            {
-                message = "Food item created successfully.",
-                foodItem = response
-            });
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = foodItem.FoodItemId },
+                new
+                {
+                    message = "Food item created successfully.",
+                    data = foodItem
+                });
         }
 
         // PUT: api/FoodItem/1
+        // Admin and Staff
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFoodItem(
+        [Authorize(Roles = "Admin,Staff")]
+        public async Task<IActionResult> Update(
             int id,
-            UpdateFoodItemDto foodItemDto)
+            UpdateFoodItemDto dto)
         {
-            var foodItem = await _context.FoodItems.FindAsync(id);
-
-            if (foodItem == null)
-            {
-                return NotFound("Food item not found.");
-            }
-
-            var category = await _context.Categories
-                .FindAsync(foodItemDto.CategoryId);
-
-            if (category == null)
-            {
-                return BadRequest("Invalid CategoryId.");
-            }
-
-            foodItem.FoodName = foodItemDto.FoodName;
-            foodItem.Description = foodItemDto.Description;
-            foodItem.Price = foodItemDto.Price;
-            foodItem.ImageUrl = foodItemDto.ImageUrl;
-            foodItem.IsAvailable = foodItemDto.IsAvailable;
-            foodItem.CategoryId = foodItemDto.CategoryId;
-
-            await _context.SaveChangesAsync();
+            var foodItem = await _service.UpdateAsync(id, dto);
 
             return Ok(new
             {
                 message = "Food item updated successfully.",
-                foodItem = new FoodItemResponseDto
-                {
-                    FoodItemId = foodItem.FoodItemId,
-                    FoodName = foodItem.FoodName,
-                    Description = foodItem.Description,
-                    Price = foodItem.Price,
-                    ImageUrl = foodItem.ImageUrl,
-                    IsAvailable = foodItem.IsAvailable,
-                    CategoryId = foodItem.CategoryId
-                }
+                data = foodItem
             });
         }
 
         // DELETE: api/FoodItem/1
+        // Admin only
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFoodItem(int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var foodItem = await _context.FoodItems.FindAsync(id);
+            await _service.DeleteAsync(id);
 
-            if (foodItem == null)
+            return Ok(new
             {
-                return NotFound("Food item not found.");
-            }
-
-            _context.FoodItems.Remove(foodItem);
-
-            await _context.SaveChangesAsync();
-
-            return Ok("Food item deleted successfully.");
+                message = "Food item deleted successfully."
+            });
         }
     }
 }
