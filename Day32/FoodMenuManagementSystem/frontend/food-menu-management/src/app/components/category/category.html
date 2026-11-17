@@ -1,0 +1,202 @@
+
+<div class="container mt-4">
+
+  <!-- Page Heading -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold">Category Management</h2>
+      <p class="text-muted">Manage your food categories</p>
+    </div>
+
+    <span class="badge bg-primary fs-6">
+      Total: {{ categories.length }}
+    </span>
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Category Form -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">
+            {{ isEditing ? 'Edit Category' : 'Add Category' }}
+          </h5>
+        </div>
+
+        <div class="card-body">
+
+          <form (ngSubmit)="saveCategory()" #categoryFormRef="ngForm">
+
+            <!-- Category Name -->
+            <div class="mb-3">
+              <label class="form-label">Category Name</label>
+
+              <input
+                type="text"
+                class="form-control"
+                name="categoryName"
+                [(ngModel)]="categoryForm.categoryName"
+                placeholder="Enter category name"
+                required
+                maxlength="100"
+              />
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+
+              <textarea
+                class="form-control"
+                name="description"
+                [(ngModel)]="categoryForm.description"
+                placeholder="Enter description"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <!-- Active Status -->
+            <div class="form-check mb-3">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="isActive"
+                name="isActive"
+                [(ngModel)]="categoryForm.isActive"
+              />
+
+              <label class="form-check-label" for="isActive">
+                Active
+              </label>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2">
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="categoryFormRef.invalid"
+              >
+                {{ isEditing ? 'Update Category' : 'Add Category' }}
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="resetForm()"
+              >
+                Reset
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Table -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">Category List</h5>
+        </div>
+
+        <div class="card-body">
+
+          <div *ngIf="isLoading" class="text-center py-4">
+            <div class="spinner-border text-primary"></div>
+            <p class="mt-2">Loading categories...</p>
+          </div>
+
+          <div *ngIf="!isLoading" class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Category Name</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr *ngFor="let category of categories">
+
+                  <td>{{ category.categoryId }}</td>
+
+                  <td>{{ category.categoryName }}</td>
+
+                  <td>
+                    {{ category.description || '-' }}
+                  </td>
+
+                  <td>
+                    <span
+                      class="badge"
+                      [ngClass]="category.isActive ? 'bg-success' : 'bg-secondary'"
+                    >
+                      {{ category.isActive ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+
+                  <td>
+                    <div class="d-flex gap-2">
+
+                      <button
+                        class="btn btn-sm btn-warning"
+                        type="button"
+                        (click)="editCategory(category)"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        class="btn btn-sm btn-danger"
+                        type="button"
+                        (click)="deleteCategory(category.categoryId)"
+                      >
+                        Delete
+                      </button>
+
+                    </div>
+                  </td>
+
+                </tr>
+
+                <tr *ngIf="categories.length === 0">
+                  <td colspan="5" class="text-center text-muted py-3">
+                    No categories found.
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,22 @@
+
+.card {
+  border: none;
+  border-radius: 10px;
+}
+
+.card-header {
+  padding: 15px;
+}
+
+.form-control {
+  border-radius: 6px;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.btn {
+  border-radius: 5px;
+}
