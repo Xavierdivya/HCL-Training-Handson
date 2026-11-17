@@ -1,88 +1,82 @@
 ﻿
-using FoodMenuManagement.Api.Data;
 using FoodMenuManagement.Api.Entities;
+using FoodMenuManagement.Api.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FoodMenuManagement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICategoryService _service;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(ICategoryService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Category
+        // Admin, Staff and Customer
         [HttpGet]
+        [Authorize(Roles = "Admin,Staff,Customer")]
         public async Task<IActionResult> GetCategories()
         {
-            var categories = await _context.Categories.ToListAsync();
+            var categories = await _service.GetAllAsync();
             return Ok(categories);
         }
 
         // GET: api/Category/1
+        // Admin, Staff and Customer
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Staff,Customer")]
         public async Task<IActionResult> GetCategory(int id)
         {
-            var category = await _context.Categories
-                .FindAsync(id);
+            var category = await _service.GetByIdAsync(id);
 
             if (category == null)
+            {
                 return NotFound("Category not found.");
+            }
 
             return Ok(category);
         }
 
         // POST: api/Category
+        // Admin only
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCategory(Category category)
         {
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            var createdCategory = await _service.CreateAsync(category);
 
             return CreatedAtAction(
                 nameof(GetCategory),
-                new { id = category.CategoryId },
-                category
-            );
+                new { id = createdCategory.CategoryId },
+                createdCategory);
         }
 
         // PUT: api/Category/1
+        // Admin only
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCategory(
-            int id, Category updatedCategory)
+            int id,
+            Category updatedCategory)
         {
-            var category = await _context.Categories.FindAsync(id);
-
-            if (category == null)
-                return NotFound("Category not found.");
-
-            category.CategoryName = updatedCategory.CategoryName;
-            category.Description = updatedCategory.Description;
-            category.IsActive = updatedCategory.IsActive;
-
-            await _context.SaveChangesAsync();
-
+            var category = await _service.UpdateAsync(id, updatedCategory);
             return Ok(category);
         }
 
         // DELETE: api/Category/1
+        // Admin only
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-
-            if (category == null)
-                return NotFound("Category not found.");
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
+            await _service.DeleteAsync(id);
             return Ok("Category deleted successfully.");
         }
     }

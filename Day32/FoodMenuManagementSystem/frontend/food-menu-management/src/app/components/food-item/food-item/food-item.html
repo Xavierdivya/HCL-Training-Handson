@@ -1,0 +1,293 @@
+
+<div class="container mt-4">
+
+  <h2 class="mb-4">Food Item Management</h2>
+
+  <!-- Success Message -->
+  <div class="alert alert-success" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-danger" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Food Item Form -->
+  <div class="card shadow-sm mb-4">
+
+    <div class="card-header">
+      <h5 class="mb-0">
+        {{ isEditing ? 'Edit Food Item' : 'Add Food Item' }}
+      </h5>
+    </div>
+
+    <div class="card-body">
+
+      <form (ngSubmit)="saveFoodItem()" #foodForm="ngForm">
+
+        <div class="row">
+
+          <!-- Food Name -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Food Name</label>
+
+            <input
+              type="text"
+              class="form-control"
+              name="foodName"
+              [(ngModel)]="foodItemForm.foodName"
+              required
+              maxlength="100"
+              placeholder="Enter food name">
+          </div>
+
+          <!-- Price -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Price (₹)</label>
+
+            <input
+              type="number"
+              class="form-control"
+              name="price"
+              [(ngModel)]="foodItemForm.price"
+              min="0.01"
+              step="0.01"
+              required>
+          </div>
+
+          <!-- Description -->
+          <div class="col-md-12 mb-3">
+            <label class="form-label">Description</label>
+
+            <textarea
+              class="form-control"
+              name="description"
+              [(ngModel)]="foodItemForm.description"
+              maxlength="500"
+              placeholder="Enter food description">
+            </textarea>
+          </div>
+
+          <!-- Image URL -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Image URL</label>
+
+            <input
+              type="url"
+              class="form-control"
+              name="imageUrl"
+              [(ngModel)]="foodItemForm.imageUrl"
+              placeholder="Enter image URL">
+          </div>
+
+          <!-- Category -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Category</label>
+
+            <select
+              class="form-select"
+              name="categoryId"
+              [(ngModel)]="foodItemForm.categoryId"
+              required>
+
+              <option [ngValue]="0" disabled>
+                Select Category
+              </option>
+
+              <option
+                *ngFor="let category of categories"
+                [ngValue]="category.categoryId">
+
+                {{ category.categoryName }}
+
+              </option>
+
+            </select>
+          </div>
+
+          <!-- Availability -->
+          <div class="col-md-12 mb-3">
+
+            <div class="form-check">
+
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="isAvailable"
+                name="isAvailable"
+                [(ngModel)]="foodItemForm.isAvailable">
+
+              <label
+                class="form-check-label"
+                for="isAvailable">
+
+                Available
+
+              </label>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <button
+          type="submit"
+          class="btn btn-primary me-2"
+          [disabled]="isSaving">
+
+          {{ isSaving
+            ? 'Saving...'
+            : isEditing
+              ? 'Update Food Item'
+              : 'Add Food Item' }}
+
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="resetForm()">
+
+          {{ isEditing ? 'Cancel Edit' : 'Reset' }}
+
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Food Item List -->
+  <div class="card shadow-sm">
+
+    <div class="card-header d-flex justify-content-between align-items-center">
+
+      <h5 class="mb-0">Food Items</h5>
+
+      <button
+        class="btn btn-outline-primary btn-sm"
+        type="button"
+        (click)="loadFoodItems()">
+
+        Refresh
+
+      </button>
+
+    </div>
+
+    <div class="card-body">
+
+      <!-- Search -->
+      <div class="mb-3">
+
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search food by name..."
+          [(ngModel)]="searchText"
+          name="searchText">
+
+      </div>
+
+      <!-- Loading -->
+      <div class="text-center p-3" *ngIf="isLoading">
+        Loading food items...
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive" *ngIf="!isLoading">
+
+        <table class="table table-bordered table-hover align-middle">
+
+          <thead class="table-dark">
+
+            <tr>
+              <th>ID</th>
+              <th>Food Name</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Availability</th>
+              <th>Actions</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let item of filteredFoodItems">
+
+              <td>{{ item.foodItemId }}</td>
+
+              <td>{{ item.foodName }}</td>
+
+              <td>{{ item.description || '-' }}</td>
+
+              <td>₹{{ item.price }}</td>
+
+              <td>{{ getCategoryName(item.categoryId) }}</td>
+
+              <td>
+
+                <span
+                  class="badge"
+                  [ngClass]="item.isAvailable
+                    ? 'bg-success'
+                    : 'bg-secondary'">
+
+                  {{ item.isAvailable
+                    ? 'Available'
+                    : 'Unavailable' }}
+
+                </span>
+
+              </td>
+
+              <td>
+
+                <button
+                  class="btn btn-warning btn-sm me-2"
+                  type="button"
+                  (click)="editFoodItem(item.foodItemId)">
+
+                  Edit
+
+                </button>
+
+                <button
+                  class="btn btn-danger btn-sm"
+                  type="button"
+                  (click)="deleteFoodItem(item.foodItemId)">
+
+                  Delete
+
+                </button>
+
+              </td>
+
+            </tr>
+
+            <!-- Empty State -->
+            <tr *ngIf="filteredFoodItems.length === 0">
+
+              <td colspan="7" class="text-center text-muted p-4">
+
+                No food items found.
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
