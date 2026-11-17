@@ -23,4 +23,27 @@ export class FoodItemService {
       foodItem
     );
   }
+
+  // GET all food items
+getFoodItems(): Observable<FoodItem[]> {
+  return this.http.get<FoodItem[]>(this.apiUrl);
+}
+
+// GET food item by ID
+getFoodItemById(id: number): Observable<FoodItem> {
+  return this.http.get<FoodItem>(`${this.apiUrl}/${id}`);
+}
+
+// PUT update food item
+updateFoodItem(
+  id: number,
+  foodItem: CreateFoodItem
+): Observable<any> {
+  return this.http.put(`${this.apiUrl}/${id}`, foodItem);
+}
+
+// DELETE food item
+deleteFoodItem(id: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/${id}`);
+}
 }
