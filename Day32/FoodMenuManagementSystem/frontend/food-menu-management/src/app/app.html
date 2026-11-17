@@ -1,1 +1,32 @@
-<router-outlet></router-outlet>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+
+    <a class="navbar-brand" routerLink="/">
+      Food Menu Management
+    </a>
+
+    <div class="navbar-nav">
+
+      <a
+        class="nav-link"
+        routerLink="/categories"
+        routerLinkActive="active">
+        Categories
+      </a>
+
+      <a
+        class="nav-link"
+        routerLink="/food-items"
+        routerLinkActive="active">
+        Food Items
+      </a>
+
+    </div>
+
+  </div>
+</nav>
+
+<main class="container mt-4">
+  <router-outlet></router-outlet>
+</main>
