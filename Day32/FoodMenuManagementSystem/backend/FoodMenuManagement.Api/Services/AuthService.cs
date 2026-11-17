@@ -1,12 +1,16 @@
 ﻿
+using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using FoodMenuManagement.Api.DTOs.Auth;
 using FoodMenuManagement.Api.Entities;
 using FoodMenuManagement.Api.Repositories.Interfaces;
 using FoodMenuManagement.Api.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FoodMenuManagement.Api.Services

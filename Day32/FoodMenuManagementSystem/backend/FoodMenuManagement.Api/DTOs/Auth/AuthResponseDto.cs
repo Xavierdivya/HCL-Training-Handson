@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace FoodMenuManagement.Api.DTOs.Auth
 {
     public class AuthResponseDto
