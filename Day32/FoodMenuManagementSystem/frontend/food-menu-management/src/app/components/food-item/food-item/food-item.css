@@ -1,6 +1,6 @@
 
 .container {
-  max-width: 750px;
+  max-width: 1200px;
 }
 
 h2 {
@@ -8,11 +8,18 @@ h2 {
   color: #212529;
 }
 
-form {
-  background: #ffffff;
-  padding: 25px;
+.card {
   border-radius: 10px;
   border: 1px solid #dee2e6;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  padding: 15px 20px;
+}
+
+.card-body {
+  padding: 20px;
 }
 
 .form-label {
@@ -24,6 +31,23 @@ form {
   padding: 10px;
 }
 
+textarea {
+  min-height: 90px;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.table th {
+  white-space: nowrap;
+}
+
 .btn {
-  min-width: 120px;
+  min-width: 75px;
+}
+
+.badge {
+  padding: 7px 10px;
 }

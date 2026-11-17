@@ -17,33 +17,30 @@ export class FoodItemService {
   // POST: Create food item
   createFoodItem(
     foodItem: CreateFoodItem
-  ): Observable<{ message: string; foodItem: FoodItem }> {
-    return this.http.post<{ message: string; foodItem: FoodItem }>(
-      this.apiUrl,
-      foodItem
-    );
+  ): Observable<any> {
+    return this.http.post(this.apiUrl, foodItem);
   }
 
-  // GET all food items
-getFoodItems(): Observable<FoodItem[]> {
-  return this.http.get<FoodItem[]>(this.apiUrl);
-}
+  // GET: Retrieve all food items
+  getFoodItems(): Observable<FoodItem[]> {
+    return this.http.get<FoodItem[]>(this.apiUrl);
+  }
 
-// GET food item by ID
-getFoodItemById(id: number): Observable<FoodItem> {
-  return this.http.get<FoodItem>(`${this.apiUrl}/${id}`);
-}
+  // GET: Retrieve food item by ID
+  getFoodItemById(id: number): Observable<FoodItem> {
+    return this.http.get<FoodItem>(`${this.apiUrl}/${id}`);
+  }
 
-// PUT update food item
-updateFoodItem(
-  id: number,
-  foodItem: CreateFoodItem
-): Observable<any> {
-  return this.http.put(`${this.apiUrl}/${id}`, foodItem);
-}
+  // PUT: Update food item
+  updateFoodItem(
+    id: number,
+    foodItem: CreateFoodItem
+  ): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, foodItem);
+  }
 
-// DELETE food item
-deleteFoodItem(id: number): Observable<any> {
-  return this.http.delete(`${this.apiUrl}/${id}`);
-}
+  // DELETE: Delete food item
+  deleteFoodItem(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }
