@@ -1,5 +1,11 @@
 
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectorRef
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
@@ -12,6 +18,7 @@ import {
 
 import { CategoryService } from '../../../services/category.service';
 import { FoodItemService } from '../../../services/food-item.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-food-item',
@@ -24,29 +31,50 @@ export class FoodItemComponent implements OnInit {
 
   private categoryService = inject(CategoryService);
   private foodItemService = inject(FoodItemService);
+  private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
 
+  // User roles
+  isAdmin = false;
+  isStaff = false;
+  canManageFoodItems = false;
+
+  // Food data
   categories: Category[] = [];
   foodItems: FoodItem[] = [];
 
   foodItemForm: CreateFoodItem = this.emptyFoodItem();
 
+  // Search
   searchText = '';
 
+  // Form states
+  isEditing = false;
+  editingFoodItemId: number | null = null;
+
+  // Loading states
   isLoading = false;
   isSaving = false;
 
-  isEditing = false;
-  editingFoodItemId = 0;
-
+  // Messages
   successMessage = '';
   errorMessage = '';
 
   ngOnInit(): void {
+
+    const role = this.authService.getUserRole();
+
+    console.log('Logged-in role:', role);
+
+    this.isAdmin = role === 'Admin';
+    this.isStaff = role === 'Staff';
+    this.canManageFoodItems = this.isAdmin || this.isStaff;
+
     this.loadCategories();
     this.loadFoodItems();
   }
 
-  // Empty form
+  // Empty food item object
   emptyFoodItem(): CreateFoodItem {
     return {
       foodName: '',
@@ -58,58 +86,96 @@ export class FoodItemComponent implements OnInit {
     };
   }
 
-  // GET categories
+  // Load all categories
   loadCategories(): void {
+
     this.categoryService.getCategories().subscribe({
-      next: (data) => {
-        this.categories = data;
+
+      next: (data: Category[]) => {
+
+        this.categories = data ?? [];
+
+        this.cdr.detectChanges();
       },
+
       error: (error) => {
-        console.error(error);
+
+        console.error('Category loading failed:', error);
+
         this.errorMessage = 'Unable to load categories.';
+
+        this.cdr.detectChanges();
       }
+
     });
   }
 
-  // GET all food items
+  // Load all food items
   loadFoodItems(): void {
+
     this.isLoading = true;
+    this.errorMessage = '';
 
     this.foodItemService.getFoodItems()
       .pipe(
-        finalize(() => this.isLoading = false)
+        finalize(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        })
       )
       .subscribe({
-        next: (data) => {
-          this.foodItems = data;
+
+        next: (data: FoodItem[]) => {
+
+          console.log('Food items loaded:', data);
+
+          this.foodItems = data ?? [];
+
+          this.cdr.detectChanges();
         },
+
         error: (error) => {
-          console.error(error);
+
+          console.error('Food item loading failed:', error);
+
+          this.foodItems = [];
           this.errorMessage = 'Unable to load food items.';
+
+          this.cdr.detectChanges();
         }
+
       });
   }
 
-  // Search food items
+  // Search and filter food items
   get filteredFoodItems(): FoodItem[] {
+
     const search = this.searchText.toLowerCase().trim();
 
     return this.foodItems.filter(item =>
-      item.foodName.toLowerCase().includes(search)
+      item.foodName.toLowerCase().includes(search) ||
+      (item.description ?? '').toLowerCase().includes(search) ||
+      this.getCategoryName(item.categoryId).toLowerCase().includes(search)
     );
   }
 
-  // Get category name using CategoryId
+  // Get category name
   getCategoryName(categoryId: number): string {
+
     const category = this.categories.find(
-      c => c.categoryId === categoryId
+      item => item.categoryId === categoryId
     );
 
     return category?.categoryName ?? 'Unknown';
   }
 
-  // POST / PUT: Save food item
+  // Add or update food item
   saveFoodItem(): void {
+
+    if (!this.canManageFoodItems) {
+      this.errorMessage = 'You are not authorized to manage food items.';
+      return;
+    }
 
     if (!this.foodItemForm.foodName.trim()) {
       this.errorMessage = 'Food name is required.';
@@ -126,51 +192,68 @@ export class FoodItemComponent implements OnInit {
       return;
     }
 
+    this.isSaving = true;
     this.errorMessage = '';
     this.successMessage = '';
-    this.isSaving = true;
 
-    const request = this.isEditing
-      ? this.foodItemService.updateFoodItem(
-          this.editingFoodItemId,
-          this.foodItemForm
-        )
-      : this.foodItemService.createFoodItem(
-          this.foodItemForm
-        );
+    const payload: CreateFoodItem = {
+      ...this.foodItemForm,
+      foodName: this.foodItemForm.foodName.trim()
+    };
+
+    const request =
+      this.isEditing && this.editingFoodItemId !== null
+        ? this.foodItemService.updateFoodItem(
+            this.editingFoodItemId,
+            payload
+          )
+        : this.foodItemService.createFoodItem(payload);
 
     request
       .pipe(
-        finalize(() => this.isSaving = false)
+        finalize(() => {
+          this.isSaving = false;
+          this.cdr.detectChanges();
+        })
       )
       .subscribe({
-        next: (response) => {
 
-          this.successMessage = response.message ||
-            (this.isEditing
-              ? 'Food item updated successfully.'
-              : 'Food item created successfully.');
+        next: () => {
 
-          this.resetForm();
+          this.successMessage = this.isEditing
+            ? 'Food item updated successfully.'
+            : 'Food item added successfully.';
+
+          this.resetForm(false);
           this.loadFoodItems();
         },
+
         error: (error) => {
-          console.error(error);
-          this.errorMessage = error.error?.title ||
-            error.error ||
+
+          console.error('Food item save failed:', error);
+
+          this.errorMessage =
+            error.error?.message ||
+            error.error?.title ||
             'Unable to save food item.';
         }
+
       });
   }
 
-  // GET by ID and load into form for editing
+  // Edit food item
   editFoodItem(id: number): void {
+
+    if (!this.canManageFoodItems) {
+      return;
+    }
 
     this.errorMessage = '';
     this.successMessage = '';
 
     this.foodItemService.getFoodItemById(id).subscribe({
-      next: (item) => {
+
+      next: (item: FoodItem) => {
 
         this.foodItemForm = {
           foodName: item.foodName,
@@ -188,22 +271,29 @@ export class FoodItemComponent implements OnInit {
           top: 0,
           behavior: 'smooth'
         });
+
+        this.cdr.detectChanges();
       },
+
       error: (error) => {
-        console.error(error);
+
+        console.error('Food item retrieval failed:', error);
+
         this.errorMessage = 'Unable to retrieve food item.';
       }
+
     });
   }
 
-  // DELETE food item
+  // Delete food item (Admin only)
   deleteFoodItem(id: number): void {
 
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this food item?'
-    );
+    if (!this.isAdmin) {
+      this.errorMessage = 'Only Admin can delete food items.';
+      return;
+    }
 
-    if (!confirmed) {
+    if (!window.confirm('Are you sure you want to delete this food item?')) {
       return;
     }
 
@@ -211,32 +301,41 @@ export class FoodItemComponent implements OnInit {
     this.successMessage = '';
 
     this.foodItemService.deleteFoodItem(id).subscribe({
-      next: (response) => {
-        this.successMessage =
-          typeof response === 'string'
-            ? response
-            : response.message || 'Food item deleted successfully.';
+
+      next: () => {
+
+        this.successMessage = 'Food item deleted successfully.';
 
         if (this.editingFoodItemId === id) {
-          this.resetForm();
+          this.resetForm(false);
         }
 
         this.loadFoodItems();
       },
+
       error: (error) => {
-        console.error(error);
-        this.errorMessage = 'Unable to delete food item.';
+
+        console.error('Food item deletion failed:', error);
+
+        this.errorMessage =
+          error.error?.message || 'Unable to delete food item.';
       }
+
     });
   }
 
-  // Reset form
-  resetForm(): void {
+  // Reset food item form
+  resetForm(clearMessages = true): void {
+
     this.foodItemForm = this.emptyFoodItem();
 
     this.isEditing = false;
-    this.editingFoodItemId = 0;
+    this.editingFoodItemId = null;
 
-    this.errorMessage = '';
+    if (clearMessages) {
+      this.successMessage = '';
+      this.errorMessage = '';
+    }
   }
+
 }

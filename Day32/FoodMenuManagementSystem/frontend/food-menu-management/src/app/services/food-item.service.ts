@@ -12,13 +12,7 @@ export class FoodItemService {
 
   private http = inject(HttpClient);
 
-private apiUrl = 'http://localhost:5000/api/FoodItem';
-  // POST: Create food item
-  createFoodItem(
-    foodItem: CreateFoodItem
-  ): Observable<any> {
-    return this.http.post(this.apiUrl, foodItem);
-  }
+  private readonly apiUrl = 'http://localhost:5186/api/FoodItem';
 
   // GET: Retrieve all food items
   getFoodItems(): Observable<FoodItem[]> {
@@ -30,16 +24,21 @@ private apiUrl = 'http://localhost:5000/api/FoodItem';
     return this.http.get<FoodItem>(`${this.apiUrl}/${id}`);
   }
 
+  // POST: Create food item
+  createFoodItem(foodItem: CreateFoodItem): Observable<any> {
+    return this.http.post<any>(this.apiUrl, foodItem);
+  }
+
   // PUT: Update food item
   updateFoodItem(
     id: number,
     foodItem: CreateFoodItem
   ): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, foodItem);
+    return this.http.put<any>(`${this.apiUrl}/${id}`, foodItem);
   }
 
   // DELETE: Delete food item
   deleteFoodItem(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 }
