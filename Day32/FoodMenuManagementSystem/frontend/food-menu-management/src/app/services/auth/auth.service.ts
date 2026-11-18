@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
@@ -15,12 +14,11 @@ import {
 })
 export class AuthService {
 
-  private readonly apiUrl = 'http://localhost:5000/api/Auth';
+  private readonly apiUrl = 'http://localhost:5186/api/Auth';
   private readonly storageKey = 'foodMenuAuth';
 
   constructor(private http: HttpClient) {}
 
-  // REGISTER
   register(data: RegisterRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>(
       `${this.apiUrl}/register`,
@@ -30,7 +28,6 @@ export class AuthService {
     );
   }
 
-  // LOGIN
   login(data: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>(
       `${this.apiUrl}/login`,
@@ -40,34 +37,37 @@ export class AuthService {
     );
   }
 
-  // SAVE AUTHENTICATION DETAILS
   private saveAuth(data: AuthResponse): void {
     sessionStorage.setItem(this.storageKey, JSON.stringify(data));
   }
 
-  // GET CURRENT USER
   getCurrentUser(): AuthResponse | null {
     const userData = sessionStorage.getItem(this.storageKey);
 
-    return userData ? JSON.parse(userData) as AuthResponse : null;
+    if (!userData) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(userData) as AuthResponse;
+    } catch {
+      this.logout();
+      return null;
+    }
   }
 
-  // GET TOKEN
   getToken(): string | null {
     return this.getCurrentUser()?.token ?? null;
   }
 
-  // CHECK LOGIN STATUS
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
 
-  // GET USER ROLE
   getUserRole(): string | null {
     return this.getCurrentUser()?.role ?? null;
   }
 
-  // LOGOUT
   logout(): void {
     sessionStorage.removeItem(this.storageKey);
   }

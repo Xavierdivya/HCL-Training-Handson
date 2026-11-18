@@ -2,44 +2,33 @@ import { Routes } from '@angular/router';
 
 import { CategoryComponent } from './components/category/category';
 import { FoodItemComponent } from './components/food-item/food-item/food-item';
-
 import { LoginComponent } from './components/auth/login/login';
 import { RegisterComponent } from './components/auth/register/register';
-
-import { authGuard } from './guards/auth.guard';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
-  // Public routes
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'register',
-    component: RegisterComponent
-  },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
 
-  // Protected routes
   {
     path: 'categories',
     component: CategoryComponent,
-    canActivate: [authGuard]
+    canActivate: [roleGuard],
+    data: { roles: ['Admin', 'Staff', 'Customer'] }
   },
   {
     path: 'food-items',
     component: FoodItemComponent,
-    canActivate: [authGuard]
-  },
-
-  // Default route
-  {
-    path: '',
-    redirectTo: 'categories',
-    pathMatch: 'full'
+    canActivate: [roleGuard],
+    data: { roles: ['Admin', 'Staff', 'Customer'] }
   },
 
   {
-    path: '**',
-    redirectTo: 'categories'
-  }
+    path: 'unauthorized',
+    component: UnauthorizedComponent
+  },
+
+  { path: '', redirectTo: 'categories', pathMatch: 'full' },
+  { path: '**', redirectTo: 'categories' }
 ];

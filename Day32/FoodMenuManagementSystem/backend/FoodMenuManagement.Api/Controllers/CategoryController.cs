@@ -45,9 +45,9 @@ namespace FoodMenuManagement.Api.Controllers
         }
 
         // POST: api/Category
-        // Admin only
+        // Admin and Staff
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> CreateCategory(Category category)
         {
             var createdCategory = await _service.CreateAsync(category);
@@ -59,9 +59,9 @@ namespace FoodMenuManagement.Api.Controllers
         }
 
         // PUT: api/Category/1
-        // Admin only
+        // Admin and Staff
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> UpdateCategory(
             int id,
             Category updatedCategory)

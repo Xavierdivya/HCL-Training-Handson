@@ -12,7 +12,9 @@ export class CategoryService {
 
   private http = inject(HttpClient);
 
-private apiUrl = 'http://localhost:5000/api/Category';
+  private readonly apiUrl =
+    'http://localhost:5186/api/Category';
+
   // GET: Retrieve all categories
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(this.apiUrl);

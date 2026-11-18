@@ -1,10 +1,18 @@
 
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectorRef
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { finalize } from 'rxjs';
 
 import { Category } from '../../models/category.model';
 import { CategoryService } from '../../services/category.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-category',
@@ -15,29 +23,44 @@ import { CategoryService } from '../../services/category.service';
 })
 export class CategoryComponent implements OnInit {
 
-  // Inject CategoryService
   private categoryService = inject(CategoryService);
+  private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
 
-  // Store all categories
+  // User roles
+  isAdmin = false;
+  isStaff = false;
+  canManageCategories = false;
+
+  // Category data
   categories: Category[] = [];
-
-  // Category form data
   categoryForm: Category = this.emptyCategory();
 
-  // Track editing mode
+  // Form states
   isEditing = false;
   editingId: number | null = null;
 
-  // Loading and messages
+  // Loading states
   isLoading = false;
+  isSaving = false;
+
+  // Messages
   successMessage = '';
   errorMessage = '';
 
   ngOnInit(): void {
+    const role = this.authService.getUserRole();
+
+    console.log('Logged-in role:', role);
+
+    this.isAdmin = role === 'Admin';
+    this.isStaff = role === 'Staff';
+    this.canManageCategories = this.isAdmin || this.isStaff;
+
     this.loadCategories();
   }
 
-  // Create an empty category object
+  // Empty category object
   emptyCategory(): Category {
     return {
       categoryId: 0,
@@ -47,101 +70,165 @@ export class CategoryComponent implements OnInit {
     };
   }
 
-  // GET: Load all categories
+  // Load all categories
   loadCategories(): void {
+
     this.isLoading = true;
     this.errorMessage = '';
 
     this.categoryService.getCategories().subscribe({
-      next: (data) => {
-        this.categories = data;
+
+      next: (data: Category[]) => {
+
+        console.log('Categories loaded:', data);
+
+        this.categories = data ?? [];
         this.isLoading = false;
+
+        console.log('Loading state:', this.isLoading);
+        console.log('Category count:', this.categories.length);
+
+        this.cdr.detectChanges();
       },
-      error: () => {
-        this.errorMessage = 'Unable to load categories.';
+
+      error: (error) => {
+
+        console.error('Category API error:', error);
+
+        this.categories = [];
         this.isLoading = false;
+        this.errorMessage = 'Unable to load categories.';
+
+        this.cdr.detectChanges();
       }
+
     });
   }
 
-  // POST: Add a new category
+  // Add or update category
   saveCategory(): void {
+
+    if (!this.canManageCategories) {
+      this.errorMessage = 'You are not authorized to manage categories.';
+      return;
+    }
 
     if (!this.categoryForm.categoryName.trim()) {
       this.errorMessage = 'Category name is required.';
       return;
     }
 
+    this.isSaving = true;
     this.errorMessage = '';
     this.successMessage = '';
 
-    if (this.isEditing && this.editingId !== null) {
+    const payload: Category = {
+      ...this.categoryForm,
+      categoryName: this.categoryForm.categoryName.trim()
+    };
 
-      // PUT: Update existing category
-      this.categoryService.updateCategory(
-        this.editingId,
-        this.categoryForm
-      ).subscribe({
+    const request =
+      this.isEditing && this.editingId !== null
+        ? this.categoryService.updateCategory(this.editingId, payload)
+        : this.categoryService.createCategory(payload);
+
+    request
+      .pipe(
+        finalize(() => {
+          this.isSaving = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+
         next: () => {
-          this.successMessage = 'Category updated successfully.';
-          this.resetForm();
+
+          this.successMessage = this.isEditing
+            ? 'Category updated successfully.'
+            : 'Category added successfully.';
+
+          this.resetForm(false);
           this.loadCategories();
         },
-        error: () => {
-          this.errorMessage = 'Failed to update category.';
-        }
-      });
 
-    } else {
+        error: (error) => {
 
-      // POST: Create new category
-      this.categoryService.createCategory(
-        this.categoryForm
-      ).subscribe({
-        next: () => {
-          this.successMessage = 'Category added successfully.';
-          this.resetForm();
-          this.loadCategories();
-        },
-        error: () => {
-          this.errorMessage = 'Failed to add category.';
+          console.error('Category save failed:', error);
+
+          this.errorMessage =
+            error.error?.message || 'Unable to save category.';
         }
+
       });
-    }
   }
 
-  // Load category details into the form for editing
+  // Edit category
   editCategory(category: Category): void {
+
+    if (!this.canManageCategories) {
+      return;
+    }
+
     this.categoryForm = { ...category };
+
     this.isEditing = true;
     this.editingId = category.categoryId;
 
     this.successMessage = '';
     this.errorMessage = '';
-  }
 
-  // DELETE: Remove a category
-  deleteCategory(id: number): void {
-
-    if (!confirm('Are you sure you want to delete this category?')) {
-      return;
-    }
-
-    this.categoryService.deleteCategory(id).subscribe({
-      next: () => {
-        this.successMessage = 'Category deleted successfully.';
-        this.loadCategories();
-      },
-      error: () => {
-        this.errorMessage = 'Failed to delete category.';
-      }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
     });
   }
 
-  // Reset the form
-  resetForm(): void {
+  // Delete category (Admin only)
+  deleteCategory(id: number): void {
+
+    if (!this.isAdmin) {
+      this.errorMessage = 'Only Admin can delete categories.';
+      return;
+    }
+
+    if (!window.confirm('Are you sure you want to delete this category?')) {
+      return;
+    }
+
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.categoryService.deleteCategory(id).subscribe({
+
+      next: () => {
+
+        this.successMessage = 'Category deleted successfully.';
+        this.loadCategories();
+      },
+
+      error: (error) => {
+
+        console.error('Category deletion failed:', error);
+
+        this.errorMessage =
+          error.error?.message || 'Unable to delete category.';
+      }
+
+    });
+  }
+
+  // Reset category form
+  resetForm(clearMessages = true): void {
+
     this.categoryForm = this.emptyCategory();
+
     this.isEditing = false;
     this.editingId = null;
+
+    if (clearMessages) {
+      this.successMessage = '';
+      this.errorMessage = '';
+    }
   }
+
 }
