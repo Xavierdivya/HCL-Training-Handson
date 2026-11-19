@@ -1,32 +1,39 @@
+<div class="app-wrapper">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
+  <nav class="main-navbar" *ngIf="showNavbar">
+    <div class="navbar-inner">
 
-    <a class="navbar-brand" routerLink="/">
-      Food Menu Management
-    </a>
-
-    <div class="navbar-nav">
-
-      <a
-        class="nav-link"
-        routerLink="/categories"
-        routerLinkActive="active">
-        Categories
+      <a routerLink="/categories" class="brand">
+        <span class="brand-icon">F</span>
+        <span>Food<span class="brand-highlight">Hub</span></span>
       </a>
 
-      <a
-        class="nav-link"
-        routerLink="/food-items"
-        routerLinkActive="active">
-        Food Items
-      </a>
+      <div class="nav-links">
+        <a routerLink="/categories" routerLinkActive="active">
+          Categories
+        </a>
+
+        <a routerLink="/food-items" routerLinkActive="active">
+          Food Items
+        </a>
+      </div>
+
+      <div class="user-section">
+        <div class="user-details">
+          <strong>{{ userName }}</strong>
+          <span>{{ userRole }}</span>
+        </div>
+
+        <button class="logout-button" (click)="logout()">
+          Logout
+        </button>
+      </div>
 
     </div>
+  </nav>
 
-  </div>
-</nav>
+  <main [class.auth-main]="!showNavbar">
+    <router-outlet></router-outlet>
+  </main>
 
-<main class="container mt-4">
-  <router-outlet></router-outlet>
-</main>
+</div>

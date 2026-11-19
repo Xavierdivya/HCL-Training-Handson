@@ -1,4 +1,3 @@
-
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -20,6 +19,7 @@ export class LoginComponent {
 
   isSubmitting = signal(false);
   errorMessage = signal('');
+  showPassword = signal(false);
 
   loginForm;
 
@@ -34,6 +34,10 @@ export class LoginComponent {
     });
   }
 
+  togglePassword(): void {
+    this.showPassword.update(value => !value);
+  }
+
   onSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -44,20 +48,12 @@ export class LoginComponent {
     this.errorMessage.set('');
 
     this.authService.login(this.loginForm.getRawValue()).subscribe({
-      next: (response) => {
+      next: () => {
         this.isSubmitting.set(false);
-
-        if (response.data.role === 'Admin') {
-          this.router.navigate(['/admin']);
-        } else {
-          this.router.navigate(['/categories']);
-        }
+        this.router.navigate(['/categories']);
       },
-      error: (error) => {
-        console.error('Login failed:', error);
-
+      error: error => {
         this.isSubmitting.set(false);
-
         this.errorMessage.set(
           error.error?.message || 'Invalid email or password.'
         );

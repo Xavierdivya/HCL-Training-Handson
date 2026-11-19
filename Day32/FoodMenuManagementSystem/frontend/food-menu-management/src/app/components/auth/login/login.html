@@ -1,71 +1,118 @@
+<div class="auth-page">
 
-<div class="auth-container">
-  <div class="auth-card">
+  <section class="auth-visual">
+    <div class="visual-content">
+      <div class="visual-logo">F</div>
 
-    <h2>Welcome Back</h2>
-    <p>Login to your Food Menu account</p>
+      <p class="visual-label">FOOD MANAGEMENT PLATFORM</p>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <h1>Manage your menu.<br><span>Serve better.</span></h1>
 
-      <!-- Email -->
-      <div class="form-group">
-        <label for="email">Email</label>
-
-        <input
-          id="email"
-          type="email"
-          formControlName="email"
-          placeholder="Enter your email"
-        />
-
-        <small
-          *ngIf="loginForm.controls.email.touched &&
-                 loginForm.controls.email.invalid">
-          Enter a valid email address.
-        </small>
-      </div>
-
-      <!-- Password -->
-      <div class="form-group">
-        <label for="password">Password</label>
-
-        <input
-          id="password"
-          type="password"
-          formControlName="password"
-          placeholder="Enter your password"
-        />
-
-        <small
-          *ngIf="loginForm.controls.password.touched &&
-                 loginForm.controls.password.invalid">
-          Password is required.
-        </small>
-      </div>
-
-      <!-- API Error Message -->
-      <p
-        class="error-message"
-        *ngIf="errorMessage()">
-        {{ errorMessage() }}
+      <p class="visual-description">
+        A simple and organized platform to manage food categories
+        and menu items in one place.
       </p>
 
-      <!-- Login Button -->
-      <button
-        type="submit"
-        [disabled]="isSubmitting()">
+      <div class="visual-features">
+        <div>✓ Organized food categories</div>
+        <div>✓ Easy menu management</div>
+        <div>✓ Role-based access</div>
+      </div>
+    </div>
 
-        {{ isSubmitting() ? 'Logging in...' : 'Login' }}
+    <div class="visual-footer">
+      FoodHub · Food Menu Management System
+    </div>
+  </section>
 
-      </button>
+  <section class="auth-form-section">
+    <div class="auth-card">
 
-    </form>
+      <div class="mobile-logo">F</div>
 
-    <!-- Register Link -->
-    <p>
-      Don't have an account?
-      <a routerLink="/register">Register here</a>
-    </p>
+      <span class="form-eyebrow">WELCOME BACK</span>
 
-  </div>
+      <h2>Sign in to your account</h2>
+
+      <p class="form-description">
+        Enter your account details to continue.
+      </p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <div class="field-group">
+          <label for="email">Email address</label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="name@example.com"
+            autocomplete="email">
+
+          <small
+            class="field-error"
+            *ngIf="loginForm.controls.email.touched &&
+                   loginForm.controls.email.hasError('required')">
+            Email is required.
+          </small>
+
+          <small
+            class="field-error"
+            *ngIf="loginForm.controls.email.touched &&
+                   loginForm.controls.email.hasError('email')">
+            Enter a valid email address.
+          </small>
+        </div>
+
+        <div class="field-group">
+          <label for="password">Password</label>
+
+          <div class="password-wrapper">
+            <input
+              id="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Enter your password"
+              autocomplete="current-password">
+
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()">
+              {{ showPassword() ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+
+          <small
+            class="field-error"
+            *ngIf="loginForm.controls.password.touched &&
+                   loginForm.controls.password.invalid">
+            Password is required.
+          </small>
+        </div>
+
+        <div class="form-error" *ngIf="errorMessage()">
+          {{ errorMessage() }}
+        </div>
+
+        <button
+          type="submit"
+          class="primary-auth-button"
+          [disabled]="isSubmitting()">
+
+          {{ isSubmitting() ? 'Signing in...' : 'Sign In' }}
+
+        </button>
+
+      </form>
+
+      <p class="auth-switch">
+        Don't have an account?
+        <a routerLink="/register">Create account</a>
+      </p>
+
+    </div>
+  </section>
+
 </div>
