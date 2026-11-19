@@ -1,0 +1,20 @@
+<div class="student-card">
+
+  <h3>{{ student().name | uppercase  }}</h3>
+
+  <p>Age: {{ student().age }}</p>
+
+<p>
+  Email:
+  <span appEmailHover>
+    {{ student().email }}
+  </span>
+</p>
+
+  <p>Course: {{ student().course }}</p>
+
+  <p>Course Price: {{ student().coursePrice | currency:'INR':'symbol':'1.0-0' }}</p>
+
+  <p>Date : {{ today | date:'dd MMM yyyy' }}</p>
+
+</div>
