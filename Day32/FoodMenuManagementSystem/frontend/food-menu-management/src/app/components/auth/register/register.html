@@ -1,75 +1,133 @@
+<div class="auth-page">
 
-<div class="auth-container">
-  <div class="auth-card">
+  <section class="auth-visual">
+    <div class="visual-content">
+      <div class="visual-logo">F</div>
 
-    <h2>Create Account</h2>
-    <p>Join our Food Menu Management System</p>
+      <p class="visual-label">JOIN FOODHUB</p>
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <h1>Your menu.<br><span>One platform.</span></h1>
 
-      <div class="form-group">
-        <label>Full Name</label>
-
-        <input
-          type="text"
-          formControlName="fullName"
-          placeholder="Enter your full name"
-        />
-
-        <small *ngIf="registerForm.controls.fullName.touched &&
-                      registerForm.controls.fullName.invalid">
-          Name must contain between 2 and 100 characters.
-        </small>
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-
-        <input
-          type="email"
-          formControlName="email"
-          placeholder="Enter your email"
-        />
-
-        <small *ngIf="registerForm.controls.email.touched &&
-                      registerForm.controls.email.invalid">
-          Enter a valid email address.
-        </small>
-      </div>
-
-      <div class="form-group">
-        <label>Password</label>
-
-        <input
-          type="password"
-          formControlName="password"
-          placeholder="Create a password"
-        />
-
-        <small *ngIf="registerForm.controls.password.touched &&
-                      registerForm.controls.password.invalid">
-          Password must contain at least 8 characters.
-        </small>
-      </div>
-
-      <p class="error-message" *ngIf="errorMessage">
-        {{ errorMessage }}
+      <p class="visual-description">
+        Create your account to explore food categories
+        and discover available menu items.
       </p>
 
-      <p class="success-message" *ngIf="successMessage">
-        {{ successMessage }}
+      <div class="visual-features">
+        <div>✓ Simple account registration</div>
+        <div>✓ Browse food categories</div>
+        <div>✓ Explore menu items</div>
+      </div>
+    </div>
+
+    <div class="visual-footer">
+      FoodHub · Food Menu Management System
+    </div>
+  </section>
+
+  <section class="auth-form-section">
+    <div class="auth-card">
+
+      <div class="mobile-logo">F</div>
+
+      <span class="form-eyebrow">GET STARTED</span>
+
+      <h2>Create your account</h2>
+
+      <p class="form-description">
+        Enter your details to get started.
       </p>
 
-      <button type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Creating account...' : 'Register' }}
-      </button>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
-    </form>
+        <div class="field-group">
+          <label for="fullName">Full name</label>
 
-    <p>
-      Already have an account?
-      <a routerLink="/login">Login here</a>
-    </p>
+          <input
+            id="fullName"
+            type="text"
+            formControlName="fullName"
+            placeholder="Enter your full name"
+            autocomplete="name">
 
-  </div>
+          <small
+            class="field-error"
+            *ngIf="registerForm.controls.fullName.touched &&
+                   registerForm.controls.fullName.invalid">
+            Name must contain between 2 and 100 characters.
+          </small>
+        </div>
+
+        <div class="field-group">
+          <label for="email">Email address</label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="name@example.com"
+            autocomplete="email">
+
+          <small
+            class="field-error"
+            *ngIf="registerForm.controls.email.touched &&
+                   registerForm.controls.email.invalid">
+            Enter a valid email address.
+          </small>
+        </div>
+
+        <div class="field-group">
+          <label for="password">Password</label>
+
+          <div class="password-wrapper">
+            <input
+              id="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Minimum 8 characters"
+              autocomplete="new-password">
+
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()">
+              {{ showPassword() ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+
+          <small
+            class="field-error"
+            *ngIf="registerForm.controls.password.touched &&
+                   registerForm.controls.password.invalid">
+            Password must contain at least 8 characters.
+          </small>
+        </div>
+
+        <div class="form-error" *ngIf="errorMessage()">
+          {{ errorMessage() }}
+        </div>
+
+        <button
+          type="submit"
+          class="primary-auth-button"
+          [disabled]="isSubmitting()">
+
+          {{ isSubmitting() ? 'Creating account...' : 'Create Account' }}
+
+        </button>
+
+      </form>
+
+      <p class="auth-switch">
+        Already have an account?
+        <a routerLink="/login">Sign in</a>
+      </p>
+
+      <p class="role-note">
+        New registrations receive the Customer role.
+      </p>
+
+    </div>
+  </section>
+
 </div>

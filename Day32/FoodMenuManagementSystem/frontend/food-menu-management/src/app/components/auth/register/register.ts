@@ -1,5 +1,4 @@
-
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -18,9 +17,9 @@ import { AuthService } from '../../../services/auth/auth.service';
 })
 export class RegisterComponent {
 
-  isSubmitting = false;
-  errorMessage = '';
-  successMessage = '';
+  isSubmitting = signal(false);
+  errorMessage = signal('');
+  showPassword = signal(false);
 
   registerForm;
 
@@ -47,27 +46,30 @@ export class RegisterComponent {
     });
   }
 
+  togglePassword(): void {
+    this.showPassword.update(value => !value);
+  }
+
   onSubmit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
     }
 
-    this.isSubmitting = true;
-    this.errorMessage = '';
-    this.successMessage = '';
+    this.isSubmitting.set(true);
+    this.errorMessage.set('');
 
     this.authService.register(this.registerForm.getRawValue()).subscribe({
       next: () => {
-        this.isSubmitting = false;
-        this.successMessage = 'Registration successful!';
-
-        this.router.navigate(['/']);
+        this.isSubmitting.set(false);
+        this.router.navigate(['/categories']);
       },
-      error: (error) => {
-        this.isSubmitting = false;
-        this.errorMessage =
-          error.error?.message || 'Registration failed. Please try again.';
+      error: error => {
+        this.isSubmitting.set(false);
+        this.errorMessage.set(
+          error.error?.message ||
+          'Registration failed. Please try again.'
+        );
       }
     });
   }
