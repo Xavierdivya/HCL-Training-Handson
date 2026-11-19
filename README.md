@@ -50,6 +50,11 @@ Throughout the training, I work with different programming languages, frameworks
 | Day 28 | TypeScript learning | [View](Day28/) |
 | Day 29 | Angular learning | [View](Day29/) |
 | Day 30 | Pipes & Directive learning | [View](Day30/) |
+| Day 31 | Signal,Computed signal | [View](Day31/) |
+| Day 32 | Food Menu Management Web App | [View](Day32/) |
+| Day 33 | Full Stack Workflow Revision| [View](Day33/) |
+| Day 34 | Full Stack Application | [View](Day34/) |
+
 
 
 
