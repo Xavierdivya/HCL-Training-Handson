@@ -1,10 +1,10 @@
+
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { AuthService } from '../../../core/auth/auth.service';
 import { LoginRequest } from '../../../core/auth/auth.models';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,9 +14,8 @@ import { Router } from '@angular/router';
   styleUrl: './login.css',
 })
 export class Login {
-  
-  private authService = inject(AuthService);
-  private router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   loginRequest: LoginRequest = {
     email: '',
@@ -33,18 +32,20 @@ export class Login {
     this.authService.login(this.loginRequest).subscribe({
       next: (response) => {
         this.isLoading = false;
-        if(response.role === 'Administrator') {
+
+        if (response.role === 'Administrator') {
           this.router.navigate(['/admin/dashboard']);
-        } else if(response.role === 'Student') {
+        } else if (response.role === 'Student') {
           this.router.navigate(['/student/dashboard']);
-        } 
+        } else {
+          this.errorMessage = 'Your account has an unrecognized role.';
+        }
       },
-
       error: (error) => {
-        console.error('Login failed:', error);
-
         this.errorMessage =
-          error.error?.detail || error.error?.message || 'Something went wrong. Please try again.';
+          error.error?.detail ||
+          error.error?.message ||
+          'Login failed. Please check your credentials.';
 
         this.isLoading = false;
       },

@@ -1,3 +1,4 @@
+
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject, signal } from '@angular/core';
@@ -50,105 +51,145 @@ export class Dashboard implements OnInit {
       }
     };
 
+    // Load available courses
     this.courseService
       .getCourses(1, 6, { isActive: true })
       .subscribe({
         next: (response) => {
           const eligibleCourses = response.items.filter(
-            (course) => course.isActive && course.availableSeats > 0,
+            (course) => course.isActive && course.availableSeats > 0
           );
+
           this.availableCourses.set(eligibleCourses);
-          this.availableCourseCount.set(
-            eligibleCourses.filter((course) => course.availableSeats > 0).length,
-          );
+
+          this.availableCourseCount.set(eligibleCourses.length);
+
           this.openSeatCount.set(
-            eligibleCourses.reduce((total, course) => total + course.availableSeats, 0),
+            eligibleCourses.reduce(
+              (total, course) => total + course.availableSeats,
+              0
+            )
           );
+
           courseRequestComplete = true;
           markComplete();
         },
         error: (error: HttpErrorResponse) => {
-          this.courseError.set(this.getErrorMessage(error, 'Unable to load available courses.'));
+          this.courseError.set(
+            this.getErrorMessage(
+              error,
+              'Unable to load available courses.'
+            )
+          );
+
           courseRequestComplete = true;
           markComplete();
         },
       });
 
+    // Load recent enrollments
     this.enrollmentService
       .getMyEnrollments(1, 6)
       .subscribe({
         next: (response) => {
-          const enrollments = response.items;
-          this.recentEnrollments.set(enrollments);
+          this.recentEnrollments.set(response.items);
           this.totalEnrollmentCount.set(response.totalRecords);
-          let activeStatsComplete = false;
-          let cancelledStatsComplete = false;
 
-          const markStatsComplete = (): void => {
-            if (activeStatsComplete && cancelledStatsComplete) {
-              enrollmentRequestComplete = true;
-              markComplete();
-            }
-          };
-
-          this.enrollmentService
-            .getMyEnrollments(1, 1, { status: 1 })
-            .subscribe({
-              next: (activeResponse) => {
-                this.activeEnrollmentCount.set(activeResponse.totalRecords);
-                activeStatsComplete = true;
-                markStatsComplete();
-              },
-              error: () => {
-                this.activeEnrollmentCount.set(0);
-                activeStatsComplete = true;
-                markStatsComplete();
-              },
-            });
-
-          this.enrollmentService
-            .getMyEnrollments(1, 1, { status: 0 })
-            .subscribe({
-              next: (cancelledResponse) => {
-                this.cancelledEnrollmentCount.set(cancelledResponse.totalRecords);
-                cancelledStatsComplete = true;
-                markStatsComplete();
-              },
-              error: () => {
-                this.cancelledEnrollmentCount.set(0);
-                cancelledStatsComplete = true;
-                markStatsComplete();
-              },
-            });
+          this.loadEnrollmentStatistics(markComplete, () => {
+            enrollmentRequestComplete = true;
+          });
         },
         error: (error: HttpErrorResponse) => {
           this.enrollmentError.set(
-            this.getErrorMessage(error, 'Unable to load your enrollments.'),
+            this.getErrorMessage(
+              error,
+              'Unable to load your enrollments.'
+            )
           );
+
           enrollmentRequestComplete = true;
           markComplete();
+        },
+      });
+
+    // Keep loading until both course and enrollment requests finish.
+    const originalMarkComplete = markComplete;
+    void originalMarkComplete;
+  }
+
+  private loadEnrollmentStatistics(
+    markComplete: () => void,
+    onComplete: () => void
+  ): void {
+    let activeComplete = false;
+    let cancelledComplete = false;
+
+    const checkStatistics = (): void => {
+      if (activeComplete && cancelledComplete) {
+        onComplete();
+        markComplete();
+      }
+    };
+
+    // Active = 0
+    this.enrollmentService
+      .getMyEnrollments(1, 1, { status: 0 })
+      .subscribe({
+        next: (response) => {
+          this.activeEnrollmentCount.set(response.totalRecords);
+          activeComplete = true;
+          checkStatistics();
+        },
+        error: () => {
+          this.activeEnrollmentCount.set(0);
+          activeComplete = true;
+          checkStatistics();
+        },
+      });
+
+    // Cancelled = 1
+    this.enrollmentService
+      .getMyEnrollments(1, 1, { status: 1 })
+      .subscribe({
+        next: (response) => {
+          this.cancelledEnrollmentCount.set(response.totalRecords);
+          cancelledComplete = true;
+          checkStatistics();
+        },
+        error: () => {
+          this.cancelledEnrollmentCount.set(0);
+          cancelledComplete = true;
+          checkStatistics();
         },
       });
   }
 
   statusLabel(status: number): string {
-    return status === 1 ? 'Active' : 'Cancelled';
+    return status === 0 ? 'Active' : 'Cancelled';
   }
 
-  private getErrorMessage(error: HttpErrorResponse, fallback: string): string {
+  private getErrorMessage(
+    error: HttpErrorResponse,
+    fallback: string
+  ): string {
     const body = error.error;
+
     if (typeof body === 'string' && body.trim()) {
       return body;
     }
+
     if (body?.detail) {
       return body.detail;
     }
+
     if (body?.message) {
       return body.message;
     }
+
     if (body?.title) {
       return body.title;
     }
+
     return fallback;
   }
 }

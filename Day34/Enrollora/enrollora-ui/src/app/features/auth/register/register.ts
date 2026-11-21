@@ -1,9 +1,10 @@
+
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/auth/auth.service';
 import { RegisterStudentRequest } from '../../../core/auth/auth.models';
-import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -13,9 +14,8 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './register.css',
 })
 export class Register {
-  private authService = inject(AuthService);
-
-  private router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   registerRequest: RegisterStudentRequest = {
     name: '',
@@ -36,7 +36,7 @@ export class Register {
     this.errorMessage = '';
 
     this.authService.register(this.registerRequest).subscribe({
-      next: (response) => {
+      next: () => {
         this.successMessage =
           'Registration successful! Your account is pending administrator approval. You can log in once your account is approved.';
 
@@ -44,15 +44,15 @@ export class Register {
 
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 4000);
+        }, 3000);
       },
       error: (error) => {
         this.errorMessage =
-          error.error?.detail || error.error?.message || 'Registration failed. Please try again.';
+          error.error?.detail ||
+          error.error?.message ||
+          'Registration failed. Please try again.';
 
         this.isLoading = false;
-
-        console.error('Registration failed:', error);
       },
     });
   }

@@ -1,1 +1,294 @@
-/* You can add global styles to this file, and also import other style files */
+
+/* ==========================================
+   ENROLLORA - GLOBAL DESIGN SYSTEM
+========================================== */
+
+:root {
+  /* Brand */
+  --brand-primary: #7656c9;
+  --brand-primary-dark: #6040b0;
+  --brand-secondary: #a33df0;
+  --brand-gradient: linear-gradient(110deg, #7545ed, #a33df0);
+  --brand-dark: #24133f;
+
+  /* Backgrounds */
+  --page-bg: #f8f6ff;
+  --surface: #ffffff;
+  --surface-soft: #fcfaff;
+
+  /* Text */
+  --text-primary: #291743;
+  --text-secondary: #655576;
+  --text-muted: #8c819d;
+
+  /* Borders and shadows */
+  --border-color: #eee7f8;
+  --border-soft: #f1edf5;
+  --card-shadow: 0 5px 18px rgba(56, 34, 87, 0.045);
+  --card-shadow-hover: 0 9px 23px rgba(56, 34, 87, 0.09);
+
+  /* Status colours */
+  --success: #208653;
+  --success-bg: #e5f8ed;
+  --warning: #a85d00;
+  --warning-bg: #fff0c9;
+  --danger: #d9534b;
+  --danger-bg: #fff0ed;
+  --info: #4284d8;
+  --info-bg: #eaf3ff;
+
+  /* Common sizing */
+  --radius-sm: 8px;
+  --radius-md: 11px;
+  --radius-lg: 15px;
+  --radius-xl: 17px;
+
+  /* Typography */
+  --font-family: Arial, Helvetica, sans-serif;
+}
+
+/* GLOBAL BASE */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--page-bg);
+  color: var(--text-primary);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* SHARED CARD STYLE */
+
+.enrollora-card {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+}
+
+/* SHARED PRIMARY BUTTON */
+
+.enrollora-primary-btn {
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: 11px 19px;
+  background: var(--brand-gradient);
+  color: #ffffff;
+  font-weight: 750;
+  transition: 0.2s ease;
+}
+
+.enrollora-primary-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(117, 69, 237, 0.24);
+}
+
+/* SHARED INPUT STYLE */
+
+.enrollora-input {
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 1px solid #e5ddec;
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.enrollora-input:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(118, 86, 201, 0.12);
+}
+
+/* SHARED STATUS BADGES */
+
+.enrollora-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 11px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.enrollora-status.success {
+  color: var(--success);
+  background: var(--success-bg);
+}
+
+.enrollora-status.warning {
+  color: var(--warning);
+  background: var(--warning-bg);
+}
+
+.enrollora-status.danger {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.enrollora-status.info {
+  color: var(--info);
+  background: var(--info-bg);
+}
+
+/* ==========================================
+   ENROLLORA - ADMIN PAGE CONSISTENCY
+========================================== */
+
+/* Consistent page containers */
+
+.admin-wrapper .students-page,
+.admin-wrapper .course-page,
+.admin-wrapper .enrollment-page,
+.admin-wrapper .cancellation-page,
+.admin-wrapper .dashboard {
+  color: var(--text-primary);
+}
+
+/* Consistent headings */
+
+.admin-wrapper .page-heading h1,
+.admin-wrapper .page-heading h2,
+.admin-wrapper .page-header h1,
+.admin-wrapper .page-header h2,
+.admin-wrapper .dashboard-heading h2 {
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+.admin-wrapper .page-heading p,
+.admin-wrapper .page-header p,
+.admin-wrapper .dashboard-heading p {
+  color: var(--text-muted);
+}
+
+/* Consistent cards */
+
+.admin-wrapper .student-filter-card,
+.admin-wrapper .filter-card,
+.admin-wrapper .summary-card,
+.admin-wrapper .summary-grid .summary-card,
+.admin-wrapper .table-card,
+.admin-wrapper .table-container,
+.admin-wrapper .request-card,
+.admin-wrapper .stat-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+}
+
+/* Consistent table headers */
+
+.admin-wrapper .course-table thead th,
+.admin-wrapper .table thead th {
+  background: #f7f3ff;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 750;
+}
+
+/* Consistent table rows */
+
+.admin-wrapper .course-table tbody td,
+.admin-wrapper .table tbody td {
+  border-bottom-color: var(--border-soft);
+}
+
+.admin-wrapper .course-table tbody tr:hover,
+.admin-wrapper .table tbody tr:hover {
+  background: #fcfaff;
+}
+
+/* Consistent form controls */
+
+.admin-wrapper .form-control,
+.admin-wrapper .form-select,
+.admin-wrapper input,
+.admin-wrapper select,
+.admin-wrapper textarea {
+  border-color: #e5ddec;
+}
+
+.admin-wrapper .form-control:focus,
+.admin-wrapper .form-select:focus,
+.admin-wrapper input:focus,
+.admin-wrapper select:focus,
+.admin-wrapper textarea:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(118, 86, 201, 0.12);
+}
+
+/* Consistent primary actions */
+
+.admin-wrapper .btn-search,
+.admin-wrapper .btn-apply,
+.admin-wrapper .btn-add,
+.admin-wrapper .approve-btn {
+  transition: 0.2s ease;
+}
+
+.admin-wrapper .btn-search,
+.admin-wrapper .btn-apply,
+.admin-wrapper .btn-add {
+  background: var(--brand-gradient);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.admin-wrapper .btn-search:hover,
+.admin-wrapper .btn-apply:hover,
+.admin-wrapper .btn-add:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+/* Consistent empty and loading states */
+
+.admin-wrapper .empty-state,
+.admin-wrapper .loading-state,
+.admin-wrapper .state-message {
+  color: var(--text-muted);
+}
+
+/* Consistent pagination */
+
+.admin-wrapper .pagination-container,
+.admin-wrapper .pagination {
+  color: var(--text-secondary);
+}
+
+/* Responsive content spacing */
+
+@media (max-width: 768px) {
+  .admin-wrapper .students-page,
+  .admin-wrapper .course-page,
+  .admin-wrapper .enrollment-page,
+  .admin-wrapper .cancellation-page {
+    max-width: 100%;
+  }
+}

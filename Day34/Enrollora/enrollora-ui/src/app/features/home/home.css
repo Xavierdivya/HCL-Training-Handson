@@ -1,0 +1,160 @@
+
+.home-page {
+  min-height: 100vh;
+  background: #f8f7fc;
+  color: #29213f;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-header {
+  height: 76px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #eeeaf5;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #34234f;
+  font-size: 23px;
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.brand-icon,
+.hero-card-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: #8055d9;
+  color: white;
+  font-weight: 850;
+}
+
+.home-header nav,
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.home-header nav a,
+.hero-actions a {
+  text-decoration: none;
+  font-weight: 750;
+  border-radius: 9px;
+  padding: 12px 19px;
+}
+
+.login-link,
+.secondary-btn {
+  color: #7650bd;
+}
+
+.register-link,
+.primary-btn {
+  background: #8055d9;
+  color: #fff;
+}
+
+.hero {
+  flex: 1;
+  width: min(1120px, 86%);
+  margin: auto;
+  padding: 75px 0;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: 70px;
+}
+
+.eyebrow {
+  color: #8055d9;
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 1.5px;
+}
+
+.hero h1 {
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 1.12;
+  margin: 20px 0;
+  letter-spacing: -2px;
+}
+
+.hero h1 span {
+  display: block;
+  color: #8055d9;
+}
+
+.hero-content > p {
+  color: #777187;
+  font-size: 16px;
+  line-height: 1.8;
+  max-width: 570px;
+  margin-bottom: 30px;
+}
+
+.hero-card {
+  background: #fff;
+  padding: 38px;
+  border: 1px solid #eeeaf5;
+  border-radius: 23px;
+  box-shadow: 0 18px 50px rgba(54, 37, 91, 0.08);
+}
+
+.hero-card-icon {
+  width: 54px;
+  height: 54px;
+  font-size: 25px;
+}
+
+.hero-card h2 {
+  margin: 22px 0 8px;
+}
+
+.hero-card > p {
+  color: #898397;
+  margin-bottom: 28px;
+}
+
+.feature {
+  padding: 13px 0;
+  border-top: 1px solid #f0edf5;
+  color: #5e566d;
+  font-size: 14px;
+}
+
+.feature span {
+  color: #16834a;
+  font-weight: 900;
+  margin-right: 10px;
+}
+
+.home-page footer {
+  padding: 22px;
+  text-align: center;
+  color: #9992a8;
+  font-size: 12px;
+  background: #fff;
+}
+
+@media (max-width: 750px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding: 45px 0;
+  }
+
+  .home-header {
+    padding: 0 5%;
+  }
+}

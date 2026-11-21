@@ -1,0 +1,205 @@
+
+<div class="profile-page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">STUDENT ACCOUNT</span>
+      <h1>My Profile</h1>
+      <p>View and manage your personal information.</p>
+    </div>
+
+    @if (profile() && !isEditing()) {
+      <button class="btn btn-primary" (click)="startEditing()">
+        Edit Profile
+      </button>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="state-card">
+      <div class="loader"></div>
+      <p>Loading your profile...</p>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+      @if (!profile()) {
+        <button class="btn btn-outline" (click)="loadProfile()">
+          Try Again
+        </button>
+      }
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (profile(); as student) {
+    @if (!isLoading()) {
+      @if (!isEditing()) {
+        <section class="profile-card">
+          <div class="profile-banner">
+            <div class="avatar">{{ student.name.charAt(0).toUpperCase() }}</div>
+            <div>
+              <h2>{{ student.name }}</h2>
+              <p>{{ student.email }}</p>
+              <span class="status-badge">
+                {{ student.status }}
+              </span>
+            </div>
+          </div>
+
+          <div class="details-section">
+            <h3>Personal Information</h3>
+
+            <div class="details-grid">
+              <div class="detail-item">
+                <span>Student ID</span>
+                <strong>{{ student.studentId }}</strong>
+              </div>
+
+              <div class="detail-item">
+                <span>Full Name</span>
+                <strong>{{ student.name }}</strong>
+              </div>
+
+              <div class="detail-item">
+                <span>Email Address</span>
+                <strong>{{ student.email }}</strong>
+              </div>
+
+              <div class="detail-item">
+                <span>Department</span>
+                <strong>{{ student.department }}</strong>
+              </div>
+
+              <div class="detail-item">
+                <span>Age</span>
+                <strong>{{ student.age }}</strong>
+              </div>
+
+              <div class="detail-item">
+                <span>CGPA</span>
+                <strong>{{ student.cgpa }}</strong>
+              </div>
+
+              <div class="detail-item">
+                <span>Registered On</span>
+                <strong>{{ student.registeredAt | date:'mediumDate' }}</strong>
+              </div>
+
+              <div class="detail-item">
+                <span>Reviewed On</span>
+                <strong>
+                  {{ student.reviewedAt ? (student.reviewedAt | date:'mediumDate') : 'Not reviewed' }}
+                </strong>
+              </div>
+            </div>
+          </div>
+        </section>
+      } @else {
+        <section class="profile-card edit-card">
+          <div class="section-heading">
+            <h2>Edit Profile</h2>
+            <p>Update your personal information below.</p>
+          </div>
+
+          <form #profileForm="ngForm" (ngSubmit)="saveProfile(profileForm)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  [(ngModel)]="editForm.name"
+                  required
+                  minlength="2"
+                  maxlength="100"
+                  #name="ngModel"
+                />
+                @if (name.invalid && name.touched) {
+                  <small class="field-error">Enter a name with at least 2 characters.</small>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="department">Department</label>
+                <input
+                  id="department"
+                  type="text"
+                  name="department"
+                  [(ngModel)]="editForm.department"
+                  required
+                  maxlength="100"
+                  #department="ngModel"
+                />
+                @if (department.invalid && department.touched) {
+                  <small class="field-error">Department is required.</small>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="age">Age</label>
+                <input
+                  id="age"
+                  type="number"
+                  name="age"
+                  [(ngModel)]="editForm.age"
+                  required
+                  min="16"
+                  max="100"
+                  #age="ngModel"
+                />
+                @if (age.invalid && age.touched) {
+                  <small class="field-error">Age must be between 16 and 100.</small>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="cgpa">CGPA</label>
+                <input
+                  id="cgpa"
+                  type="number"
+                  name="cgpa"
+                  [(ngModel)]="editForm.cgpa"
+                  required
+                  min="0"
+                  max="10"
+                  step="0.01"
+                  #cgpa="ngModel"
+                />
+                @if (cgpa.invalid && cgpa.touched) {
+                  <small class="field-error">CGPA must be between 0 and 10.</small>
+                }
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn btn-outline"
+                (click)="cancelEditing()"
+                [disabled]="isSaving()"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="isSaving()"
+              >
+                {{ isSaving() ? 'Saving...' : 'Save Changes' }}
+              </button>
+            </div>
+          </form>
+        </section>
+      }
+    }
+  }
+</div>
