@@ -179,6 +179,22 @@
   padding: 8px 14px;
 }
 
+.header-icon,
+.summary-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.header-icon {
+  font-size: 27px;
+}
+
+.summary-icon {
+  font-size: 24px;
+}
+
 @media (max-width: 650px) {
   .enrollment-page {
     padding: 14px;

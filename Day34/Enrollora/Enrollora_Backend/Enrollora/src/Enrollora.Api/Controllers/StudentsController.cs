@@ -1,3 +1,4 @@
+
 using System.Security.Claims;
 using Enrollora.Api.DTOs;
 using Enrollora.Api.Models;
@@ -15,7 +16,8 @@ public sealed class StudentsController(IStudentService service) : ControllerBase
     [HttpGet]
     [Authorize(Roles = "Administrator")]
     public Task<PagedResult<StudentResponse>> GetAll(
-        [FromQuery] StudentQuery query, CancellationToken ct) =>
+        [FromQuery] StudentQuery query,
+        CancellationToken ct) =>
         service.GetStudentsAsync(query, ct);
 
     [HttpGet("{id:int}")]
@@ -31,13 +33,16 @@ public sealed class StudentsController(IStudentService service) : ControllerBase
     [HttpPut("me")]
     [Authorize(Roles = "Student")]
     public Task<StudentResponse> UpdateMe(
-        UpdateStudentRequest request, CancellationToken ct) =>
+        UpdateStudentRequest request,
+        CancellationToken ct) =>
         service.UpdateMeAsync(CurrentStudentId(), request, ct);
 
     [HttpPut("{id:int}")]
     [Authorize(Roles = "Administrator")]
     public Task<StudentResponse> Update(
-        int id, UpdateStudentRequest request, CancellationToken ct) =>
+        int id,
+        UpdateStudentRequest request,
+        CancellationToken ct) =>
         service.UpdateAsync(id, request, ct);
 
     [HttpPut("{id:int}/approve")]
@@ -65,6 +70,7 @@ public sealed class StudentsController(IStudentService service) : ControllerBase
     }
 
     private int CurrentStudentId() =>
-        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)
+        int.Parse(
+            User.FindFirstValue(ClaimTypes.NameIdentifier)
             ?? throw new UnauthorizedAccessException("Student identity is missing."));
 }

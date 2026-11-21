@@ -1,0 +1,99 @@
+
+<div class="cancellation-page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">ENROLLMENT MANAGEMENT</span>
+      <h1>Cancellation Requests</h1>
+      <p>Review and manage student enrollment cancellation requests.</p>
+    </div>
+
+    <button class="refresh-btn" (click)="loadRequests()">
+      Refresh
+    </button>
+  </div>
+
+  @if (successMessage()) {
+    <div class="alert success">{{ successMessage() }}</div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="empty-state">Loading cancellation requests...</div>
+  } @else if (requests().length === 0) {
+    <div class="empty-state">No cancellation requests found.</div>
+  } @else {
+    <div class="request-list">
+      @for (request of requests(); track request.cancellationRequestId) {
+        <article class="request-card">
+          <div class="card-header">
+            <div>
+              <h2>{{ request.courseName }}</h2>
+              <span>Request #{{ request.cancellationRequestId }}</span>
+            </div>
+
+            <span class="status"
+              [class.pending]="request.status === 0"
+              [class.approved]="request.status === 1"
+              [class.rejected]="request.status === 2">
+              {{ statusLabel(request.status) }}
+            </span>
+          </div>
+
+          <div class="student-details">
+            <p><strong>Student:</strong> {{ request.studentName }}</p>
+            <p><strong>Email:</strong> {{ request.studentEmail }}</p>
+            <p><strong>Enrollment ID:</strong> {{ request.enrollmentId }}</p>
+            <p><strong>Requested:</strong> {{ request.requestedAt | date:'medium' }}</p>
+          </div>
+
+          <div class="reason">
+            <strong>Cancellation reason</strong>
+            <p>{{ request.reason }}</p>
+          </div>
+
+          @if (request.status === 0) {
+            <div class="review-section">
+              <label [for]="'remarks-' + request.cancellationRequestId">
+                Admin remarks
+              </label>
+
+              <textarea
+                [id]="'remarks-' + request.cancellationRequestId"
+                [(ngModel)]="remarks[request.cancellationRequestId]"
+                placeholder="Enter remarks (optional)">
+              </textarea>
+
+              <div class="actions">
+                <button
+                  class="approve-btn"
+                  [disabled]="processingId() !== null"
+                  (click)="review(request.cancellationRequestId, true)">
+                  Approve
+                </button>
+
+                <button
+                  class="reject-btn"
+                  [disabled]="processingId() !== null"
+                  (click)="review(request.cancellationRequestId, false)">
+                  Reject
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="reviewed">
+              <p><strong>Reviewed:</strong>
+                {{ request.reviewedAt ? (request.reviewedAt | date:'medium') : '—' }}
+              </p>
+              <p><strong>Admin remarks:</strong>
+                {{ request.adminRemarks || 'No remarks' }}
+              </p>
+            </div>
+          }
+        </article>
+      }
+    </div>
+  }
+</div>

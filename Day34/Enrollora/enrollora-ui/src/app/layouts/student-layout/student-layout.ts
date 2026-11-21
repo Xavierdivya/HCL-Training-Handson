@@ -1,18 +1,24 @@
+
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
+
 import { AuthService } from '../../core/auth/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
+  selector: 'app-student-layout',
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
-  selector: 'app-student-layout',
-  styleUrl: './student-layout.css',
   templateUrl: './student-layout.html',
+  styleUrl: './student-layout.css',
 })
 export class StudentLayout {
-  private authService = inject(AuthService);
-  private router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   logout(): void {
     this.authService.logout();

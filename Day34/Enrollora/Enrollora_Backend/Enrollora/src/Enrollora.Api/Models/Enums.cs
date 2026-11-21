@@ -1,3 +1,4 @@
+
 namespace Enrollora.Api.Models;
 
 public enum StudentStatus

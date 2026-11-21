@@ -1,31 +1,49 @@
+
 import { Routes } from '@angular/router';
+
 import { authGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/role-guard';
 
 export const routes: Routes = [
   {
+    path: 'home',
+    loadComponent: () =>
+      import('./features/home/home').then((m) => m.Home),
+  },
+  {
     path: 'login',
-    loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
+    loadComponent: () =>
+      import('./features/auth/login/login').then((m) => m.Login),
   },
   {
     path: 'register',
-    loadComponent: () => import('./features/auth/register/register').then((m) => m.Register),
+    loadComponent: () =>
+      import('./features/auth/register/register').then((m) => m.Register),
   },
+
+  // ADMIN ROUTES
   {
     path: 'admin',
     canActivate: [authGuard, roleGuard],
     data: { role: 'Administrator' },
-    loadComponent: () => import('./layouts/admin-layout/admin-layout').then((m) => m.AdminLayout),
+    loadComponent: () =>
+      import('./layouts/admin-layout/admin-layout').then(
+        (m) => m.AdminLayout,
+      ),
     children: [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./features/admin/dashboard/dashboard').then((m) => m.Dashboard),
+          import('./features/admin/dashboard/dashboard').then(
+            (m) => m.Dashboard,
+          ),
       },
       {
         path: 'students',
         loadComponent: () =>
-          import('./features/admin/students/student-list/student-list').then((m) => m.StudentList),
+          import('./features/admin/students/student-list/student-list').then(
+            (m) => m.StudentList,
+          ),
       },
       {
         path: 'courses',
@@ -34,7 +52,6 @@ export const routes: Routes = [
             (m) => m.CourseListComponent,
           ),
       },
-
       {
         path: 'enrollments',
         loadComponent: () =>
@@ -42,19 +59,44 @@ export const routes: Routes = [
             (m) => m.EnrollmentListComponent,
           ),
       },
+      {
+        path: 'cancellation-requests',
+        loadComponent: () =>
+          import('./features/admin/cancellation-requests/cancellation-requests').then(
+            (m) => m.AdminCancellationRequests,
+          ),
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard',
+      },
     ],
   },
+
+  // STUDENT ROUTES
   {
     path: 'student',
     canActivate: [authGuard, roleGuard],
     data: { role: 'Student' },
     loadComponent: () =>
-      import('./layouts/student-layout/student-layout').then((m) => m.StudentLayout),
+      import('./layouts/student-layout/student-layout').then(
+        (m) => m.StudentLayout,
+      ),
     children: [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./features/student/dashboard/dashboard').then((m) => m.Dashboard),
+          import('./features/student/dashboard/dashboard').then(
+            (m) => m.Dashboard,
+          ),
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./features/student/profile/profile').then(
+            (m) => m.Profile,
+          ),
       },
       {
         path: 'courses',
@@ -71,19 +113,28 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'cancellation-requests',
+        loadComponent: () =>
+          import('./features/student/cancellation-requests/cancellation-requests').then(
+            (m) => m.CancellationRequests,
+          ),
+      },
+      {
         path: '',
-        redirectTo: 'courses',
         pathMatch: 'full',
+        redirectTo: 'courses',
       },
     ],
   },
+
+  // DEFAULT ROUTES
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'home',
     pathMatch: 'full',
   },
   {
     path: '**',
-    redirectTo: 'login',
+    redirectTo: 'home',
   },
 ];

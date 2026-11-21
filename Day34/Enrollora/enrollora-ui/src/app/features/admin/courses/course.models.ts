@@ -16,7 +16,7 @@ export interface SaveCourseRequest {
   duration: string;
   fees: number;
   capacity: number;
-  isActive: boolean;
+  isActive?: boolean;
 }
 
 export interface CourseFilter {

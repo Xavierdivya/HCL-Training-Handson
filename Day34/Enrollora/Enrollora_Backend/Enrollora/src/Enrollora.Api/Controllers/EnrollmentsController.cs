@@ -38,10 +38,14 @@ public sealed class EnrollmentsController(IEnrollmentService service) : Controll
     [HttpPost]
     [Authorize(Roles = "Student")]
     public async Task<IActionResult> Create(
-        CreateEnrollmentRequest request, CancellationToken ct)
+    CreateEnrollmentRequest request, CancellationToken ct)
     {
-        var result = await service.CreateAsync(CurrentStudentId(), request.CourseId, ct);
-        return CreatedAtAction(nameof(GetMine), result);
+        var result = await service.CreateAsync(
+            CurrentStudentId(),
+            request.CourseId,
+            ct);
+
+        return StatusCode(StatusCodes.Status201Created, result);
     }
 
     private int CurrentStudentId() =>

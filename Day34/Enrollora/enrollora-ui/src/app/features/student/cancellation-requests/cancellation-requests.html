@@ -1,0 +1,134 @@
+
+<div class="cancellation-page">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">ENROLLMENT MANAGEMENT</span>
+      <h1>Cancellation Requests</h1>
+      <p>Request cancellation of an enrollment and track its progress.</p>
+    </div>
+  </div>
+
+  <div class="alert success" *ngIf="successMessage()">
+    {{ successMessage() }}
+  </div>
+
+  <div class="alert error" *ngIf="errorMessage()">
+    {{ errorMessage() }}
+  </div>
+
+  <section class="request-card">
+    <h2>Submit a Cancellation Request</h2>
+    <p class="section-description">
+      Select an active enrollment and explain why you want to cancel it.
+    </p>
+
+    <form (ngSubmit)="submitRequest()">
+      <div class="form-group">
+        <label for="enrollment">Select Enrollment</label>
+
+        <select
+          id="enrollment"
+          name="enrollment"
+          [(ngModel)]="selectedEnrollmentId"
+          required
+        >
+          <option [ngValue]="null">Choose an enrollment</option>
+
+          <option
+            *ngFor="let enrollment of activeEnrollments()"
+            [ngValue]="enrollment.enrollmentId"
+          >
+            {{ enrollment.courseName }} (Enrollment #{{ enrollment.enrollmentId }})
+          </option>
+        </select>
+
+        <small *ngIf="activeEnrollments().length === 0">
+          You currently have no active enrollments.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="reason">Reason for Cancellation</label>
+
+        <textarea
+          id="reason"
+          name="reason"
+          [(ngModel)]="reason"
+          rows="4"
+          maxlength="500"
+          placeholder="Explain why you want to cancel this enrollment..."
+          required
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="isSubmitting() || activeEnrollments().length === 0"
+      >
+        {{ isSubmitting() ? 'Submitting...' : 'Submit Request' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="history-card">
+    <div class="section-heading">
+      <div>
+        <h2>My Cancellation History</h2>
+        <p class="section-description">
+          View the status of your submitted requests.
+        </p>
+      </div>
+
+      <button type="button" class="refresh-button" (click)="loadData()">
+        Refresh
+      </button>
+    </div>
+
+    <div class="loading" *ngIf="isLoading()">
+      Loading cancellation requests...
+    </div>
+
+    <div
+      class="empty-state"
+      *ngIf="!isLoading() && requests().length === 0"
+    >
+      <h3>No cancellation requests yet</h3>
+      <p>Your submitted requests will appear here.</p>
+    </div>
+
+    <div class="table-wrapper" *ngIf="!isLoading() && requests().length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Reason</th>
+            <th>Requested On</th>
+            <th>Status</th>
+            <th>Admin Remarks</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let request of requests()">
+            <td>{{ request.courseName }}</td>
+            <td>{{ request.reason }}</td>
+            <td>{{ request.requestedAt | date:'mediumDate' }}</td>
+            <td>
+              <span
+                class="status"
+                [ngClass]="{
+                  pending: request.status === 0,
+                  approved: request.status === 1,
+                  rejected: request.status === 2
+                }"
+              >
+                {{ statusLabel(request.status) }}
+              </span>
+            </td>
+            <td>{{ request.adminRemarks || '—' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

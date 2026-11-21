@@ -1,7 +1,14 @@
+
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+
 import { DashboardService } from './dashboard.service';
 import { DashboardSummary } from './dashboard.models';
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,12 +18,10 @@ import { DecimalPipe } from '@angular/common';
   styleUrl: './dashboard.css',
 })
 export class Dashboard implements OnInit {
-  private dashboardService = inject(DashboardService);
-
-  private cdr = inject(ChangeDetectorRef);
+  private readonly dashboardService = inject(DashboardService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   summary: DashboardSummary | null = null;
-
   isLoading = false;
   errorMessage = '';
 
@@ -38,7 +43,7 @@ export class Dashboard implements OnInit {
         console.error('Dashboard loading failed:', error);
         this.errorMessage = 'Unable to load dashboard data.';
         this.isLoading = false;
-         this.cdr.markForCheck();
+        this.cdr.markForCheck();
       },
     });
   }
