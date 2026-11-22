@@ -1,3 +1,4 @@
+
 <div class="enrollment-page">
   <!-- Page Header -->
   <div class="page-header">
@@ -6,16 +7,16 @@
       <p>Monitor and manage student course enrollments.</p>
     </div>
 
-    <<div class="header-icon">
-  🎓
-</div>
+    <div class="header-icon">
+      🎓
+    </div>
   </div>
 
   <!-- Summary -->
   <div class="summary-card">
     <div class="summary-icon">
-  👥
-</div>
+      👥
+    </div>
     <div>
       <span>Total Enrollments</span>
       <h3>{{ totalRecords() }}</h3>
@@ -34,7 +35,12 @@
   @if (errorMessage()) {
     <div class="alert alert-danger">
       {{ errorMessage() }}
-      <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadEnrollments()">Retry</button>
+      <button
+        class="btn btn-sm btn-outline-danger ms-2"
+        (click)="loadEnrollments()"
+      >
+        Retry
+      </button>
     </div>
   }
 
@@ -75,7 +81,9 @@
                 <span class="course-name">
                   {{ enrollment.courseName }}
                 </span>
-                <small class="course-id"> Course #{{ enrollment.courseId }} </small>
+                <small class="course-id">
+                  Course #{{ enrollment.courseId }}
+                </small>
               </td>
 
               <td>
@@ -85,14 +93,13 @@
               <td>
                 <span
                   class="status-badge"
-                  [class.active]="enrollment.status === 1"
-                  [class.inactive]="enrollment.status !== 1"
+                  [class.active]="enrollment.status === 0"
+                  [class.inactive]="enrollment.status === 1"
                 >
-                  {{ enrollment.status === 1 ? 'Active' : 'Cancelled' }}
+                  {{ enrollment.status === 0 ? 'Active' : 'Cancelled' }}
                 </span>
               </td>
             </tr>
-
           } @empty {
             <tr>
               <td colspan="4" class="empty-state">
@@ -107,7 +114,9 @@
 
     <!-- Pagination -->
     <div class="pagination-container">
-      <span> Showing {{ enrollments().length }} of {{ totalRecords() }} enrollments </span>
+      <span>
+        Showing {{ enrollments().length }} of {{ totalRecords() }} enrollments
+      </span>
 
       <div class="pagination-actions">
         <button
@@ -118,7 +127,9 @@
           Previous
         </button>
 
-        <span> Page {{ pageNumber() }} of {{ totalPages() }} </span>
+        <span>
+          Page {{ pageNumber() }} of {{ totalPages() }}
+        </span>
 
         <button
           class="btn btn-outline-secondary"

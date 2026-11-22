@@ -15,7 +15,9 @@ public sealed class CancellationQuery : PaginationQuery
 
 public sealed class CreateCancellationRequest
 {
-    [Required, MaxLength(1000)]
+    [Required]
+    [MaxLength(1000)]
+    [RegularExpression(@".*\S.*", ErrorMessage = "Cancellation reason cannot be empty or whitespace.")]
     public string Reason { get; set; } = string.Empty;
 }
 

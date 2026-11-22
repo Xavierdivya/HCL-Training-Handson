@@ -18,9 +18,18 @@ public sealed class CancellationRequestService(
         GetPageAsync(requests.Query().Include(x => x.Student).Include(x => x.Enrollment)
             .ThenInclude(x => x.Course).Where(x => x.StudentId == studentId), query, ct);
 
+
     public async Task<CancellationResponse> CreateAsync(
         int studentId, int enrollmentId, CreateCancellationRequest request, CancellationToken ct)
     {
+        if (string.IsNullOrWhiteSpace(request.Reason))
+            throw new ArgumentException("Cancellation reason is required.");
+
+        var reason = request.Reason.Trim();
+
+        if (reason.Length > 1000)
+            throw new ArgumentException("Cancellation reason cannot exceed 1000 characters.");
+
         var enrollment = await enrollments.Query()
             .Include(x => x.Student).Include(x => x.Course)
             .FirstOrDefaultAsync(x => x.EnrollmentId == enrollmentId && x.StudentId == studentId, ct)
@@ -37,7 +46,7 @@ public sealed class CancellationRequestService(
         {
             EnrollmentId = enrollmentId,
             StudentId = studentId,
-            Reason = request.Reason.Trim(),
+            Reason = reason,
             Status = CancellationStatus.Pending,
             RequestedAt = DateTime.UtcNow
         };
@@ -47,6 +56,7 @@ public sealed class CancellationRequestService(
 
         return Map(entity, enrollment.Student, enrollment.Course);
     }
+
 
     public async Task<CancellationResponse> ReviewAsync(
         int requestId, bool approve, ReviewCancellationRequest request, CancellationToken ct)

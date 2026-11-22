@@ -1,7 +1,7 @@
 
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { EnrollmentResponse } from '../../enrollments/enrollment.models';
@@ -27,6 +27,19 @@ export class CancellationRequests implements OnInit {
   activeEnrollments = signal<EnrollmentResponse[]>([]);
   requests = signal<CancellationResponse[]>([]);
 
+  // Only enrollments without an existing Pending request can be selected.
+  availableEnrollments = computed(() => {
+    const pendingEnrollmentIds = new Set(
+      this.requests()
+        .filter((request) => request.status === 0)
+        .map((request) => request.enrollmentId),
+    );
+
+    return this.activeEnrollments().filter(
+      (enrollment) => !pendingEnrollmentIds.has(enrollment.enrollmentId),
+    );
+  });
+
   selectedEnrollmentId: number | null = null;
   reason = '';
 
@@ -50,29 +63,36 @@ export class CancellationRequests implements OnInit {
 
       if (completed === 2) {
         this.isLoading.set(false);
+
+        // Clear a selection if it is no longer eligible.
+        if (
+          this.selectedEnrollmentId !== null &&
+          !this.availableEnrollments().some(
+            (enrollment) =>
+              enrollment.enrollmentId === this.selectedEnrollmentId,
+          )
+        ) {
+          this.selectedEnrollmentId = null;
+        }
       }
     };
 
-    // Load active enrollments
-    this.enrollmentService
-      .getMyEnrollments(1, 100, { status: 0 })
-      .subscribe({
-        next: (response) => {
-          this.activeEnrollments.set(response.items);
-          finishLoading();
-        },
-        error: (error: HttpErrorResponse) => {
-          this.errorMessage.set(
-            this.getErrorMessage(
-              error,
-              'Unable to load your active enrollments.'
-            )
-          );
-          finishLoading();
-        },
-      });
+    this.enrollmentService.getMyEnrollments(1, 100, { status: 0 }).subscribe({
+      next: (response) => {
+        this.activeEnrollments.set(response.items);
+        finishLoading();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.errorMessage.set(
+          this.getErrorMessage(
+            error,
+            'Unable to load your active enrollments.',
+          ),
+        );
+        finishLoading();
+      },
+    });
 
-    // Load cancellation history
     this.cancellationService.getMyRequests(1, 100).subscribe({
       next: (response) => {
         this.requests.set(response.items);
@@ -82,8 +102,8 @@ export class CancellationRequests implements OnInit {
         this.errorMessage.set(
           this.getErrorMessage(
             error,
-            'Unable to load cancellation requests.'
-          )
+            'Unable to load cancellation requests.',
+          ),
         );
         finishLoading();
       },
@@ -94,8 +114,24 @@ export class CancellationRequests implements OnInit {
     this.errorMessage.set('');
     this.successMessage.set('');
 
+    if (this.isSubmitting()) {
+      return;
+    }
+
     if (!this.selectedEnrollmentId) {
       this.errorMessage.set('Please select an enrollment.');
+      return;
+    }
+
+    const eligibleEnrollment = this.availableEnrollments().some(
+      (enrollment) =>
+        enrollment.enrollmentId === this.selectedEnrollmentId,
+    );
+
+    if (!eligibleEnrollment) {
+      this.errorMessage.set(
+        'This enrollment already has a pending cancellation request. Refresh your data and try again.',
+      );
       return;
     }
 
@@ -115,7 +151,7 @@ export class CancellationRequests implements OnInit {
       .subscribe({
         next: () => {
           this.successMessage.set(
-            'Cancellation request submitted successfully.'
+            'Cancellation request submitted successfully.',
           );
 
           this.selectedEnrollmentId = null;
@@ -128,8 +164,8 @@ export class CancellationRequests implements OnInit {
           this.errorMessage.set(
             this.getErrorMessage(
               error,
-              'Unable to submit cancellation request.'
-            )
+              'Unable to submit cancellation request.',
+            ),
           );
 
           this.isSubmitting.set(false);
@@ -152,7 +188,7 @@ export class CancellationRequests implements OnInit {
 
   private getErrorMessage(
     error: HttpErrorResponse,
-    fallback: string
+    fallback: string,
   ): string {
     const body = error.error;
 
@@ -160,11 +196,6 @@ export class CancellationRequests implements OnInit {
       return body;
     }
 
-    return (
-      body?.detail ||
-      body?.message ||
-      body?.title ||
-      fallback
-    );
+    return body?.detail || body?.message || body?.title || fallback;
   }
 }

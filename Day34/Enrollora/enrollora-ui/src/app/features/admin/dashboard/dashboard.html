@@ -5,24 +5,57 @@
     <div>
       <h2>Dashboard Overview</h2>
       <p>Here's what's happening across Enrollora today.</p>
+
+      @if (lastUpdated) {
+        <small class="text-muted">
+          Last updated: {{ lastUpdated | date:'medium' }}
+        </small>
+      }
     </div>
 
-    <span class="dashboard-status">
-      <span class="status-dot"></span>
-      Live Overview
-    </span>
+    <div class="d-flex align-items-center gap-3">
+      <span class="dashboard-status">
+        <span class="status-dot"></span>
+        Live Overview
+      </span>
+
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        (click)="refreshDashboard()"
+        [disabled]="isLoading || isRefreshing"
+      >
+        {{ isRefreshing ? 'Refreshing...' : 'Refresh' }}
+      </button>
+    </div>
   </div>
 
-  @if (isLoading) {
+  @if (isLoading && !summary) {
     <div class="loading-state">
       <div class="spinner-border text-primary"></div>
       <p>Loading dashboard...</p>
     </div>
   }
-  @else if (errorMessage) {
-    <div class="alert alert-danger">{{ errorMessage }}</div>
+  @else if (errorMessage && !summary) {
+    <div class="alert alert-danger" role="alert">
+      {{ errorMessage }}
+
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-danger ms-3"
+        (click)="loadDashboard()"
+      >
+        Try Again
+      </button>
+    </div>
   }
   @else if (summary) {
+
+    @if (errorMessage) {
+      <div class="alert alert-warning" role="alert">
+        {{ errorMessage }}
+      </div>
+    }
 
     <!-- Student Overview -->
     <h5 class="section-title">Student Overview</h5>

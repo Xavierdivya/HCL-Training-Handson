@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 using Enrollora.Api.Models;
 
@@ -16,10 +17,14 @@ public sealed class StudentQuery : PaginationQuery
 
 public sealed class UpdateStudentRequest
 {
-    [Required, MaxLength(120)]
+    [Required]
+    [MaxLength(120)]
+    [RegularExpression(@".*\S.*", ErrorMessage = "Name cannot be empty or whitespace.")]
     public string Name { get; set; } = string.Empty;
 
-    [Required, MaxLength(100)]
+    [Required]
+    [MaxLength(100)]
+    [RegularExpression(@".*\S.*", ErrorMessage = "Department cannot be empty or whitespace.")]
     public string Department { get; set; } = string.Empty;
 
     [Range(17, 60)]

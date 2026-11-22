@@ -89,9 +89,12 @@ namespace Enrollora.Api.Migrations
 
                     b.HasKey("CancellationRequestId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("EnrollmentId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_CancellationRequests_Enrollment_Pending")
+                        .HasFilter("[Status] = 0");
 
-                    b.HasIndex("EnrollmentId", "Status");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("CancellationRequests");
                 });
@@ -158,7 +161,10 @@ namespace Enrollora.Api.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId", "CourseId", "Status");
+                    b.HasIndex("StudentId", "CourseId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Enrollments_Student_Course_Active")
+                        .HasFilter("[Status] = 0");
 
                     b.ToTable("Enrollments");
                 });

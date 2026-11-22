@@ -1,3 +1,4 @@
+
 using System.Text;
 using Microsoft.OpenApi;
 using Enrollora.Api.Data;
@@ -7,7 +8,6 @@ using Enrollora.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,13 +39,37 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
-var jwtKey = builder.Configuration["Jwt:Key"]
-    ?? throw new InvalidOperationException("JWT key is missing.");
-var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+if (string.IsNullOrWhiteSpace(jwtKey) ||
+    Encoding.UTF8.GetByteCount(jwtKey) < 32)
+{
+    throw new InvalidOperationException(
+        "JWT signing key is missing or too short. Configure a key of at least 32 bytes.");
+}
+
+if (string.IsNullOrWhiteSpace(jwtIssuer))
+    throw new InvalidOperationException("JWT issuer is missing.");
+
+if (string.IsNullOrWhiteSpace(jwtAudience))
+    throw new InvalidOperationException("JWT audience is missing.");
+
+if (!int.TryParse(builder.Configuration["Jwt:ExpiryMinutes"], out var expiryMinutes) ||
+    expiryMinutes < 1 ||
+    expiryMinutes > 1440)
+{
+    throw new InvalidOperationException(
+        "JWT expiry must be between 1 and 1440 minutes.");
+}
+
+var signingKey = new SymmetricSecurityKey(
+    Encoding.UTF8.GetBytes(jwtKey));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -56,14 +80,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
             IssuerSigningKey = signingKey,
             ClockSkew = TimeSpan.Zero
         };
     });
 
 builder.Services.AddAuthorization();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AngularClient", policy =>
@@ -99,4 +124,5 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 
 await DbSeeder.SeedAsync(app.Services, app.Configuration);
+
 app.Run();

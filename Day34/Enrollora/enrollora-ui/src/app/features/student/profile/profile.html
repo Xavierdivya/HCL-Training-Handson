@@ -24,6 +24,7 @@
   @if (errorMessage()) {
     <div class="alert alert-error">
       {{ errorMessage() }}
+
       @if (!profile()) {
         <button class="btn btn-outline" (click)="loadProfile()">
           Try Again
@@ -43,12 +44,29 @@
       @if (!isEditing()) {
         <section class="profile-card">
           <div class="profile-banner">
-            <div class="avatar">{{ student.name.charAt(0).toUpperCase() }}</div>
+            <div class="avatar">
+              {{ student.name.charAt(0).toUpperCase() }}
+            </div>
+
             <div>
               <h2>{{ student.name }}</h2>
               <p>{{ student.email }}</p>
-              <span class="status-badge">
-                {{ student.status }}
+
+              <span
+                class="status-badge"
+                [class.pending]="student.status === 0"
+                [class.approved]="student.status === 1"
+                [class.rejected]="student.status === 2"
+              >
+                {{
+                  student.status === 0
+                    ? 'Pending'
+                    : student.status === 1
+                      ? 'Approved'
+                      : student.status === 2
+                        ? 'Rejected'
+                        : 'Unknown'
+                }}
               </span>
             </div>
           </div>
@@ -95,7 +113,11 @@
               <div class="detail-item">
                 <span>Reviewed On</span>
                 <strong>
-                  {{ student.reviewedAt ? (student.reviewedAt | date:'mediumDate') : 'Not reviewed' }}
+                  {{
+                    student.reviewedAt
+                      ? (student.reviewedAt | date:'mediumDate')
+                      : 'Not reviewed'
+                  }}
                 </strong>
               </div>
             </div>
@@ -108,10 +130,14 @@
             <p>Update your personal information below.</p>
           </div>
 
-          <form #profileForm="ngForm" (ngSubmit)="saveProfile(profileForm)">
+          <form
+            #profileForm="ngForm"
+            (ngSubmit)="saveProfile(profileForm)"
+          >
             <div class="form-grid">
               <div class="form-group">
                 <label for="name">Full Name</label>
+
                 <input
                   id="name"
                   type="text"
@@ -119,16 +145,21 @@
                   [(ngModel)]="editForm.name"
                   required
                   minlength="2"
-                  maxlength="100"
+                  maxlength="120"
                   #name="ngModel"
                 />
+
                 @if (name.invalid && name.touched) {
-                  <small class="field-error">Enter a name with at least 2 characters.</small>
+                  <small class="field-error">
+                    Enter a name with at least 2 characters and no more than
+                    120 characters.
+                  </small>
                 }
               </div>
 
               <div class="form-group">
                 <label for="department">Department</label>
+
                 <input
                   id="department"
                   type="text"
@@ -138,30 +169,39 @@
                   maxlength="100"
                   #department="ngModel"
                 />
+
                 @if (department.invalid && department.touched) {
-                  <small class="field-error">Department is required.</small>
+                  <small class="field-error">
+                    Department is required.
+                  </small>
                 }
               </div>
 
               <div class="form-group">
                 <label for="age">Age</label>
+
                 <input
                   id="age"
                   type="number"
                   name="age"
                   [(ngModel)]="editForm.age"
                   required
-                  min="16"
-                  max="100"
+                  min="17"
+                  max="60"
+                  step="1"
                   #age="ngModel"
                 />
+
                 @if (age.invalid && age.touched) {
-                  <small class="field-error">Age must be between 16 and 100.</small>
+                  <small class="field-error">
+                    Age must be between 17 and 60.
+                  </small>
                 }
               </div>
 
               <div class="form-group">
                 <label for="cgpa">CGPA</label>
+
                 <input
                   id="cgpa"
                   type="number"
@@ -173,8 +213,11 @@
                   step="0.01"
                   #cgpa="ngModel"
                 />
+
                 @if (cgpa.invalid && cgpa.touched) {
-                  <small class="field-error">CGPA must be between 0 and 10.</small>
+                  <small class="field-error">
+                    CGPA must be between 0 and 10.
+                  </small>
                 }
               </div>
             </div>
