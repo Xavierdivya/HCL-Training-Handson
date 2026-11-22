@@ -6,6 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 import { CourseService } from '../course.service';
 import {
@@ -13,7 +14,6 @@ import {
   CourseFilter,
   SaveCourseRequest,
 } from '../course.models';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-course-list',
@@ -23,31 +23,25 @@ import { Observable } from 'rxjs';
   styleUrl: './course-list.css',
 })
 export class CourseListComponent implements OnInit {
-
   private courseService = inject(CourseService);
   private fb = inject(FormBuilder);
 
-  // Course data
   courses = signal<CourseResponse[]>([]);
 
-  // Loading and messages
   isLoading = signal(false);
   isSaving = signal(false);
   errorMessage = signal('');
   successMessage = signal('');
 
-  // Pagination
   pageNumber = signal(1);
   pageSize = signal(10);
   totalRecords = signal(0);
   totalPages = signal(0);
 
-  // Form visibility
   showForm = signal(false);
   isEditing = signal(false);
   editingId = signal<number | null>(null);
 
-  // Course form
   courseForm = this.fb.nonNullable.group({
     courseName: ['', [
       Validators.required,
@@ -68,24 +62,43 @@ export class CourseListComponent implements OnInit {
     isActive: [true],
   });
 
-  // Filter form
   filterForm = this.fb.group({
     search: [''],
     isActive: ['all'],
     availability: ['all'],
     minFees: this.fb.control<number | null>(null),
     maxFees: this.fb.control<number | null>(null),
+    minCapacity: this.fb.control<number | null>(null),
+    maxCapacity: this.fb.control<number | null>(null),
   });
 
   ngOnInit(): void {
     this.loadCourses();
   }
 
-  // --------------------------------
-  // LOAD COURSES
-  // --------------------------------
+  // Summary figures below are intentionally calculated
+  // from the currently displayed page, not the entire database.
+
+  activeCoursesOnPage(): number {
+    return this.courses().filter(course => course.isActive).length;
+  }
+
+  inactiveCoursesOnPage(): number {
+    return this.courses().filter(course => !course.isActive).length;
+  }
+
+  availableSeatsOnPage(): number {
+    return this.courses().reduce(
+      (total, course) => total + course.availableSeats,
+      0,
+    );
+  }
 
   loadCourses(): void {
+    if (this.isLoading()) {
+      return;
+    }
+
     this.isLoading.set(true);
     this.errorMessage.set('');
 
@@ -107,10 +120,6 @@ export class CourseListComponent implements OnInit {
       },
     });
   }
-
-  // --------------------------------
-  // BUILD SEARCH FILTERS
-  // --------------------------------
 
   private buildFilters(): CourseFilter {
     const values = this.filterForm.getRawValue();
@@ -137,10 +146,40 @@ export class CourseListComponent implements OnInit {
       filters.maxFees = values.maxFees;
     }
 
+    if (values.minCapacity !== null && values.minCapacity !== undefined) {
+      filters.minCapacity = values.minCapacity;
+    }
+
+    if (values.maxCapacity !== null && values.maxCapacity !== undefined) {
+      filters.maxCapacity = values.maxCapacity;
+    }
+
     return filters;
   }
 
   applyFilters(): void {
+    const values = this.filterForm.getRawValue();
+
+    if (
+      values.minFees !== null &&
+      values.maxFees !== null &&
+      values.minFees > values.maxFees
+    ) {
+      this.errorMessage.set('Minimum fee cannot be greater than maximum fee.');
+      return;
+    }
+
+    if (
+      values.minCapacity !== null &&
+      values.maxCapacity !== null &&
+      values.minCapacity > values.maxCapacity
+    ) {
+      this.errorMessage.set(
+        'Minimum capacity cannot be greater than maximum capacity.',
+      );
+      return;
+    }
+
     this.pageNumber.set(1);
     this.loadCourses();
   }
@@ -152,15 +191,13 @@ export class CourseListComponent implements OnInit {
       availability: 'all',
       minFees: null,
       maxFees: null,
+      minCapacity: null,
+      maxCapacity: null,
     });
 
     this.pageNumber.set(1);
     this.loadCourses();
   }
-
-  // --------------------------------
-  // OPEN CREATE FORM
-  // --------------------------------
 
   openCreateForm(): void {
     this.isEditing.set(false);
@@ -177,10 +214,6 @@ export class CourseListComponent implements OnInit {
     this.errorMessage.set('');
     this.showForm.set(true);
   }
-
-  // --------------------------------
-  // OPEN EDIT FORM
-  // --------------------------------
 
   openEditForm(course: CourseResponse): void {
     this.isEditing.set(true);
@@ -203,18 +236,13 @@ export class CourseListComponent implements OnInit {
     this.isSaving.set(false);
   }
 
-  // --------------------------------
-  // CREATE / UPDATE COURSE
-  // --------------------------------
-
   saveCourse(): void {
-    if (this.courseForm.invalid) {
+    if (this.courseForm.invalid || this.isSaving()) {
       this.courseForm.markAllAsTouched();
       return;
     }
 
-    const request: SaveCourseRequest =
-      this.courseForm.getRawValue();
+    const request: SaveCourseRequest = this.courseForm.getRawValue();
 
     this.isSaving.set(true);
     this.errorMessage.set('');
@@ -252,15 +280,8 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  // --------------------------------
-  // ACTIVATE / DEACTIVATE COURSE
-  // --------------------------------
-
   toggleCourseStatus(course: CourseResponse): void {
-
-    const action = course.isActive
-      ? 'deactivate'
-      : 'activate';
+    const action = course.isActive ? 'deactivate' : 'activate';
 
     const confirmed = window.confirm(
       `Are you sure you want to ${action} ${course.courseName}?`,
@@ -271,9 +292,6 @@ export class CourseListComponent implements OnInit {
     }
 
     this.errorMessage.set('');
-
-    // Existing backend provides DELETE for deactivation.
-    // PUT supports setting IsActive = true for activation.
 
     const operation: Observable<unknown> = course.isActive
       ? this.courseService.deactivateCourse(course.courseId)
@@ -305,19 +323,15 @@ export class CourseListComponent implements OnInit {
     });
   }
 
-  // --------------------------------
-  // PAGINATION
-  // --------------------------------
-
   nextPage(): void {
-    if (this.pageNumber() < this.totalPages()) {
+    if (this.pageNumber() < this.totalPages() && !this.isLoading()) {
       this.pageNumber.update(page => page + 1);
       this.loadCourses();
     }
   }
 
   previousPage(): void {
-    if (this.pageNumber() > 1) {
+    if (this.pageNumber() > 1 && !this.isLoading()) {
       this.pageNumber.update(page => page - 1);
       this.loadCourses();
     }
