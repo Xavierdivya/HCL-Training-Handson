@@ -1,3 +1,4 @@
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,10 +22,14 @@ public sealed class PasswordHasher : IPasswordHasher
 
 public sealed class TokenService(IConfiguration configuration) : ITokenService
 {
-    public LoginResponse CreateToken(string userId, string name, string email, string role)
+    public LoginResponse CreateToken(
+        string userId,
+        string name,
+        string email,
+        string role)
     {
-        var expiry = DateTime.UtcNow.AddMinutes(
-            int.TryParse(configuration["Jwt:ExpiryMinutes"], out var minutes) ? minutes : 120);
+        var expiryMinutes = int.Parse(configuration["Jwt:ExpiryMinutes"]!);
+        var expiry = DateTime.UtcNow.AddMinutes(expiryMinutes);
 
         var claims = new[]
         {
@@ -37,7 +42,10 @@ public sealed class TokenService(IConfiguration configuration) : ITokenService
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
 
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var credentials = new SigningCredentials(
+            key,
+            SecurityAlgorithms.HmacSha256);
+
         var token = new JwtSecurityToken(
             configuration["Jwt:Issuer"],
             configuration["Jwt:Audience"],

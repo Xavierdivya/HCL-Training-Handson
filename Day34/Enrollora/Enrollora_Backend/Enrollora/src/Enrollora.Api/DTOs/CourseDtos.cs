@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Enrollora.Api.DTOs;
@@ -15,10 +16,14 @@ public sealed class CourseQuery : PaginationQuery
 
 public sealed class SaveCourseRequest
 {
-    [Required, MaxLength(150)]
+    [Required]
+    [MaxLength(150)]
+    [RegularExpression(@".*\S.*", ErrorMessage = "Course name cannot be empty or whitespace.")]
     public string CourseName { get; set; } = string.Empty;
 
-    [Required, MaxLength(80)]
+    [Required]
+    [MaxLength(80)]
+    [RegularExpression(@".*\S.*", ErrorMessage = "Duration cannot be empty or whitespace.")]
     public string Duration { get; set; } = string.Empty;
 
     [Range(typeof(decimal), "0", "999999999")]

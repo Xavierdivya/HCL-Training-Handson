@@ -1,3 +1,4 @@
+
 using System.Security.Claims;
 using Enrollora.Api.DTOs;
 using Enrollora.Api.Services;
@@ -38,7 +39,7 @@ public sealed class EnrollmentsController(IEnrollmentService service) : Controll
     [HttpPost]
     [Authorize(Roles = "Student")]
     public async Task<IActionResult> Create(
-    CreateEnrollmentRequest request, CancellationToken ct)
+        CreateEnrollmentRequest request, CancellationToken ct)
     {
         var result = await service.CreateAsync(
             CurrentStudentId(),
@@ -48,7 +49,16 @@ public sealed class EnrollmentsController(IEnrollmentService service) : Controll
         return StatusCode(StatusCodes.Status201Created, result);
     }
 
-    private int CurrentStudentId() =>
-        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? throw new UnauthorizedAccessException("Student identity is missing."));
+    private int CurrentStudentId()
+    {
+        var studentIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (!int.TryParse(studentIdClaim, out var studentId) || studentId <= 0)
+        {
+            throw new UnauthorizedAccessException(
+                "Student identity is missing or invalid.");
+        }
+
+        return studentId;
+    }
 }

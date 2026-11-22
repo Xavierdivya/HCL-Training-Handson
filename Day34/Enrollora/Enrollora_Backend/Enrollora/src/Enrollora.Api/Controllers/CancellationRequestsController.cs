@@ -1,3 +1,4 @@
+
 using System.Security.Claims;
 using Enrollora.Api.DTOs;
 using Enrollora.Api.Services;
@@ -45,7 +46,16 @@ public sealed class CancellationRequestsController(
         int id, ReviewCancellationRequest request, CancellationToken ct) =>
         service.ReviewAsync(id, false, request, ct);
 
-    private int CurrentStudentId() =>
-        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? throw new UnauthorizedAccessException("Student identity is missing."));
+    private int CurrentStudentId()
+    {
+        var studentIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (!int.TryParse(studentIdClaim, out var studentId) || studentId <= 0)
+        {
+            throw new UnauthorizedAccessException(
+                "Student identity is missing or invalid.");
+        }
+
+        return studentId;
+    }
 }
