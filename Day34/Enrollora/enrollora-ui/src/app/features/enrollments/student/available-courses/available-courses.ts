@@ -1,3 +1,4 @@
+
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject, signal } from '@angular/core';
@@ -38,20 +39,21 @@ export class AvailableCourses implements OnInit {
     this.errorMessage.set('');
 
     this.courseService
-      .getCourses(this.pageNumber(), this.pageSize(), { isActive: true })
+      .getCourses(this.pageNumber(), this.pageSize(), {
+        isActive: true,
+        availability: 'available',
+      })
       .subscribe({
         next: (response) => {
-          this.courses.set(
-            response.items.filter(
-              (course) => course.isActive && course.availableSeats > 0,
-            ),
-          );
+          this.courses.set(response.items);
           this.totalRecords.set(response.totalRecords);
           this.totalPages.set(response.totalPages);
           this.isLoading.set(false);
         },
         error: (error: HttpErrorResponse) => {
-          this.errorMessage.set(this.getErrorMessage(error, 'Unable to load courses.'));
+          this.errorMessage.set(
+            this.getErrorMessage(error, 'Unable to load courses.'),
+          );
           this.isLoading.set(false);
         },
       });
@@ -69,7 +71,9 @@ export class AvailableCourses implements OnInit {
     this.enrollmentService.createEnrollment({ courseId: course.courseId }).subscribe({
       next: () => {
         this.processingCourseId.set(null);
-        this.successMessage.set(`You have successfully enrolled in ${course.courseName}.`);
+        this.successMessage.set(
+          `You have successfully enrolled in ${course.courseName}.`,
+        );
         this.loadCourses();
       },
       error: (error: HttpErrorResponse) => {
@@ -97,24 +101,31 @@ export class AvailableCourses implements OnInit {
 
   private getErrorMessage(error: HttpErrorResponse, fallback: string): string {
     const body = error.error;
+
     if (typeof body === 'string' && body.trim()) {
       return body;
     }
+
     if (body?.detail) {
       return body.detail;
     }
+
     if (body?.message) {
       return body.message;
     }
+
     if (body?.title) {
       return body.title;
     }
+
     if (body?.errors) {
       const messages = Object.values(body.errors).flat();
+
       if (messages.length > 0) {
         return messages.map((message) => String(message)).join(' ');
       }
     }
+
     return fallback;
   }
 }

@@ -19,7 +19,8 @@
   <section class="request-card">
     <h2>Submit a Cancellation Request</h2>
     <p class="section-description">
-      Select an active enrollment and explain why you want to cancel it.
+      Select an active enrollment without an existing pending cancellation
+      request and explain why you want to cancel it.
     </p>
 
     <form (ngSubmit)="submitRequest()">
@@ -30,20 +31,28 @@
           id="enrollment"
           name="enrollment"
           [(ngModel)]="selectedEnrollmentId"
+          [disabled]="isLoading() || isSubmitting()"
           required
         >
           <option [ngValue]="null">Choose an enrollment</option>
 
           <option
-            *ngFor="let enrollment of activeEnrollments()"
+            *ngFor="let enrollment of availableEnrollments()"
             [ngValue]="enrollment.enrollmentId"
           >
             {{ enrollment.courseName }} (Enrollment #{{ enrollment.enrollmentId }})
           </option>
         </select>
 
-        <small *ngIf="activeEnrollments().length === 0">
-          You currently have no active enrollments.
+        <small *ngIf="!isLoading() && availableEnrollments().length === 0">
+          <ng-container *ngIf="activeEnrollments().length === 0; else allPending">
+            You currently have no active enrollments.
+          </ng-container>
+
+          <ng-template #allPending>
+            All your active enrollments already have pending cancellation
+            requests.
+          </ng-template>
         </small>
       </div>
 
@@ -57,13 +66,18 @@
           rows="4"
           maxlength="500"
           placeholder="Explain why you want to cancel this enrollment..."
+          [disabled]="isSubmitting()"
           required
         ></textarea>
       </div>
 
       <button
         type="submit"
-        [disabled]="isSubmitting() || activeEnrollments().length === 0"
+        [disabled]="
+          isLoading() ||
+          isSubmitting() ||
+          availableEnrollments().length === 0
+        "
       >
         {{ isSubmitting() ? 'Submitting...' : 'Submit Request' }}
       </button>
@@ -79,8 +93,13 @@
         </p>
       </div>
 
-      <button type="button" class="refresh-button" (click)="loadData()">
-        Refresh
+      <button
+        type="button"
+        class="refresh-button"
+        (click)="loadData()"
+        [disabled]="isLoading() || isSubmitting()"
+      >
+        {{ isLoading() ? 'Refreshing...' : 'Refresh' }}
       </button>
     </div>
 
