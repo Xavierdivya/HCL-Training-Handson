@@ -1,0 +1,118 @@
+<a routerLink="/" class="back">&larr; Back to hotels</a>
+
+@if (loading()) {
+  <div class="loading">Loading hotel...</div>
+} @else if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+} @else if (hotel(); as h) {
+  <div class="head">
+    <div>
+      <div class="stars">{{ stars(h.starRating) }}</div>
+      <h1>{{ h.name }}</h1>
+      <p class="muted">{{ h.address }}, {{ h.city }}, {{ h.state }}, {{ h.country }}</p>
+      <p class="muted">Contact: {{ h.contactNumber }}</p>
+    </div>
+  </div>
+
+  @if (h.images.length) {
+    <div class="gallery">
+      @for (img of h.images; track img.hotelImageId) {
+        <img [src]="img.imageUrl" [alt]="h.name" />
+      }
+    </div>
+  }
+
+  <div class="card">
+    <h2>About this hotel</h2>
+    <p>{{ h.description }}</p>
+    @if (h.amenities.length) {
+      <div class="chips">
+        @for (a of h.amenities; track a) {
+          <span class="chip">{{ a }}</span>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="card">
+    <h2>Choose your rooms</h2>
+
+    <form class="dates" (ngSubmit)="checkAvailability()">
+      <div class="field">
+        <label for="in">Check-in</label>
+        <input id="in" name="in" type="date" [(ngModel)]="checkIn" />
+      </div>
+      <div class="field">
+        <label for="out">Check-out</label>
+        <input id="out" name="out" type="date" [(ngModel)]="checkOut" />
+      </div>
+      <div class="field">
+        <label for="guests">Guests</label>
+        <input id="guests" name="guests" type="number" min="1" max="20" [(ngModel)]="guests" />
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn" type="submit">Check availability</button>
+      </div>
+    </form>
+
+    @if (roomsError()) {
+      <div class="alert alert-error">{{ roomsError() }}</div>
+    }
+
+    @if (loadingRooms()) {
+      <div class="loading">Checking availability...</div>
+    } @else if (rooms().length === 0 && !roomsError()) {
+      <div class="empty">No rooms available for these dates.</div>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Room type</th>
+              <th>Sleeps</th>
+              <th>Price / night</th>
+              <th>Available</th>
+              <th>Rooms</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of rooms(); track r.roomTypeId) {
+              <tr>
+                <td><strong>{{ r.roomTypeName }}</strong></td>
+                <td>{{ r.capacity }}</td>
+                <td>{{ r.pricePerNight | currency: 'INR' : 'symbol' : '1.0-0' }}</td>
+                <td>{{ r.availableRooms }}</td>
+                <td class="qty">
+                  <select [name]="'q' + r.roomTypeId" [(ngModel)]="quantities[r.roomTypeId]" [disabled]="r.availableRooms === 0">
+                    @for (n of options(r); track n) {
+                      <option [ngValue]="n">{{ n }}</option>
+                    }
+                  </select>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="summary">
+        <div>
+          <strong>{{ nights }}</strong> night{{ nights === 1 ? '' : 's' }} &middot;
+          <strong>{{ selectedCount }}</strong> room{{ selectedCount === 1 ? '' : 's' }}
+          <div class="total">{{ total | currency: 'INR' : 'symbol' : '1.0-0' }}</div>
+        </div>
+
+        @if (!auth.isLoggedIn()) {
+          <button class="btn" type="button" (click)="book()">Sign in to book</button>
+        } @else if (auth.isAdmin()) {
+          <span class="muted">Admin accounts cannot place bookings.</span>
+        } @else {
+          <button class="btn" type="button" (click)="book()" [disabled]="selectedCount === 0 || booking()">
+            {{ booking() ? 'Booking...' : 'Book now' }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+}

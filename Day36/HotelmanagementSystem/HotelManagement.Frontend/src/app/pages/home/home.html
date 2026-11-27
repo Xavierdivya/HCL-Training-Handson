@@ -1,0 +1,89 @@
+<section class="hero">
+  <h1>Find a place to stay</h1>
+  <p class="muted">Search hotels, compare rooms and book in a few clicks.</p>
+</section>
+
+<form class="card search" (ngSubmit)="load()">
+  <div class="form-grid">
+    <div class="field">
+      <label for="term">Hotel name</label>
+      <input id="term" name="term" [(ngModel)]="search.searchTerm" placeholder="e.g. Grand" />
+    </div>
+    <div class="field">
+      <label for="city">City</label>
+      <input id="city" name="city" [(ngModel)]="search.city" placeholder="e.g. Chennai" />
+    </div>
+    <div class="field">
+      <label for="stars">Star rating</label>
+      <select id="stars" name="stars" [(ngModel)]="search.starRating">
+        <option [ngValue]="null">Any</option>
+        @for (s of [5, 4, 3, 2, 1]; track s) {
+          <option [ngValue]="s">{{ s }} star{{ s > 1 ? 's' : '' }}</option>
+        }
+      </select>
+    </div>
+    <div class="field">
+      <label for="in">Check-in</label>
+      <input id="in" name="in" type="date" [(ngModel)]="search.checkInDate" />
+    </div>
+    <div class="field">
+      <label for="out">Check-out</label>
+      <input id="out" name="out" type="date" [(ngModel)]="search.checkOutDate" />
+    </div>
+    <div class="field">
+      <label for="guests">Guests</label>
+      <input id="guests" name="guests" type="number" min="1" max="20" [(ngModel)]="search.guests" />
+    </div>
+  </div>
+  <div class="row">
+    <button class="btn" type="submit">Search hotels</button>
+    <button class="btn btn-outline" type="button" (click)="reset()">Clear</button>
+  </div>
+</form>
+
+<div class="spacer"></div>
+
+@if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+}
+
+@if (loading()) {
+  <div class="loading">Loading hotels...</div>
+} @else if (hotels().length === 0 && !error()) {
+  <div class="card empty">
+    <h3>No hotels found</h3>
+    <p>Try a different city or clear the filters.</p>
+  </div>
+} @else {
+  <div class="hotel-grid">
+    @for (hotel of hotels(); track hotel.hotelId) {
+      <article class="card hotel">
+        @if (primaryImage(hotel); as img) {
+          <img class="photo" [src]="img" [alt]="hotel.name" />
+        } @else {
+          <div class="photo placeholder">No photo</div>
+        }
+        <div class="body">
+          <div class="stars">{{ stars(hotel.starRating) }}</div>
+          <h3>{{ hotel.name }}</h3>
+          <p class="muted">{{ hotel.city }}, {{ hotel.state }}, {{ hotel.country }}</p>
+          <div class="chips">
+            @for (a of hotel.amenities.slice(0, 4); track a) {
+              <span class="chip">{{ a }}</span>
+            }
+            @if (hotel.amenities.length > 4) {
+              <span class="chip">+{{ hotel.amenities.length - 4 }}</span>
+            }
+          </div>
+          <a
+            class="btn btn-block"
+            [routerLink]="['/hotels', hotel.hotelId]"
+            [queryParams]="{ checkIn: search.checkInDate, checkOut: search.checkOutDate, guests: search.guests }"
+          >
+            View rooms
+          </a>
+        </div>
+      </article>
+    }
+  </div>
+}

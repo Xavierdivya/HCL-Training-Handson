@@ -1,0 +1,10 @@
+/dist
+/tmp
+/out-tsc
+/node_modules
+/.angular/cache
+/.sass-cache
+.vscode/*
+!.vscode/extensions.json
+npm-debug.log
+.DS_Store

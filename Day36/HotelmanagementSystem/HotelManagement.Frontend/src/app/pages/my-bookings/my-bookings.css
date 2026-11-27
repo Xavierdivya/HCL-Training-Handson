@@ -1,0 +1,6 @@
+.stay { font-weight: 600; margin: 10px 0; }
+.items { list-style: none; margin: 0; padding: 0; }
+.items li { display: grid; grid-template-columns: 1fr auto 110px; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+.items li strong { text-align: right; }
+.foot { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--line); }
+.total { font-size: 18px; color: var(--brand); margin-left: 6px; }

@@ -1,0 +1,79 @@
+<div class="page-head">
+  <div>
+    <h1>Dashboard</h1>
+    <p>A quick look at hotels and bookings.</p>
+  </div>
+  <div class="row">
+    <a class="btn btn-outline" routerLink="/admin/amenities">Amenities</a>
+    <a class="btn" routerLink="/admin/hotels">Manage hotels</a>
+  </div>
+</div>
+
+@if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+}
+
+@if (loading()) {
+  <div class="loading">Loading...</div>
+} @else {
+  <div class="stats">
+    <div class="card stat">
+      <span class="label">Hotels</span>
+      <span class="value">{{ hotels().length }}</span>
+    </div>
+    <div class="card stat">
+      <span class="label">Bookings</span>
+      <span class="value">{{ bookings().length }}</span>
+    </div>
+    <div class="card stat">
+      <span class="label">Awaiting confirmation</span>
+      <span class="value">{{ pending() }}</span>
+    </div>
+    <div class="card stat">
+      <span class="label">Revenue (not cancelled)</span>
+      <span class="value">{{ revenue() | currency: 'INR' : 'symbol' : '1.0-0' }}</span>
+    </div>
+    <div class="card stat">
+      <span class="label">Amenities</span>
+      <span class="value">{{ amenityCount() }}</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row between">
+      <h2>Recent bookings</h2>
+      <a routerLink="/admin/bookings">See all</a>
+    </div>
+
+    @if (recent().length === 0) {
+      <div class="empty">No bookings yet.</div>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Customer</th>
+              <th>Hotel</th>
+              <th>Stay</th>
+              <th>Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (b of recent(); track b.bookingId) {
+              <tr>
+                <td>{{ b.bookingReference }}</td>
+                <td>{{ b.customerName }}</td>
+                <td>{{ b.hotelName }}</td>
+                <td>{{ b.checkInDate | date: 'mediumDate' }} &rarr; {{ b.checkOutDate | date: 'mediumDate' }}</td>
+                <td>{{ b.totalAmount | currency: 'INR' : 'symbol' : '1.0-0' }}</td>
+                <td><span [class]="'badge ' + b.bookingStatus.toLowerCase()">{{ b.bookingStatus }}</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+}
