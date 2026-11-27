@@ -1,0 +1,56 @@
+<div class="page-head">
+  <div>
+    <h1>My bookings</h1>
+    <p>Your upcoming and past stays.</p>
+  </div>
+  <a class="btn" routerLink="/">Find a hotel</a>
+</div>
+
+@if (success()) {
+  <div class="alert alert-success">{{ success() }}</div>
+}
+@if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+}
+
+@if (loading()) {
+  <div class="loading">Loading your bookings...</div>
+} @else if (bookings().length === 0) {
+  <div class="card empty">
+    <h3>No bookings yet</h3>
+    <p>When you book a room it will show up here.</p>
+  </div>
+} @else {
+  @for (b of bookings(); track b.bookingId) {
+    <article class="card">
+      <div class="row between">
+        <div>
+          <h3>{{ b.hotelName }}</h3>
+          <p class="muted">Ref {{ b.bookingReference }} &middot; booked {{ b.bookingDate | date: 'mediumDate' }}</p>
+        </div>
+        <span [class]="'badge ' + b.bookingStatus.toLowerCase()">{{ b.bookingStatus }}</span>
+      </div>
+
+      <p class="stay">
+        {{ b.checkInDate | date: 'mediumDate' }} &rarr; {{ b.checkOutDate | date: 'mediumDate' }}
+      </p>
+
+      <ul class="items">
+        @for (i of b.items; track i.bookingItemId) {
+          <li>
+            <span>{{ i.quantity }} &times; {{ i.roomTypeName }}</span>
+            <span class="muted">{{ i.pricePerNight | currency: 'INR' : 'symbol' : '1.0-0' }} / night</span>
+            <strong>{{ i.subTotal | currency: 'INR' : 'symbol' : '1.0-0' }}</strong>
+          </li>
+        }
+      </ul>
+
+      <div class="row between foot">
+        <div>Total <strong class="total">{{ b.totalAmount | currency: 'INR' : 'symbol' : '1.0-0' }}</strong></div>
+        @if (canCancel(b)) {
+          <button class="btn btn-danger btn-sm" type="button" (click)="cancel(b)">Cancel booking</button>
+        }
+      </div>
+    </article>
+  }
+}

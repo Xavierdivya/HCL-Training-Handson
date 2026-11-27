@@ -1,0 +1,9 @@
+.back { display: inline-block; margin-bottom: 14px; }
+.head { margin-bottom: 16px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.gallery img { width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius); }
+.chips { margin-top: 8px; }
+.dates { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0 16px; align-items: end; margin-top: 12px; }
+.qty select { width: 80px; }
+.summary { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.total { font-size: 24px; font-weight: 700; color: var(--brand); }

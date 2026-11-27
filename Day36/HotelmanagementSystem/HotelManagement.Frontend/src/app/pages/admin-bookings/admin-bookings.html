@@ -1,0 +1,82 @@
+<div class="page-head">
+  <div>
+    <h1>Bookings</h1>
+    <p>Review reservations and update their status.</p>
+  </div>
+  <div class="field filter">
+    <label for="status">Show</label>
+    <select id="status" [ngModel]="filter()" (ngModelChange)="filter.set($event)">
+      <option value="">All bookings</option>
+      @for (s of statuses; track s.value) {
+        <option [value]="s.label">{{ s.label }}</option>
+      }
+    </select>
+  </div>
+</div>
+
+@if (success()) {
+  <div class="alert alert-success">{{ success() }}</div>
+}
+@if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+}
+
+<div class="card">
+  @if (loading()) {
+    <div class="loading">Loading bookings...</div>
+  } @else if (visible().length === 0) {
+    <div class="empty">No bookings to show.</div>
+  } @else {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Customer</th>
+            <th>Hotel</th>
+            <th>Stay</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (b of visible(); track b.bookingId) {
+            <tr>
+              <td><strong>{{ b.bookingReference }}</strong></td>
+              <td>{{ b.customerName }}</td>
+              <td>{{ b.hotelName }}</td>
+              <td>{{ b.checkInDate | date: 'mediumDate' }} &rarr; {{ b.checkOutDate | date: 'mediumDate' }}</td>
+              <td>{{ b.totalAmount | currency: 'INR' : 'symbol' : '1.0-0' }}</td>
+              <td>
+                <select class="status" [ngModel]="statusValue(b)" (ngModelChange)="changeStatus(b, $event)" [name]="'s' + b.bookingId">
+                  @for (s of statuses; track s.value) {
+                    <option [ngValue]="s.value">{{ s.label }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <button class="btn btn-outline btn-sm" type="button" (click)="toggle(b)">
+                  {{ expandedId === b.bookingId ? 'Hide' : 'Rooms' }}
+                </button>
+              </td>
+            </tr>
+            @if (expandedId === b.bookingId) {
+              <tr class="detail">
+                <td colspan="7">
+                  @for (i of b.items; track i.bookingItemId) {
+                    <div class="item">
+                      {{ i.quantity }} &times; {{ i.roomTypeName }} at
+                      {{ i.pricePerNight | currency: 'INR' : 'symbol' : '1.0-0' }} / night =
+                      <strong>{{ i.subTotal | currency: 'INR' : 'symbol' : '1.0-0' }}</strong>
+                    </div>
+                  }
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

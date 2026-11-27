@@ -1,0 +1,5 @@
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat + .stat { margin-top: 0; }
+.label { color: var(--muted); font-size: 13px; }
+.value { font-size: 26px; font-weight: 700; color: var(--brand); }

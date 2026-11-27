@@ -1,0 +1,63 @@
+<div class="page-head">
+  <div>
+    <h1>Amenities</h1>
+    <p>Features that hotels and rooms can offer, like Wi-Fi or a pool.</p>
+  </div>
+</div>
+
+@if (success()) {
+  <div class="alert alert-success">{{ success() }}</div>
+}
+@if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+}
+
+<div class="layout">
+  <form class="card" (ngSubmit)="save()" #f="ngForm">
+    <h2>{{ editingId === null ? 'Add amenity' : 'Edit amenity' }}</h2>
+    <div class="field">
+      <label for="name">Name</label>
+      <input id="name" name="name" [(ngModel)]="form.name" required maxlength="100" />
+    </div>
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" [(ngModel)]="form.description"></textarea>
+    </div>
+    <div class="row">
+      <button class="btn" type="submit" [disabled]="f.invalid">{{ editingId === null ? 'Add amenity' : 'Save changes' }}</button>
+      @if (editingId !== null) {
+        <button class="btn btn-outline" type="button" (click)="reset()">Cancel</button>
+      }
+    </div>
+  </form>
+
+  <div class="card">
+    @if (loading()) {
+      <div class="loading">Loading...</div>
+    } @else if (amenities().length === 0) {
+      <div class="empty">No amenities yet. Add your first one.</div>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Description</th><th></th></tr>
+          </thead>
+          <tbody>
+            @for (a of amenities(); track a.amenityId) {
+              <tr>
+                <td><strong>{{ a.name }}</strong></td>
+                <td class="muted">{{ a.description }}</td>
+                <td>
+                  <div class="actions">
+                    <button class="btn btn-outline btn-sm" type="button" (click)="edit(a)">Edit</button>
+                    <button class="btn btn-danger btn-sm" type="button" (click)="remove(a)">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

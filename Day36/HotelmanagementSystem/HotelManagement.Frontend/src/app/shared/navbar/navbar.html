@@ -1,0 +1,31 @@
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" routerLink="/">Stayly</a>
+
+    <nav class="links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Hotels</a>
+
+      @if (auth.isCustomer()) {
+        <a routerLink="/my-bookings" routerLinkActive="active">My bookings</a>
+      }
+
+      @if (auth.isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+        <a routerLink="/admin/hotels" routerLinkActive="active">Manage hotels</a>
+        <a routerLink="/admin/bookings" routerLinkActive="active">Bookings</a>
+        <a routerLink="/admin/amenities" routerLinkActive="active">Amenities</a>
+      }
+    </nav>
+
+    <div class="user">
+      @if (auth.isLoggedIn()) {
+        <span class="name">{{ auth.user()?.fullName }}</span>
+        <span class="badge">{{ auth.user()?.role }}</span>
+        <button class="btn btn-outline btn-sm" type="button" (click)="logout()">Sign out</button>
+      } @else {
+        <a class="btn btn-outline btn-sm" routerLink="/login">Sign in</a>
+        <a class="btn btn-sm" routerLink="/register">Create account</a>
+      }
+    </div>
+  </div>
+</header>

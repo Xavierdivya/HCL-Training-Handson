@@ -1,0 +1,140 @@
+<div class="page-head">
+  <div>
+    <h1>Manage hotels</h1>
+    <p>Add hotels, update their details and manage their rooms.</p>
+  </div>
+  @if (!showForm) {
+    <button class="btn" type="button" (click)="add()">Add hotel</button>
+  }
+</div>
+
+@if (success()) {
+  <div class="alert alert-success">{{ success() }}</div>
+}
+@if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+}
+
+@if (showForm) {
+  <form class="card" (ngSubmit)="save()" #f="ngForm">
+    <h2>{{ editingId === null ? 'Add hotel' : 'Edit hotel' }}</h2>
+
+    <div class="form-grid">
+      <div class="field full">
+        <label for="name">Hotel name</label>
+        <input id="name" name="name" [(ngModel)]="form.name" required maxlength="150" />
+      </div>
+      <div class="field full">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" [(ngModel)]="form.description" required></textarea>
+      </div>
+      <div class="field full">
+        <label for="address">Address</label>
+        <input id="address" name="address" [(ngModel)]="form.address" required />
+      </div>
+      <div class="field">
+        <label for="city">City</label>
+        <input id="city" name="city" [(ngModel)]="form.city" required />
+      </div>
+      <div class="field">
+        <label for="state">State</label>
+        <input id="state" name="state" [(ngModel)]="form.state" required />
+      </div>
+      <div class="field">
+        <label for="country">Country</label>
+        <input id="country" name="country" [(ngModel)]="form.country" required />
+      </div>
+      <div class="field">
+        <label for="stars">Star rating</label>
+        <select id="stars" name="stars" [(ngModel)]="form.starRating">
+          @for (s of [1, 2, 3, 4, 5]; track s) {
+            <option [ngValue]="s">{{ s }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="contact">Contact number</label>
+        <input id="contact" name="contact" [(ngModel)]="form.contactNumber" required />
+      </div>
+      @if (editingId !== null) {
+        <div class="field">
+          <label>Status</label>
+          <label class="inline"><input type="checkbox" name="isActive" [(ngModel)]="form.isActive" /> Visible to guests</label>
+        </div>
+      }
+      <div class="field full">
+        <label for="images">Image URLs</label>
+        <textarea id="images" name="images" [(ngModel)]="form.imageUrls" placeholder="One image link per line"></textarea>
+        <span class="hint">The first image is shown on the hotel card.</span>
+      </div>
+      <div class="field full">
+        <label>Amenities</label>
+        @if (amenities().length === 0) {
+          <span class="hint">No amenities yet. <a routerLink="/admin/amenities">Add some first.</a></span>
+        } @else {
+          <div class="check-list">
+            @for (a of amenities(); track a.amenityId) {
+              <label>
+                <input
+                  type="checkbox"
+                  [checked]="form.amenityIds.includes(a.amenityId)"
+                  (change)="toggleAmenity(a.amenityId, $any($event.target).checked)"
+                />
+                {{ a.name }}
+              </label>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="btn" type="submit" [disabled]="f.invalid || saving()">
+        {{ saving() ? 'Saving...' : editingId === null ? 'Add hotel' : 'Save changes' }}
+      </button>
+      <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+  <div class="spacer"></div>
+}
+
+<div class="card">
+  @if (loading()) {
+    <div class="loading">Loading hotels...</div>
+  } @else if (hotels().length === 0) {
+    <div class="empty">No hotels yet. Add your first hotel to get started.</div>
+  } @else {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Hotel</th>
+            <th>Location</th>
+            <th>Stars</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (h of hotels(); track h.hotelId) {
+            <tr>
+              <td><strong>{{ h.name }}</strong></td>
+              <td>{{ h.city }}, {{ h.country }}</td>
+              <td class="stars">{{ '★'.repeat(h.starRating) }}</td>
+              <td>
+                <span [class]="'badge ' + (h.isActive ? 'confirmed' : 'inactive')">{{ h.isActive ? 'Active' : 'Hidden' }}</span>
+              </td>
+              <td>
+                <div class="actions">
+                  <a class="btn btn-sm" [routerLink]="['/admin/hotels', h.hotelId, 'rooms']">Rooms</a>
+                  <button class="btn btn-outline btn-sm" type="button" (click)="edit(h)">Edit</button>
+                  <button class="btn btn-danger btn-sm" type="button" (click)="remove(h)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

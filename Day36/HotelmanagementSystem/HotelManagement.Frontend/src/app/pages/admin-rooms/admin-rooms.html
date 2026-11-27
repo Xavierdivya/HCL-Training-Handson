@@ -1,0 +1,190 @@
+<a routerLink="/admin/hotels" class="back">&larr; Back to hotels</a>
+
+<div class="page-head">
+  <div>
+    <h1>{{ hotel()?.name ?? 'Rooms' }}</h1>
+    <p>Room types, prices and day-by-day inventory.</p>
+  </div>
+  @if (!showForm && hotel()) {
+    <button class="btn" type="button" (click)="add()">Add room type</button>
+  }
+</div>
+
+@if (success()) {
+  <div class="alert alert-success">{{ success() }}</div>
+}
+@if (error()) {
+  <div class="alert alert-error">{{ error() }}</div>
+}
+
+@if (showForm) {
+  <form class="card" (ngSubmit)="save()" #f="ngForm">
+    <h2>{{ editingId === null ? 'Add room type' : 'Edit room type' }}</h2>
+
+    <div class="form-grid">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" [(ngModel)]="form.name" required maxlength="100" placeholder="e.g. Deluxe King" />
+      </div>
+      <div class="field">
+        <label for="price">Price per night</label>
+        <input id="price" name="price" type="number" min="0.01" step="0.01" [(ngModel)]="form.pricePerNight" required />
+      </div>
+      <div class="field">
+        <label for="capacity">Guests per room</label>
+        <input id="capacity" name="capacity" type="number" min="1" max="20" [(ngModel)]="form.capacity" required />
+      </div>
+      <div class="field">
+        <label for="total">Total rooms</label>
+        <input id="total" name="total" type="number" min="1" max="10000" [(ngModel)]="form.totalRooms" required />
+      </div>
+      @if (editingId !== null) {
+        <div class="field">
+          <label>Status</label>
+          <label class="inline"><input type="checkbox" name="isActive" [(ngModel)]="form.isActive" /> Available to book</label>
+        </div>
+      }
+      <div class="field full">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" [(ngModel)]="form.description"></textarea>
+      </div>
+      <div class="field full">
+        <label>Amenities</label>
+        @if (amenities().length === 0) {
+          <span class="hint">No amenities yet. <a routerLink="/admin/amenities">Add some first.</a></span>
+        } @else {
+          <div class="check-list">
+            @for (a of amenities(); track a.amenityId) {
+              <label>
+                <input
+                  type="checkbox"
+                  [checked]="form.amenityIds.includes(a.amenityId)"
+                  (change)="toggleAmenity(a.amenityId, $any($event.target).checked)"
+                />
+                {{ a.name }}
+              </label>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="btn" type="submit" [disabled]="f.invalid">{{ editingId === null ? 'Add room type' : 'Save changes' }}</button>
+      <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+  <div class="spacer"></div>
+}
+
+<div class="card">
+  <h2>Room types</h2>
+  @if (loading()) {
+    <div class="loading">Loading rooms...</div>
+  } @else if (roomTypes().length === 0) {
+    <div class="empty">No room types yet. Add one so guests can book this hotel.</div>
+  } @else {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Room type</th>
+            <th>Price / night</th>
+            <th>Sleeps</th>
+            <th>Rooms</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of roomTypes(); track r.roomTypeId) {
+            <tr>
+              <td>
+                <strong>{{ r.name }}</strong>
+                <div>
+                  @for (a of r.amenities; track a) {
+                    <span class="chip">{{ a }}</span>
+                  }
+                </div>
+              </td>
+              <td>{{ r.pricePerNight | currency: 'INR' : 'symbol' : '1.0-0' }}</td>
+              <td>{{ r.capacity }}</td>
+              <td>{{ r.totalRooms }}</td>
+              <td><span [class]="'badge ' + (r.isActive ? 'confirmed' : 'inactive')">{{ r.isActive ? 'Active' : 'Hidden' }}</span></td>
+              <td>
+                <div class="actions">
+                  <button class="btn btn-sm" type="button" (click)="manageInventory(r)">Inventory</button>
+                  <button class="btn btn-outline btn-sm" type="button" (click)="edit(r)">Edit</button>
+                  <button class="btn btn-danger btn-sm" type="button" (click)="remove(r)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+@if (inventoryRoomId !== null) {
+  <div class="card" id="inventory">
+    <h2>Inventory: {{ inventoryRoomName() }}</h2>
+
+    <form class="inv-form" (ngSubmit)="saveInventory()">
+      <div class="field">
+        <label for="setDate">Date</label>
+        <input id="setDate" name="setDate" type="date" [(ngModel)]="setDate" required />
+      </div>
+      <div class="field">
+        <label for="setTotal">Total rooms</label>
+        <input id="setTotal" name="setTotal" type="number" min="0" [(ngModel)]="setTotal" required />
+      </div>
+      <div class="field">
+        <label for="setAvail">Available rooms</label>
+        <input id="setAvail" name="setAvail" type="number" min="0" [(ngModel)]="setAvailable" required />
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn" type="submit">Save for this date</button>
+      </div>
+    </form>
+
+    <div class="spacer"></div>
+
+    <form class="inv-form" (ngSubmit)="loadInventory()">
+      <div class="field">
+        <label for="from">From</label>
+        <input id="from" name="from" type="date" [(ngModel)]="fromDate" />
+      </div>
+      <div class="field">
+        <label for="to">To</label>
+        <input id="to" name="to" type="date" [(ngModel)]="toDate" />
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn btn-outline" type="submit">Show dates</button>
+      </div>
+    </form>
+
+    @if (inventory().length === 0) {
+      <div class="empty">No inventory set for these dates.</div>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Total rooms</th><th>Available</th></tr>
+          </thead>
+          <tbody>
+            @for (i of inventory(); track i.inventoryId) {
+              <tr>
+                <td>{{ i.inventoryDate | date: 'EEE, d MMM y' }}</td>
+                <td>{{ i.totalRooms }}</td>
+                <td>{{ i.availableRooms }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+}
