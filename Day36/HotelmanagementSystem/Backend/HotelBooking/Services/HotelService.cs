@@ -84,6 +84,15 @@ public class HotelService : IHotelService
             IsActive = true
         };
 
+        foreach(var imageurl in request.ImageUrls)
+        {
+            hotel.HotelImages.Add(new HotelImage
+            {
+                ImageUrl = imageurl,
+                IsPrimary = hotel.HotelImages.Count == 0
+            });
+        }
+
         await _hotelRepository.AddAsync(hotel);
         await _hotelRepository.SaveChangesAsync();
 
@@ -91,14 +100,15 @@ public class HotelService : IHotelService
     }
 
     public async Task<HotelResponseDto?> UpdateAsync(
-        int hotelId,
-        UpdateHotelRequestDto request)
+    int hotelId,
+    UpdateHotelRequestDto request)
     {
         var hotel = await _hotelRepository.GetByIdAsync(hotelId);
 
         if (hotel == null)
             return null;
 
+        // Update hotel details
         hotel.Name = request.Name;
         hotel.Description = request.Description;
         hotel.Address = request.Address;
@@ -107,6 +117,28 @@ public class HotelService : IHotelService
         hotel.Country = request.Country;
         hotel.StarRating = request.StarRating;
         hotel.ContactNumber = request.ContactNumber;
+
+        // Update hotel images
+        if (request.ImageUrls != null)
+        {
+            // Remove existing images
+            hotel.HotelImages.Clear();
+
+            // Add the updated images
+            var imageUrls = request.ImageUrls
+                .Where(url => !string.IsNullOrWhiteSpace(url))
+                .Select(url => url.Trim())
+                .ToList();
+
+            for (int i = 0; i < imageUrls.Count; i++)
+            {
+                hotel.HotelImages.Add(new HotelImage
+                {
+                    ImageUrl = imageUrls[i],
+                    IsPrimary = i == 0
+                });
+            }
+        }
 
         await _hotelRepository.UpdateAsync(hotel);
         await _hotelRepository.SaveChangesAsync();
